@@ -33,5 +33,5 @@ df2 <- fromJSON(json2)$features$properties %>%
   select(datetime, wnd = value) %>% 
   arrange(datetime)
 
-write_csv(df1, "data/wind_1.csv")
-write_csv(df2, "data/wind_2.csv")
+write_csv(df1, "data/dmi_wind_1.csv")
+write_csv(df2, "data/dmi_wind_2.csv")

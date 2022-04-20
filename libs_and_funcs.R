@@ -1,7 +1,7 @@
 #Libraries and functions
 
 library(tidyverse);library(lubridate);library(patchwork);library(viridisLite)
-library(httr);library(jsonlite)
+library(httr);library(jsonlite);library(readxl);library(LakeMetabolizer)
 
 #Figure sizing. For most journals the figures should be 39 mm, 84 mm, 129 mm, or 174 mm wide and not higher than 234 mm.
 #ggplot theme
@@ -16,9 +16,9 @@ theme_set(theme_pub)
 Sys.setenv(TZ="GMT");Sys.setlocale("LC_TIME", "English")
 
 #Open site coordinates UTM32
-open_site_x <- 320895	
-open_site_y <- 6168289
+open_site_x <- 698630.5	
+open_site_y <- 6169134
 
 #Littoral site coordinates UTM32
-littoral_site_x <- 1	
-littoral_site_y <- 1
+littoral_site_x <- 698751.9
+littoral_site_y <- 6169169

@@ -1,6 +1,9 @@
-source("libs_and_funcs.R")
+source("rawdata.R")
 
 #Figures
+
+#Figure 2 - water temperature and oxygen dynamics
+
 
 #Figure 4 - open water water temperature, ph and oxygen profiles
 profile <- read.delim2("data/profile.txt")
