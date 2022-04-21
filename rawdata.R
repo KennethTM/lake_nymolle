@@ -75,8 +75,11 @@ wtr_2020_2 <- sensor_data_2020_2 |>
 wtr_2020_3 <- sensor_data_2020_3 |> 
   select(datetime = Date_time, wtr_1 = Temp_10748214, wtr_4 = Temp_10675577, wtr_5 = Temp_10748206)
 
-wtr_all <- bind_rows(wtr_2019, wtr_2020_1, wtr_2020_2, wtr_2020_3)
+wtr_2020 <- bind_rows(wtr_2020_1, wtr_2020_2, wtr_2020_3)
 
+wtr_all <- bind_rows(wtr_2019, wtr_2020) |> 
+  mutate(datetime = round_date(datetime, "10 mins"))
+  
 #Oxygen sensor data
 oxygen_2019 <- sensor_data_2019 |> 
   select(datetime = Date_time, oxygen_2 = `DO_%_39`, oxygen_3 = `DO_%_65`)
@@ -92,4 +95,7 @@ oxygen_2020_3 <- sensor_data_2020_3 |>
          DO_procent_652844 = DO_mgL_652844/dosat*100) |>
   select(datetime = Date_time, oxygen_1 = DO_procent_500098, oxygen_2 = DO_procent_348923, oxygen_3 = DO_procent_652844)
 
-oxygen_all <- bind_rows(oxygen_2019, oxygen_2020_1, oxygen_2020_2, oxygen_2020_3)
+oxygen_2020 <- bind_rows(oxygen_2020_1, oxygen_2020_2, oxygen_2020_3)
+
+oxygen_all <- bind_rows(oxygen_2019, oxygen_2020) |> 
+  mutate(datetime = round_date(datetime, "10 mins"))

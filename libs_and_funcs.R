@@ -2,6 +2,7 @@
 
 library(tidyverse);library(lubridate);library(patchwork);library(viridisLite)
 library(httr);library(jsonlite);library(readxl);library(LakeMetabolizer)
+library(RColorBrewer)
 
 #Figure sizing. For most journals the figures should be 39 mm, 84 mm, 129 mm, or 174 mm wide and not higher than 234 mm.
 #ggplot theme
