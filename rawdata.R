@@ -4,10 +4,9 @@ source("libs_and_funcs.R")
 
 #Wind data from 2020
 #Sensor malfunction after few days, predict wind speed using dmi data
+wnd_raw <- read_csv("data/nymolle_wind.csv", skip=1)
 
-wnd <- read_csv("data/nymolle_wind.csv", skip=1)
-
-wnd_clean <- wnd |> 
+wnd_clean <- wnd_raw |> 
   select(2:3) |> 
   set_names(c("datetime_gmt2", "wnd")) |> 
   mutate(datetime = round_date(mdy_hms(datetime_gmt2), "10 mins") - 2*60*60) |> 
@@ -17,24 +16,30 @@ wnd_clean <- wnd |>
 dmi_wnd_1 <- read_csv("data/dmi_wind_1.csv")
 dmi_wnd_2 <- read_csv("data/dmi_wind_2.csv")
 
-dmi_wnd <- bind_rows(dmi_wnd_1, dmi_wnd_2) |> 
-  rename(dmi_wnd = wnd)
+dmi_wnd_all <- bind_rows(dmi_wnd_1, dmi_wnd_2) |> 
+  rename(wnd_dmi = wnd) |> 
+  arrange(datetime)
+
+#Perform linear interpolation for small gaps
+wnd_seq <- data.frame(datetime = seq(min(dmi_wnd_1$datetime), max(dmi_wnd_2$datetime), "10 min"))
+
+dmi_wnd_interp <- left_join(wnd_seq, dmi_wnd_all) |> 
+  mutate(wnd_dmi = na.approx(wnd_dmi, na.rm = FALSE, maxgap=18))
 
 #Fit model for wind speed between lake and dmi weather station
-wnd_model_data <- wnd_clean |> 
-  left_join(dmi_wnd)
+wnd_model_data <- left_join(wnd_clean, dmi_wnd_all)
 
 wnd_m0 <- lm(wnd ~ 1, data = wnd_model_data)
-wnd_m1 <- lm(wnd ~ dmi_wnd - 1, data = wnd_model_data)
-wnd_m2 <- lm(wnd ~ dmi_wnd + I(dmi_wnd^2) - 1, data = wnd_model_data)
+wnd_m1 <- lm(wnd ~ wnd_dmi - 1, data = wnd_model_data)
+wnd_m2 <- lm(wnd ~ wnd_dmi + I(wnd_dmi^2) - 1, data = wnd_model_data)
 
 anova(wnd_m0, wnd_m1, wnd_m2)
 summary(wnd_m2)
 
 #Predict for all observations
-wnd_predict <- dmi_wnd |> 
-  mutate(wnd_pred = predict(wnd_m2, newdata = data.frame(dmi_wnd = dmi_wnd))) |> 
-  select(-dmi_wnd)
+wnd_predict <- dmi_wnd_interp |> 
+  mutate(wnd_pred = predict(wnd_m2, newdata = data.frame(wnd_dmi = wnd_dmi))) |> 
+  select(-wnd_dmi)
 
 #Calibration curves for alk versus specifik conductivity
 calcurve_2019 <- tribble(~spec_cond, ~alk,
@@ -79,7 +84,10 @@ wtr_2020 <- bind_rows(wtr_2020_1, wtr_2020_2, wtr_2020_3)
 
 wtr_all <- bind_rows(wtr_2019, wtr_2020) |> 
   mutate(datetime = round_date(datetime, "10 mins"))
-  
+
+#Datetime sequence used for figures
+datetime_seq <- data.frame(datetime = seq(min(wtr_all$datetime), max(wtr_all$datetime), "10 mins"))
+
 #Oxygen sensor data
 oxygen_2019 <- sensor_data_2019 |> 
   select(datetime = Date_time, oxygen_2 = `DO_%_39`, oxygen_3 = `DO_%_65`)
@@ -99,3 +107,48 @@ oxygen_2020 <- bind_rows(oxygen_2020_1, oxygen_2020_2, oxygen_2020_3)
 
 oxygen_all <- bind_rows(oxygen_2019, oxygen_2020) |> 
   mutate(datetime = round_date(datetime, "10 mins"))
+
+#DIC calculations from pH and alk (predicted from spec cond)
+
+dic_2019 <- sensor_data_2019 |> 
+  mutate(anc_predicted = predict(calcurve_2019_model, newdata = data.frame(spec_cond=`Sp.Cond._18`))) |> 
+  select(datetime = Date_time, wtr = Temp_21, ph=pH_27, anc_predicted)
+
+dic_2020_1 <- sensor_data_2020_1 |> 
+  select(datetime = Date_time, wtr = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond._10745652`)
+
+dic_2020_2 <- sensor_data_2020_2 |> 
+  select(datetime = Date_time, wtr = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond_10745652`)
+
+dic_2020_3 <- sensor_data_2020_3 |> 
+  select(datetime = Date_time, wtr = Temp_10748214, ph = pH_p40189, spec_cond = `Sp.Cond._10678349`)
+
+dic_2020 <- bind_rows(dic_2020_1, dic_2020_2, dic_2020_3) |> 
+  mutate(anc_predicted = predict(calcurve_2020_model, newdata = data.frame(spec_cond=spec_cond)))
+
+#Perform DIC calculations and cache result
+# dic_all <- bind_rows(dic_2019, dic_2020) |>
+#   mutate(aquaenv = pmap(list(wtr, ph, anc_predicted), ~aquaenv(S=0, t=..1, SumCO2 = NULL, pH = ..2, TA = ..3/1000)),
+#          dic = map_dbl(aquaenv, ~.$SumCO2),
+#          datetime = round_date(datetime, "10 mins"))
+# saveRDS(dic_all, "data/dic_all.rds")
+
+dic_all <- readRDS("data/dic_all.rds")
+
+
+
+
+
+#Oxygen metabolism
+#Input: DateTime_UTC, doobs, dosat, kgas, zmix, lux, wtr, dummy
+
+# sensor_data_2019 |> 
+#   mutate(datetime = round_date(Date_time, "10 mins")) |> 
+#   left_join(wnd_predict) |> View()
+#   mutate(dosat = o2.at.sat.base(Temp_37),
+#          wnd_10 = wind.scale.base(wnd, 2),
+#          k600 = k.vachon.base(wnd_10, 4223445),
+#          kgas = k600.2.kGAS.base(k600, wtr, "O2")/24/6,
+#          dummy = 1,
+#          date = as_date(DateTime_UTC))
+#   select(DateTime_UTC = Date_time, doobs = `DO_mg/L_39`, )
