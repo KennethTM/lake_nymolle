@@ -4,6 +4,67 @@ source("rawdata.R")
 
 #Figure 1 - depth and plant cover maps
 
+#https://rspatial.org/terra/analysis/4-interpolation.html
+
+lake_poly <- st_read("data/lake_nymolle.sqlite")
+
+plants_raw <- read_excel("data/nymolle_plants_2019.xlsx")
+
+plants <- plants_raw |> 
+  select(pkt = Punkt, long, lat, species = `Art latin`, 
+         total_cover = `Total dækningsgrad %`, depth = `Dybde [m]`,
+         species_cover = `Dækningsgrad art%`) |> 
+  filter(!is.na(long)) |> 
+  st_as_sf(crs = 4326, coords = c("long", "lat")) |> 
+  st_transform(25832) |> 
+  mutate(chara_cover = ifelse(grepl("Chara*", species), species_cover, 0))
+
+depth <- plants |> 
+  select(depth) |> 
+  distinct()
+
+cover <- plants |> 
+  select(total_cover) |> 
+  distinct()
+
+# cover_df <- cbind(st_coordinates(cover), cover = cover$total_cover) |> 
+#   as.data.frame() |> 
+#   rename(x = X, y = Y)
+
+chara_cover <- plants |> 
+  group_by(pkt) |> 
+  summarise(chara_cover = max(chara_cover))
+
+# chara_cover_df <- cbind(st_coordinates(chara_cover), pres = chara_cover$chara_cover) |> 
+#   as.data.frame() |> 
+#   rename(x = X, y = Y)
+
+raster_template <- rast(vect(lake_poly), resolution = c(1, 1))
+
+cover_voronoi <- voronoi(vect(cover))
+cover_raster <- rasterize(cover_voronoi, raster_template, field="total_cover")
+cover_raster_mask <- mask(cover_raster, vect(lake_poly))
+
+chara_cover_voronoi <- voronoi(vect(chara_cover))
+chara_cover_raster <- rasterize(chara_cover_voronoi, raster_template, field="chara_cover")
+chara_cover_raster_mask <- mask(chara_cover_raster, vect(lake_poly))
+
+cover_raster_mask_df <- as.data.frame(cover_raster_mask, xy = TRUE)
+chara_cover_raster_mask_df <- as.data.frame(chara_cover_raster_mask > 20, xy = TRUE)
+
+ggplot()+
+  geom_raster(data = cover_raster_mask_df, aes(x=x, y=y, fill=total_cover))+
+  #geom_raster(data = chara_cover_raster_mask_df, aes(x=x, y=y, alpha=chara_cover))+
+  scale_alpha_manual(values = c(0, 0.5))+
+  geom_sf(data = lake_poly, fill=NA)+
+  geom_sf(data = depth)
+
+#MAKE POINT SHP CHARA PRES/ABS
+
+#Dybdekort
+#Plant cover + Chara pres/abs
+#Image
+
 #Figure 2 - open water water temperature, ph and oxygen profiles
 profile <- read.delim2("data/profile.txt")
 
