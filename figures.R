@@ -42,8 +42,11 @@ depth_map <- ggplot()+
   #annotate("point", x = open_site_x, y = open_site_y, col="red", size = 2)+
   scale_fill_viridis_c(option="mako", direction = -1, name = "Depth (m)", 
                        guide = guide_colorbar(reverse = TRUE))+
-  ylab("Northing (m)")+
-  xlab("Easting (m)")
+  ylab(NULL)+
+  xlab(NULL)+
+  theme(axis.ticks = element_blank(), axis.text = element_blank())+
+  annotation_scale(location = "br")+
+  annotation_north_arrow(location = "tr", height = unit(1, "cm"), width = unit(1, "cm"))
 
 cover_map <- ggplot()+
   geom_raster(data = total_cover_df, aes(x=x, y=y, fill=total_cover))+
@@ -52,16 +55,17 @@ cover_map <- ggplot()+
   coord_sf(datum=25832)+
   scale_fill_gradient(low = brewer.pal(5, "Greens")[1], high = brewer.pal(5, "Greens")[5], name = "Cover (%)")+
   scale_shape_manual(values = c(1, 19), name = "Charophytes")+
-  ylab("Northing (m)")+
-  xlab("Easting (m)")
+  ylab(NULL)+
+  xlab(NULL)+
+  theme(axis.ticks = element_blank(), axis.text = element_blank())
 
 #add image
-chara_img <- readJPEG("data/chara.jpeg")
+chara_img <- readJPEG("data/chara_image.jpg")
 chara_img_grob <- rasterGrob(chara_img)
 
-figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels = "A") + plot_layout(ncol = 1)
+figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels = "A")+plot_layout(ncol=1, heights = c(1, 1, 0.95))
 
-ggsave("figures/figure_1.png", figure_1, width = 129, height = 220, units = "mm")
+ggsave("figures/figure_1.png", figure_1, width = 129, height = 234, units = "mm")
 
 #Figure 2 - open water water temperature, ph and oxygen profiles
 profile <- read.delim2("data/profile.txt")
@@ -231,3 +235,8 @@ figure_5
 
 ggsave("figures/figure_5.png", figure_5, width = 174, height = 84, units = "mm")
 
+#Figure 6. A) Lake metabolism (R, GPP and NEP) based on O2. B) Lake metabolism (R, GPP and NEP) based on DIC. C) Metabolism O2 vs DIC. Filled points are metabolism estimates based on O2 and empthy points are based on DIC.
+
+#Figure 7. A) R vs GPP (normalized to 20 degrees). B) GPP vs incoming irradiance. Filled points are metabolism estimates based on O2 and empthy points are based on DIC.
+
+#Table 1. Lake characteristics (area, mean depth), plant data (LARS), and chemistry (chl a, total N, DOC, secchi depth, total P, alkalinity), site plant biomass.

@@ -1,15 +1,14 @@
 #Functions for calculating lake metabolism (MLE)
 #Input: DateTime_UTC, doobs, dosat, kgas, zmix, lux, wtr, dummy
-#Return: GPP, R og NEP, plot af dopred vs doobs med cor værdi
 
-#NLL funktion med GPP Jassby/Platt og Arhenius/Jørgensen R
+#NLL function with linear GPP-light and respiration-water temperature relationships
 nllfn <- function (pars, datain) {
   
   Pmax <- exp(pars[1])
   Rmax <- exp(pars[2])
-  DOInit <- exp(pars[3])
+  init_conc <- exp(pars[3])
   
-  #definer variable fra datain frame
+  #Define variables from datain
   nobs <- dim(datain)[1]
   irr <- datain$lux
   doobs <- datain$doobs
@@ -22,15 +21,15 @@ nllfn <- function (pars, datain) {
   #Set up output
   dohat <- rep(NA,nobs)
   atmflux <- rep(NA,nobs)
-  dohat[1] <- DOInit
+  dohat[1] <- init_conc
   
-  #metabolisme model
+  #Metabolism model
   for (i in 1:(nobs-1)) {
-    atmflux[i] <- dummy[i] * -k.gas[i] * (dohat[i] - dosat[i]) / zmix[i]  
+    atmflux[i] <- dummy[i] * -k.gas[i] * (dohat[i] - dosat[i]) / zmix[i]
     dohat[i+1] <- dohat[i] + (Pmax*irr[i]) - (Rmax*1.073^(Rwtr[i]-20)) + atmflux[i]
   }
   
-  #beregning af residualer/sigma2 samt negative log likelihood
+  #Calculation of residuals, sigma2 and negative log likelihood
   res <- doobs - dohat
   nres <- length(res)
   SSE <- sum(res^2)
@@ -39,7 +38,7 @@ nllfn <- function (pars, datain) {
   return(NLL)
 }
 
-#dopred
+#Function for obtaining predicted oxygen
 domodel <- function(pars, datain) {
   
   nobs <- dim(datain)[1]
@@ -53,7 +52,7 @@ domodel <- function(pars, datain) {
   
   dopred <- rep(NA,nobs)
   atmflux <- rep(NA,nobs)
-  dopred[1] <- pars$doinit
+  dopred[1] <- pars$init_conc
   
   for (i in 1:(nobs-1)) {
     atmflux[i] <- dummy[i] * -k.gas[i] * (dopred[i] - dosat[i]) / zmix[i]  
@@ -63,7 +62,7 @@ domodel <- function(pars, datain) {
   return(dopred)
 }
 
-#function collecting metabolism tools
+#Function collecting metabolism tools
 metab_calc <- function(df){
   datain <- df
   
@@ -74,20 +73,40 @@ metab_calc <- function(df){
   
   gppcoef <- exp(fit$par[1])
   rcoef <- exp(fit$par[2])
-  doinit <- exp(fit$par[3])
+  init_conc <- exp(fit$par[3])
   convergence <- fit$convergence
   
   GPP <- mean(gppcoef*datain$lux)*144
   R <- mean(rcoef*1.073^(datain$wtr-20))*144
   NEP <- GPP - R
   
-  pars <- list(gppcoef = gppcoef, rcoef = rcoef, doinit = doinit) 
+  pars <- list(gppcoef = gppcoef, rcoef = rcoef, init_conc = init_conc) 
   dopred <- domodel(pars = pars, datain = datain)
   r_spear <- cor(dopred, datain$doobs, method = "spearman")
   rmse <- sqrt(mean((datain$doobs-dopred)^2))
   
-  return(list(data.frame(DateTime_UTC_min = min(datain$DateTime_UTC), DateTime_UTC_max = max(datain$DateTime_UTC),
-                         gppcoef = gppcoef, rcoef = rcoef, doinit = doinit, convergence = convergence,
-                         GPP = GPP, R = R, NEP = NEP, r_spear = r_spear, rmse = rmse),
-              data.frame(DateTime_UTC = datain$DateTime_UTC, dopred = dopred, doobs = datain$doobs)))
+  daily <- data.frame(DateTime_UTC_min = min(datain$DateTime_UTC), DateTime_UTC_max = max(datain$DateTime_UTC),
+                      gppcoef = gppcoef, rcoef = rcoef, init_conc = init_conc, convergence = convergence,
+                      GPP = GPP, R = R, NEP = NEP, r_spear = r_spear, rmse = rmse, 
+                      wtr_mean = mean(datain$wtr), lux_mean = mean(datain$lux))
+  
+  obs_pred <- data.frame(DateTime_UTC = datain$DateTime_UTC, dopred = dopred, doobs = datain$doobs)
+  
+  return(list("daily" = daily, "obs_pred" = obs_pred))
 }
+
+#Function for calculating gas exchange velocity as the mean of three empirical models
+k_gas_ensemble <- function(wnd, wtr, area){
+  k600_cole <- k.cole.base(wnd)
+  k600_crucius <- k.crusius.base(wnd)
+  k600_vachon <- k.vachon.base(wnd, area)
+  k_cole <- k600.2.kGAS.base(k600_cole, wtr, gas="O2")
+  k_crucius <- k600.2.kGAS.base(k600_crucius, wtr, gas="O2")
+  k_vachon <- k600.2.kGAS.base(k600_vachon, wtr, gas="O2")
+  k_mean <- mean(k_cole, k_crucius, k_vachon)
+  return(k_mean)
+}
+k_gas_ensemble_vec <- Vectorize(k_gas_ensemble)
+
+#Function for calculating chemical enhancement factor
+k_enhance_factor #<- 

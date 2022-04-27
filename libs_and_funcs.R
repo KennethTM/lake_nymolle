@@ -1,7 +1,7 @@
 #Libraries and functions
 
 library(tidyverse);library(lubridate);library(patchwork);library(viridisLite)
-library(httr);library(jsonlite);library(readxl);library(LakeMetabolizer)
+library(httr);library(jsonlite);library(readxl);library(LakeMetabolizer);library(rLakeAnalyzer)
 library(RColorBrewer);library(AquaEnv);library(zoo);library(sf);library(terra);library(gdalUtils)
 library(fields);library(jpeg);library(grid)
 

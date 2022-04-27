@@ -138,6 +138,8 @@ dic_all <- readRDS("data/dic_all.rds")
 #Plant survey rawdata
 lake_poly <- st_read("data/lake_nymolle.sqlite")
 
+lake_area <- as.numeric(st_area(lake_poly))
+
 # #Read data from plant survey
 # plants <- read_excel("data/nymolle_plants_2019.xlsx") |>
 #   select(pkt = Punkt, long, lat, species = `Art latin`,
