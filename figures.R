@@ -3,67 +3,65 @@ source("rawdata.R")
 #Figures
 
 #Figure 1 - depth and plant cover maps
-
-#https://rspatial.org/terra/analysis/4-interpolation.html
-
-lake_poly <- st_read("data/lake_nymolle.sqlite")
-
-plants_raw <- read_excel("data/nymolle_plants_2019.xlsx")
-
-plants <- plants_raw |> 
-  select(pkt = Punkt, long, lat, species = `Art latin`, 
-         total_cover = `Total dækningsgrad %`, depth = `Dybde [m]`,
-         species_cover = `Dækningsgrad art%`) |> 
-  filter(!is.na(long)) |> 
-  st_as_sf(crs = 4326, coords = c("long", "lat")) |> 
-  st_transform(25832) |> 
-  mutate(chara_cover = ifelse(grepl("Chara*", species), species_cover, 0))
-
-depth <- plants |> 
-  select(depth) |> 
-  distinct()
-
-cover <- plants |> 
-  select(total_cover) |> 
-  distinct()
-
-# cover_df <- cbind(st_coordinates(cover), cover = cover$total_cover) |> 
-#   as.data.frame() |> 
-#   rename(x = X, y = Y)
-
-chara_cover <- plants |> 
-  group_by(pkt) |> 
-  summarise(chara_cover = max(chara_cover))
-
-# chara_cover_df <- cbind(st_coordinates(chara_cover), pres = chara_cover$chara_cover) |> 
-#   as.data.frame() |> 
-#   rename(x = X, y = Y)
-
 raster_template <- rast(vect(lake_poly), resolution = c(1, 1))
 
-cover_voronoi <- voronoi(vect(cover))
-cover_raster <- rasterize(cover_voronoi, raster_template, field="total_cover")
-cover_raster_mask <- mask(cover_raster, vect(lake_poly))
+plants_voronoi <- voronoi(vect(plant_points))
 
-chara_cover_voronoi <- voronoi(vect(chara_cover))
-chara_cover_raster <- rasterize(chara_cover_voronoi, raster_template, field="chara_cover")
+total_cover_raster <- rasterize(plants_voronoi, raster_template, field="total_cover")
+total_cover_raster_mask <- mask(total_cover_raster, vect(lake_poly))
+
+chara_cover_raster <- rasterize(plants_voronoi, raster_template, field="chara_cover")
 chara_cover_raster_mask <- mask(chara_cover_raster, vect(lake_poly))
 
-cover_raster_mask_df <- as.data.frame(cover_raster_mask, xy = TRUE)
-chara_cover_raster_mask_df <- as.data.frame(chara_cover_raster_mask > 20, xy = TRUE)
+#Bathymetric map
+depth_zero <- lake_poly |> 
+  st_cast("MULTILINESTRING") %>% 
+  st_cast("LINESTRING") %>% 
+  st_line_sample(density = 0.2) %>% 
+  st_cast("POINT") %>% 
+  st_as_sf() %>% 
+  mutate(depth = 0) %>% 
+  rename(geometry = x)
 
-ggplot()+
-  geom_raster(data = cover_raster_mask_df, aes(x=x, y=y, fill=total_cover))+
-  #geom_raster(data = chara_cover_raster_mask_df, aes(x=x, y=y, alpha=chara_cover))+
-  scale_alpha_manual(values = c(0, 0.5))+
+depth_all <- rbind(depth_zero, plant_points[, "depth"])
+
+tps_mod <- Tps(st_coordinates(depth_all), depth_all$depth)
+depth_interp <- interpolate(raster_template, tps_mod)
+depth_interp_mask <- mask(depth_interp, vect(lake_poly))
+depth_interp_mask[depth_interp_mask < 0] = 0
+
+depth_df <- as.data.frame(depth_interp_mask, xy = TRUE)
+total_cover_df <- as.data.frame(total_cover_raster_mask, xy = TRUE)
+chara_cover_df <- as.data.frame(chara_cover_raster_mask, xy = TRUE)
+
+depth_map <- ggplot()+
+  geom_raster(data = depth_df, aes(x=x, y=y, fill=lyr.1))+
   geom_sf(data = lake_poly, fill=NA)+
-  geom_sf(data = depth)
+  coord_sf(datum=25832)+
+  annotate("point", x = littoral_site_x, y = littoral_site_y, col="red", size = 3)+
+  #annotate("point", x = open_site_x, y = open_site_y, col="red", size = 2)+
+  scale_fill_viridis_c(option="mako", direction = -1, name = "Depth (m)", 
+                       guide = guide_colorbar(reverse = TRUE))+
+  ylab("Northing (m)")+
+  xlab("Easting (m)")
 
-#MAKE POINT SHP CHARA PRES/ABS
+cover_map <- ggplot()+
+  geom_raster(data = total_cover_df, aes(x=x, y=y, fill=total_cover))+
+  geom_sf(data = lake_poly, fill=NA)+
+  geom_sf(data=plant_points, aes(shape = chara_pres_abs))+
+  coord_sf(datum=25832)+
+  scale_fill_gradient(low = brewer.pal(5, "Greens")[1], high = brewer.pal(5, "Greens")[5], name = "Cover (%)")+
+  scale_shape_manual(values = c(1, 19), name = "Charophytes")+
+  ylab("Northing (m)")+
+  xlab("Easting (m)")
 
-#Dybdekort
-#Plant cover + Chara pres/abs
-#Image
+#add image
+chara_img <- readJPEG("data/chara.jpeg")
+chara_img_grob <- rasterGrob(chara_img)
+
+figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels = "A") + plot_layout(ncol = 1)
+
+ggsave("figures/figure_1.png", figure_1, width = 129, height = 220, units = "mm")
 
 #Figure 2 - open water water temperature, ph and oxygen profiles
 profile <- read.delim2("data/profile.txt")

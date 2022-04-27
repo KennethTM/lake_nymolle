@@ -1,7 +1,4 @@
 #Notes
 
-#Timezone for data?
-#Sp conductivity data?
-#Minidot calib?
-#Sp cond calib?
-#Chara images
+#Timezone for data? TJEK IFHT DMI WIND
+#Open site coordinates

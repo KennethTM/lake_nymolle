@@ -135,20 +135,34 @@ dic_2020 <- bind_rows(dic_2020_1, dic_2020_2, dic_2020_3) |>
 
 dic_all <- readRDS("data/dic_all.rds")
 
+#Plant survey rawdata
+lake_poly <- st_read("data/lake_nymolle.sqlite")
 
+# #Read data from plant survey
+# plants <- read_excel("data/nymolle_plants_2019.xlsx") |>
+#   select(pkt = Punkt, long, lat, species = `Art latin`,
+#          total_cover = `Total dækningsgrad %`, depth = `Dybde [m]`,
+#          species_cover = `Dækningsgrad art%`) |>
+#   filter(!is.na(long)) |>
+#   st_as_sf(crs = 4326, coords = c("long", "lat")) |>
+#   mutate(chara_cover = ifelse(grepl("Chara*", species), species_cover, 0))
+# 
+# #Save to file to edit coordinates in Google earth
+# st_write(plants, "data/plants.kml")
+# st_write(lake_poly, "data/lake_poly.kml")
 
+plants_edit <- st_read("data/plants_edit.kml") |> 
+  select(pkt, species, total_cover, depth, species_cover, chara_cover) |> 
+  st_transform(25832) |> 
+  st_zm()
 
-
-#Oxygen metabolism
-#Input: DateTime_UTC, doobs, dosat, kgas, zmix, lux, wtr, dummy
-
-# sensor_data_2019 |> 
-#   mutate(datetime = round_date(Date_time, "10 mins")) |> 
-#   left_join(wnd_predict) |> View()
-#   mutate(dosat = o2.at.sat.base(Temp_37),
-#          wnd_10 = wind.scale.base(wnd, 2),
-#          k600 = k.vachon.base(wnd_10, 4223445),
-#          kgas = k600.2.kGAS.base(k600, wtr, "O2")/24/6,
-#          dummy = 1,
-#          date = as_date(DateTime_UTC))
-#   select(DateTime_UTC = Date_time, doobs = `DO_mg/L_39`, )
+#Use mean x-y per pkt due to small differences cause by editting
+plant_points <- bind_cols(st_coordinates(plants_edit), st_drop_geometry(plants_edit)) |> 
+  group_by(pkt) |> 
+  summarise(X = mean(X), Y=mean(Y),
+            depth = mean(depth),
+            total_cover = mean(total_cover),
+            chara_cover = sum(chara_cover)) |> 
+  mutate(chara_cover = ifelse(chara_cover > 100, 100, chara_cover),
+         chara_pres_abs = ifelse(chara_cover > 0, "Presence", "Absence")) |> 
+  st_as_sf(coords=c("X", "Y"), crs=25832)

@@ -1,0 +1,1664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="root_doc">
+	<name>plants.kml</name>
+	<open>1</open>
+	<Schema name="plants" id="plants">
+		<SimpleField type="float" name="pkt"></SimpleField>
+		<SimpleField type="string" name="species"></SimpleField>
+		<SimpleField type="float" name="total_cover"></SimpleField>
+		<SimpleField type="float" name="depth"></SimpleField>
+		<SimpleField type="float" name="species_cover"></SimpleField>
+		<SimpleField type="float" name="chara_cover"></SimpleField>
+	</Schema>
+	<StyleMap id="default">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#default0</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="default0">
+	</Style>
+	<Style id="hl">
+		<IconStyle>
+			<scale>1.2</scale>
+		</IconStyle>
+	</Style>
+	<Folder>
+		<name>plants</name>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">27</SimpleData>
+					<SimpleData name="species">Alisma plantango-aquatica</SimpleData>
+					<SimpleData name="total_cover">60</SimpleData>
+					<SimpleData name="depth">0.53</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1536308526992,55.6295385863631,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">27</SimpleData>
+					<SimpleData name="species">Callitriche sp.</SimpleData>
+					<SimpleData name="total_cover">60</SimpleData>
+					<SimpleData name="depth">0.53</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1536308526992,55.6295385863631,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">28</SimpleData>
+					<SimpleData name="species">Callitriche sp.</SimpleData>
+					<SimpleData name="total_cover">40</SimpleData>
+					<SimpleData name="depth">2</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.152982763946,55.629186630249,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">29</SimpleData>
+					<SimpleData name="species">Callitriche sp.</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.76</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15338388153512,55.62919178997267,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">30</SimpleData>
+					<SimpleData name="species">Callitriche sp.</SimpleData>
+					<SimpleData name="total_cover">10</SimpleData>
+					<SimpleData name="depth">0.7</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15303792399706,55.62881376037429,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">42</SimpleData>
+					<SimpleData name="species">Callitriche sp.</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">1.4</SimpleData>
+					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15297769460809,55.62810978108243,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">59</SimpleData>
+					<SimpleData name="species">Callitriche sp.</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">1.63</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1528379246592,55.62738326378161,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">53</SimpleData>
+					<SimpleData name="species">Chara aspera</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.69</SimpleData>
+					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="chara_cover">20</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1541367843747,55.6277275085449,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">39</SimpleData>
+					<SimpleData name="species">Chara contraria</SimpleData>
+					<SimpleData name="total_cover">70</SimpleData>
+					<SimpleData name="depth">0.43</SimpleData>
+					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="chara_cover">30</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1579995844513,55.62833821401,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">44</SimpleData>
+					<SimpleData name="species">Chara contraria</SimpleData>
+					<SimpleData name="total_cover">40</SimpleData>
+					<SimpleData name="depth">0.2</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">1</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154164193198,55.6280684005469,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">47</SimpleData>
+					<SimpleData name="species">Chara contraria</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.81</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">10</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560678072273,55.6280284188687,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">55</SimpleData>
+					<SimpleData name="species">Chara contraria</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.66</SimpleData>
+					<SimpleData name="species_cover">25</SimpleData>
+					<SimpleData name="chara_cover">25</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1554212272167,55.6276944000273,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">56</SimpleData>
+					<SimpleData name="species">Chara contraria</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">0.19</SimpleData>
+					<SimpleData name="species_cover">25</SimpleData>
+					<SimpleData name="chara_cover">25</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560389734804,55.6276695057749,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">4541</SimpleData>
+					<SimpleData name="species">Chara contraria</SimpleData>
+					<SimpleData name="total_cover">75</SimpleData>
+					<SimpleData name="depth">0.16</SimpleData>
+					<SimpleData name="species_cover">45</SimpleData>
+					<SimpleData name="chara_cover">45</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154766768217,55.628052894026,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">28</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">40</SimpleData>
+					<SimpleData name="depth">2</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">1</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.152982763946,55.629186630249,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">31</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">40</SimpleData>
+					<SimpleData name="depth">0.53</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">1</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1535876020789,55.6288024876266,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">33</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">10</SimpleData>
+					<SimpleData name="depth">1.15</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">5</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1541944518685,55.6284452509135,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">35</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">0.94</SimpleData>
+					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="chara_cover">80</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1554623823612,55.6284035928547,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">36</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">30</SimpleData>
+					<SimpleData name="depth">1.23</SimpleData>
+					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="chara_cover">30</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560966409742,55.6283872481435,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">37</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.4</SimpleData>
+					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="chara_cover">80</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1567158959805,55.6283802911639,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">38</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.26</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1573811676353,55.628354223445,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">39</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">70</SimpleData>
+					<SimpleData name="depth">0.43</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">1</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1579995844513,55.62833821401,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">40</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.51</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1586497686803,55.6283215340226,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">41</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">5</SimpleData>
+					<SimpleData name="depth">0.43</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">1</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15912655711367,55.62832790044334,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">43</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">0.99</SimpleData>
+					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="chara_cover">30</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1534988377243,55.6280945520848,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">47</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.81</SimpleData>
+					<SimpleData name="species_cover">90</SimpleData>
+					<SimpleData name="chara_cover">90</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560678072273,55.6280284188687,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">48</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">1.2</SimpleData>
+					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="chara_cover">80</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1566855534911,55.6280035246163,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">50</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.68</SimpleData>
+					<SimpleData name="species_cover">90</SimpleData>
+					<SimpleData name="chara_cover">90</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1579548250883,55.62797980383029,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">53</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.69</SimpleData>
+					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="chara_cover">30</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1541367843747,55.6277275085449,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">55</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.66</SimpleData>
+					<SimpleData name="species_cover">75</SimpleData>
+					<SimpleData name="chara_cover">75</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1554212272167,55.6276944000273,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">56</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">0.19</SimpleData>
+					<SimpleData name="species_cover">25</SimpleData>
+					<SimpleData name="chara_cover">25</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560389734804,55.6276695057749,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">57</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.47</SimpleData>
+					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="chara_cover">80</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1566573902964,55.6276535801589,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">63</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">1.14</SimpleData>
+					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="chara_cover">20</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1553606260567,55.6273363251239,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">64</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">10</SimpleData>
+					<SimpleData name="depth">1.13</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">5</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560093853622,55.6273017078638,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">72</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.66</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1534311119467,55.6266578100621,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">73</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">3</SimpleData>
+					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="chara_cover">50</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1540336031466,55.6266423035413,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">74</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.86</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1546679455786,55.6266259588301,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">4541</SimpleData>
+					<SimpleData name="species">Chara globularis</SimpleData>
+					<SimpleData name="total_cover">75</SimpleData>
+					<SimpleData name="depth">0.16</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">10</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154766768217,55.628052894026,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">39</SimpleData>
+					<SimpleData name="species">Chara hispida</SimpleData>
+					<SimpleData name="total_cover">70</SimpleData>
+					<SimpleData name="depth">0.43</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">5</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1579995844513,55.62833821401,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">72</SimpleData>
+					<SimpleData name="species">Chara papillosa</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.66</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">1</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1534311119467,55.6266578100621,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">37</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.4</SimpleData>
+					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="chara_cover">20</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1567158959805,55.6283802911639,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">39</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">70</SimpleData>
+					<SimpleData name="depth">0.43</SimpleData>
+					<SimpleData name="species_cover">35</SimpleData>
+					<SimpleData name="chara_cover">35</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1579995844513,55.62833821401,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">49</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.18</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1573198121041,55.6279871799051,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">50</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.68</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">10</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1579548250883,55.62797980383029,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">53</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.69</SimpleData>
+					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="chara_cover">30</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1541367843747,55.6277275085449,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">61</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.61</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1540906000882,55.6273510772734,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">64</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">10</SimpleData>
+					<SimpleData name="depth">1.13</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">5</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560093853622,55.6273017078638,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">69</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">1.66</SimpleData>
+					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="chara_cover">80</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1553469635546,55.6269681081175,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">70</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.64</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1559812221676,55.6269517634063,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">71</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">1.67</SimpleData>
+					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="chara_cover">80</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1565837971866,55.6269362568855,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">75</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.55</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1553332172334,55.6265998072922,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">76</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.65</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1559523046016,55.6265929341316,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">77</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.69</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1565866470336,55.6265765894204,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">671</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.89</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1540783625096,55.62700071372091,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">4611</SimpleData>
+					<SimpleData name="species">Chara virgata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.74</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">100</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1554169524461,55.6280361302196,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">33</SimpleData>
+					<SimpleData name="species">Chara vulgaris</SimpleData>
+					<SimpleData name="total_cover">10</SimpleData>
+					<SimpleData name="depth">1.15</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">5</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1541944518685,55.6284452509135,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">44</SimpleData>
+					<SimpleData name="species">Chara vulgaris</SimpleData>
+					<SimpleData name="total_cover">40</SimpleData>
+					<SimpleData name="depth">0.2</SimpleData>
+					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="chara_cover">20</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154164193198,55.6280684005469,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">53</SimpleData>
+					<SimpleData name="species">Chara vulgaris</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.69</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">10</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1541367843747,55.6277275085449,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">56</SimpleData>
+					<SimpleData name="species">Chara vulgaris</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">0.19</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">10</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560389734804,55.6276695057749,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">57</SimpleData>
+					<SimpleData name="species">Chara vulgaris</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.47</SimpleData>
+					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="chara_cover">20</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1566573902964,55.6276535801589,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">4541</SimpleData>
+					<SimpleData name="species">Chara vulgaris</SimpleData>
+					<SimpleData name="total_cover">75</SimpleData>
+					<SimpleData name="depth">0.16</SimpleData>
+					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="chara_cover">20</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154766768217,55.628052894026,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">4611</SimpleData>
+					<SimpleData name="species">Chara vulgaris</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.74</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">1</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1554169524461,55.6280361302196,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">27</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">60</SimpleData>
+					<SimpleData name="depth">0.53</SimpleData>
+					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1536308526992,55.6295385863631,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">28</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">40</SimpleData>
+					<SimpleData name="depth">2</SimpleData>
+					<SimpleData name="species_cover">40</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.152982763946,55.629186630249,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">29</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.76</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15337576563891,55.62918624739522,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">30</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">10</SimpleData>
+					<SimpleData name="depth">0.7</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15303831210703,55.62881772839022,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">31</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">40</SimpleData>
+					<SimpleData name="depth">0.53</SimpleData>
+					<SimpleData name="species_cover">40</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1535876020789,55.6288024876266,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">32</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">0.16</SimpleData>
+					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15346486786592,55.62845804823749,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">41</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">5</SimpleData>
+					<SimpleData name="depth">0.43</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15911670069179,55.62831965487148,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">42</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">1.4</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15297401914182,55.62810278639701,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">43</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">0.99</SimpleData>
+					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1534988377243,55.6280945520848,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">52</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">1</SimpleData>
+					<SimpleData name="depth">2.3</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1534859295934,55.6277352198958,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">56</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">0.19</SimpleData>
+					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560389734804,55.6276695057749,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">57</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.47</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1566573902964,55.6276535801589,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">59</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">1.63</SimpleData>
+					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1528379246592,55.62738326378161,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">61</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.61</SimpleData>
+					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1540906000882,55.6273510772734,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">69</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">1.66</SimpleData>
+					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1553469635546,55.6269681081175,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">70</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.64</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1559812221676,55.6269517634063,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">71</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">1.67</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1565837971866,55.6269362568855,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">75</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">1.55</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1553332172334,55.6265998072922,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">76</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.65</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1559523046016,55.6265929341316,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">4541</SimpleData>
+					<SimpleData name="species">Chlorophyceae</SimpleData>
+					<SimpleData name="total_cover">75</SimpleData>
+					<SimpleData name="depth">0.16</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154766768217,55.628052894026,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">27</SimpleData>
+					<SimpleData name="species">Hippuris vulgaris</SimpleData>
+					<SimpleData name="total_cover">60</SimpleData>
+					<SimpleData name="depth">0.53</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1536308526992,55.6295385863631,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">29</SimpleData>
+					<SimpleData name="species">Hippuris vulgaris</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.76</SimpleData>
+					<SimpleData name="species_cover">90</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.153387822739,55.62920109402826,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">30</SimpleData>
+					<SimpleData name="species">Myriophyllum spicatum</SimpleData>
+					<SimpleData name="total_cover">10</SimpleData>
+					<SimpleData name="depth">0.7</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15304110903915,55.62881357397952,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">42</SimpleData>
+					<SimpleData name="species">Myriophyllum spicatum</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">1.4</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15297019031736,55.6280940166401,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">30</SimpleData>
+					<SimpleData name="species">Potamogeton berchtoldii</SimpleData>
+					<SimpleData name="total_cover">10</SimpleData>
+					<SimpleData name="depth">0.7</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15304267021782,55.62882946983049,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">52</SimpleData>
+					<SimpleData name="species">Potamogeton berchtoldii</SimpleData>
+					<SimpleData name="total_cover">1</SimpleData>
+					<SimpleData name="depth">2.3</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1534859295934,55.6277352198958,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">4541</SimpleData>
+					<SimpleData name="species">Potamogeton berchtoldii</SimpleData>
+					<SimpleData name="total_cover">75</SimpleData>
+					<SimpleData name="depth">0.16</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154766768217,55.628052894026,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">4611</SimpleData>
+					<SimpleData name="species">Potamogeton berchtoldii</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.74</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1554169524461,55.6280361302196,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">44</SimpleData>
+					<SimpleData name="species">Potamogeton pusillus</SimpleData>
+					<SimpleData name="total_cover">40</SimpleData>
+					<SimpleData name="depth">0.2</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154164193198,55.6280684005469,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">47</SimpleData>
+					<SimpleData name="species">Potamogeton pusillus</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.81</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560678072273,55.6280284188687,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">53</SimpleData>
+					<SimpleData name="species">Potamogeton pusillus</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.69</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1541367843747,55.6277275085449,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">55</SimpleData>
+					<SimpleData name="species">Potamogeton pusillus</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.66</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1554212272167,55.6276944000273,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">63</SimpleData>
+					<SimpleData name="species">Potamogeton pusillus</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">1.14</SimpleData>
+					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1553606260567,55.6273363251239,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">4541</SimpleData>
+					<SimpleData name="species">Potamogeton pusillus</SimpleData>
+					<SimpleData name="total_cover">75</SimpleData>
+					<SimpleData name="depth">0.16</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154766768217,55.628052894026,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">27</SimpleData>
+					<SimpleData name="species">Ranunculus cf. aqautilis</SimpleData>
+					<SimpleData name="total_cover">60</SimpleData>
+					<SimpleData name="depth">0.53</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1536308526992,55.6295385863631,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">55</SimpleData>
+					<SimpleData name="species">Stuckenia pectinata</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.66</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1554212272167,55.6276944000273,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">56</SimpleData>
+					<SimpleData name="species">Stuckenia pectinata</SimpleData>
+					<SimpleData name="total_cover">80</SimpleData>
+					<SimpleData name="depth">0.19</SimpleData>
+					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1560389734804,55.6276695057749,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">27</SimpleData>
+					<SimpleData name="species">Veronica sp.</SimpleData>
+					<SimpleData name="total_cover">60</SimpleData>
+					<SimpleData name="depth">0.53</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1536308526992,55.6295385863631,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">44</SimpleData>
+					<SimpleData name="species">Zannichellia palustris</SimpleData>
+					<SimpleData name="total_cover">40</SimpleData>
+					<SimpleData name="depth">0.2</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.154164193198,55.6280684005469,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">53</SimpleData>
+					<SimpleData name="species">Zannichellia palustris</SimpleData>
+					<SimpleData name="total_cover">100</SimpleData>
+					<SimpleData name="depth">0.69</SimpleData>
+					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1541367843747,55.6277275085449,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">63</SimpleData>
+					<SimpleData name="species">Zannichellia palustris</SimpleData>
+					<SimpleData name="total_cover">50</SimpleData>
+					<SimpleData name="depth">1.14</SimpleData>
+					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1553606260567,55.6273363251239,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">34</SimpleData>
+					<SimpleData name="total_cover">0</SimpleData>
+					<SimpleData name="depth">2.32</SimpleData>
+					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1548121981322,55.628420356661,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<styleUrl>#default</styleUrl>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">51</SimpleData>
+					<SimpleData name="total_cover">0</SimpleData>
+					<SimpleData name="depth">1.97</SimpleData>
+					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.15296442722154,55.62775438997173,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">60</SimpleData>
+					<SimpleData name="total_cover">0</SimpleData>
+					<SimpleData name="depth">2.1</SimpleData>
+					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1534563414752,55.6273674219846,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">651</SimpleData>
+					<SimpleData name="total_cover">0</SimpleData>
+					<SimpleData name="depth">1.73</SimpleData>
+					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1528097614645,55.62703340314319,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<ExtendedData>
+				<SchemaData schemaUrl="#plants">
+					<SimpleData name="pkt">661</SimpleData>
+					<SimpleData name="total_cover">0</SimpleData>
+					<SimpleData name="depth">3.29</SimpleData>
+					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="chara_cover">0</SimpleData>
+				</SchemaData>
+			</ExtendedData>
+			<Point>
+				<coordinates>12.1534275077283,55.62700850889081,0</coordinates>
+			</Point>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>
