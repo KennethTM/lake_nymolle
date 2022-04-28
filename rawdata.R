@@ -62,23 +62,31 @@ calcurve_2020_model <- lm(alk ~ spec_cond, data = calcurve_2020)
 summary(calcurve_2020_model)
 
 #Sensor data
-sensor_data_2019 <- read_excel("data/sensor_data_2019.xlsx")
-sensor_data_2020_1 <- read_excel("data/sensor_data_2020.xlsx", sheet = 1)
-sensor_data_2020_2 <- read_excel("data/sensor_data_2020.xlsx", sheet = 2)
-sensor_data_2020_3 <- read_excel("data/sensor_data_2020.xlsx", sheet = 3)
+sensor_data_2019 <- read_excel("data/sensor_data_2019.xlsx") |> 
+  mutate(datetime = Date_time - 2*60*60) |> 
+  select(-Date_time)
+sensor_data_2020_1 <- read_excel("data/sensor_data_2020.xlsx", sheet = 1) |> 
+  mutate(datetime = Date_time - 1*60*60)|> 
+  select(-Date_time)
+sensor_data_2020_2 <- read_excel("data/sensor_data_2020.xlsx", sheet = 2) |> 
+  mutate(datetime = Date_time - 2*60*60)|> 
+  select(-Date_time)
+sensor_data_2020_3 <- read_excel("data/sensor_data_2020.xlsx", sheet = 3) |> 
+  mutate(datetime = Date_time - 2*60*60)|> 
+  select(-Date_time)
 
 #Water temperature data
 wtr_2019 <- sensor_data_2019 |> 
-  select(datetime = Date_time, wtr_1 = Temp_8, wtr_2 = Temp_21, wtr_3 = Temp_29, wtr_4 = Temp_37, wtr_5 = Temp_49)
+  select(datetime, wtr_1 = Temp_8, wtr_2 = Temp_21, wtr_3 = Temp_29, wtr_4 = Temp_37, wtr_5 = Temp_49)
 
 wtr_2020_1 <- sensor_data_2020_1 |> 
-  select(datetime = Date_time, wtr_1 = Temp_10748214, wtr_4 = Temp_10748223, wtr_5 = Temp_10675577)
+  select(datetime, wtr_1 = Temp_10748214, wtr_4 = Temp_10748223, wtr_5 = Temp_10675577)
 
 wtr_2020_2 <- sensor_data_2020_2 |> 
-  select(datetime = Date_time, wtr_1 = Temp_10748214, wtr_3 = Temp_10748223, wtr_4 = Temp_10675577, wtr_5 = Temp_10748206)
+  select(datetime, wtr_1 = Temp_10748214, wtr_3 = Temp_10748223, wtr_4 = Temp_10675577, wtr_5 = Temp_10748206)
 
 wtr_2020_3 <- sensor_data_2020_3 |> 
-  select(datetime = Date_time, wtr_1 = Temp_10748214, wtr_4 = Temp_10675577, wtr_5 = Temp_10748206)
+  select(datetime, wtr_1 = Temp_10748214, wtr_4 = Temp_10675577, wtr_5 = Temp_10748206)
 
 wtr_2020 <- bind_rows(wtr_2020_1, wtr_2020_2, wtr_2020_3)
 
@@ -90,18 +98,18 @@ datetime_seq <- data.frame(datetime = seq(min(wtr_all$datetime), max(wtr_all$dat
 
 #Oxygen sensor data
 oxygen_2019 <- sensor_data_2019 |> 
-  select(datetime = Date_time, oxygen_2 = `DO_%_39`, oxygen_3 = `DO_%_65`)
+  select(datetime, oxygen_2 = `DO_%_39`, oxygen_3 = `DO_%_65`)
 
 oxygen_2020_1 <- sensor_data_2020_1 |> 
-  select(datetime = Date_time, oxygen_1 = DO_procent_500098, oxygen_2 = DO_procent_348923)
+  select(datetime, oxygen_1 = DO_procent_500098, oxygen_2 = DO_procent_348923)
 
 oxygen_2020_2 <- sensor_data_2020_2 |> 
-  select(datetime = Date_time, oxygen_1 = DO_procent_500098, oxygen_2 = DO_procent_348923, oxygen_3 = DO_procent_652844)
+  select(datetime, oxygen_1 = DO_procent_500098, oxygen_2 = DO_procent_348923, oxygen_3 = DO_procent_652844)
 
 oxygen_2020_3 <- sensor_data_2020_3 |> 
   mutate(dosat = o2.at.sat.base(Temp_10675577),
          DO_procent_652844 = DO_mgL_652844/dosat*100) |>
-  select(datetime = Date_time, oxygen_1 = DO_procent_500098, oxygen_2 = DO_procent_348923, oxygen_3 = DO_procent_652844)
+  select(datetime, oxygen_1 = DO_procent_500098, oxygen_2 = DO_procent_348923, oxygen_3 = DO_procent_652844)
 
 oxygen_2020 <- bind_rows(oxygen_2020_1, oxygen_2020_2, oxygen_2020_3)
 
@@ -112,23 +120,23 @@ oxygen_all <- bind_rows(oxygen_2019, oxygen_2020) |>
 
 dic_2019 <- sensor_data_2019 |> 
   mutate(anc_predicted = predict(calcurve_2019_model, newdata = data.frame(spec_cond=`Sp.Cond._18`))) |> 
-  select(datetime = Date_time, wtr = Temp_21, ph=pH_27, anc_predicted)
+  select(datetime, wtr_dic = Temp_21, ph=pH_27, spec_cond = `Sp.Cond._18`, anc_predicted)
 
 dic_2020_1 <- sensor_data_2020_1 |> 
-  select(datetime = Date_time, wtr = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond._10745652`)
+  select(datetime, wtr_dic = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond._10745652`)
 
 dic_2020_2 <- sensor_data_2020_2 |> 
-  select(datetime = Date_time, wtr = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond_10745652`)
+  select(datetime, wtr_dic = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond_10745652`)
 
 dic_2020_3 <- sensor_data_2020_3 |> 
-  select(datetime = Date_time, wtr = Temp_10748214, ph = pH_p40189, spec_cond = `Sp.Cond._10678349`)
+  select(datetime, wtr_dic = Temp_10748214, ph = pH_p40189, spec_cond = `Sp.Cond._10678349`)
 
 dic_2020 <- bind_rows(dic_2020_1, dic_2020_2, dic_2020_3) |> 
   mutate(anc_predicted = predict(calcurve_2020_model, newdata = data.frame(spec_cond=spec_cond)))
 
 #Perform DIC calculations and cache result
 # dic_all <- bind_rows(dic_2019, dic_2020) |>
-#   mutate(aquaenv = pmap(list(wtr, ph, anc_predicted), ~aquaenv(S=0, t=..1, SumCO2 = NULL, pH = ..2, TA = ..3/1000)),
+#   mutate(aquaenv = pmap(list(wtr_dic, ph, anc_predicted), ~aquaenv(S=0, t=..1, SumCO2 = NULL, pH = ..2, TA = ..3/1000)),
 #          dic = map_dbl(aquaenv, ~.$SumCO2),
 #          datetime = round_date(datetime, "10 mins"))
 # saveRDS(dic_all, "data/dic_all.rds")

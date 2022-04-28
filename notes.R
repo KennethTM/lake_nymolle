@@ -1,4 +1,4 @@
 #Notes
 
-#Timezone for data? TJEK IFHT DMI WIND
+#June data
 #Open site coordinates
