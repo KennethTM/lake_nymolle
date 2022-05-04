@@ -207,103 +207,51 @@ k_gas_ensemble <- function(wnd, wtr, area, gas){
 }
 k_gas_ensemble_vec <- Vectorize(k_gas_ensemble)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Function for calculating chemical enhancement factor
-#https://github.com/simpson-lab/jgr-co2-flux/blob/ab2cfcf37b3e6c0fe4fdad584400a8baa3a7c29b/functions/gasExchange.R
-#Hoover and Berkshire 1969 model as in Wanninkhof and Knox 1996
-k_gas_enchance <- function(kgas, wtr, ph, S=0){
+#Calculation of chemical enhancement (Hoover and Berkshire mode, Wanninkhof & Knox 1996)
+k_gas_enchance <- function(kco2, wtr, ph, S=0){
   
-  #S <- cond*0.68/1000
+  wtr_k <- wtr + 273.15
   
-  #Johnson L&O 1982
-  r1a <- -2225.22
-  r1b <- -0.049
-  r1d <- 8.91
-  r1e <- 336.6
-  r1 <- exp(r1a + r1b*S^0.5 + (10^4)*r1d/(wtr + 273) + r1e*log(wtr + 273)) 
-  
-  r2a <- 1346.24
-  r2b <- -0.126
-  r2d <- -6.44
-  r2e <- -196.4
-  r2 <- exp(r2a + r2b*S^0.5 + (10^4)*r2d/(wtr + 273) + r2e*log(wtr + 273)) 
+  #Constants kco2 (r1, s-1) and kd (r2, l/(mol*s)) Johnson L&O 1982
+  r1 <- exp(1246.98 + 0*S^0.5 + (-6.19*10^4)/wtr_k + -183.0*log(wtr_k))
+  r2 <- exp(1346.24 + -0.126*S^0.5 + (-6.44*10^4)/wtr_k + -196.4*log(wtr_k))
   
   ah <- 10^(-ph)
-  # k1 <- 10^-(0.000152*wtr^2 - 0.0129*wtr + 6.5784)
-  # k2 <- 10^-(0.000121*wtr^2 - 0.0149*wtr + 10.626)
-  # kw <- 10^-(0.0002*wtr^2 - 0.0444*wtr + 14.953)
   
-  #AQUAENV K1K2
+  #Dickson & millero 1987, S between 0 and 40
+  pk1 <- (-840.39/wtr_k + 19.894 - 3.0189*log(wtr_k))*S^0.5 + 0.00668*S + 6320.81/wtr_k - 126.3405 + 19.568*log(wtr_k)
+  k1 <- 10^(-pk1)
+
+  pk2 <- (-690.59/wtr_k + 17.176 - 2.6719*log(wtr_k))*S^0.5 + 0.0217*S + 5143.69/wtr_k - 90.1833 + 14.613*log(wtr_k)
+  k2 <- 10^(-pk2)
   
-  r <- r1 + r2*kw/ah 
+  #Kw from seacarb r package, S between 0 and 45 and temperature between 0 and 45
+  lnKw_1 <- -13847.26/wtr_k + 148.9802 - 23.6521 * log(wtr_k)
+  lnKw_2 <- (118.67/wtr_k - 5.977 + 1.0495 * log(wtr_k)) * sqrt(S) - 0.01615 * S
+  lnKw <- lnKw_1 + lnKw_2
+  kw <- exp(lnKw)
+
+  oh <- kw/ah
   
-  t <- 1 + (ah^2)*(k1*k2 + k1*ah)^-1
+  r <- r1 + r2*oh  
   
-  #Jahne 1987
-  #dspeed <- (0.61563+0.05316*wtr)*0.00001
-  dspeed <- 5019 * exp(-19.51 / 0.00831451 / (wtr+273.15)) * 10^-5
+  t <- 1 + ah^2/(k1*k2 + k1*ah)
   
-  q <- (r*t/dspeed)^0.5
+  #Jahne 1987, co2 diffusion coeffcient
+  d <- 5019 * exp(-19.51/(0.00831451*wtr_k)) * 10^-5 #unit cm2/s
   
-  z <- dspeed/(kgas/3600) #(kgas/10/60*100) #kgas from [m/10 min] to [cm/s]
+  kco2_cm_s <- kco2*100/(24*60*60) #convert unit m/d to cm/s
   
-  alpha <- t/((t - 1) + tanh(q*z)/(q*z))
+  z <- d/kco2_cm_s
+  
+  q <- (r*t/d)^0.5
+  
+  alpha <- t/((t-1) + (tanh(q*z)/(q*z)))
   
   return(alpha)
+  
 }
 
-k_gas_enchance(k600.2.kGAS.base(1.83, 20, "CO2"), 20, 9)
 
-
-# k_gas_enchance_2 <- function(kgas, wtr, ph, cond){
-# 
-#   I = 1.6 * 10^-5 * cond
-#   tempKelvin=wtr + 273.16
-#   korr= I^0.5 / (1+1.4 * I^0.5)
-#   pK1=3403.71 / tempKelvin + (0.03279 * tempKelvin) - 14.84 - korr
-#   pK2=2902.39 / tempKelvin + (0.02379 * tempKelvin ) - 6.5 - (4 * korr)
-#   pKw=4470.99 / tempKelvin + (0.01706 * tempKelvin) - 6.09 - korr
-#   OH=10^(ph - pKw + 3)
-#   r1=10^(pK1 - ph)
-#   r2=10^(ph - pK2)
-#   #HCO3=(ANC * 1000 - OH ) / (1 + 2 * r2)
-#   #CO3=r2 * HCO3
-#   #CO2=r1 * HCO3
-#   #TCO2=HCO3 + CO3 + CO2
-#   pKH=0.014 * wtr + 1.12
-#   Kh=10^(-pKH)
-#   aH=10^(-ph)
-#   K1=10^(-pK1)
-#   K2=10^(-pK2)
-#   D = 5019 * exp(-19.51 / 0.00831451 / tempKelvin) * 10^-5
-#   XRCO2=1246.98 + (-6.19 * 10^4) / tempKelvin + (-183 * log(tempKelvin))
-#   RCO2=exp(XRCO2)
-#   XROHKw=(-930.13 + (3.1 * 10^4) / tempKelvin + 140.9 * log(tempKelvin))
-#   ROH_Kw=exp(XROHKw)
-#   R=RCO2+ROH_Kw
-#   t=1+aH^2 * (K1 * K2 + K1 * aH)^-1
-#   Q=(R*t/D)^0.5
-#   z=D/(kgas/3600)
-# 
-#   alpha = t / ((t-1) + (tanh(Q * z) / (Q * z)))
-# 
-#   return(alpha)
-# }
-# 
-# k_gas_enchance_2(k600.2.kGAS.base(1.83, 30, "CO2"), 30, 9, 400)
+#Make units of daily metabolism estimates as mmol/m3/d (*depth to get m2) 
+#(dic is in mol/l/d or *10^6 mmol/m3/d - convert before metabolism calc, o2 is g/m3/d convert by /32*1000 )
