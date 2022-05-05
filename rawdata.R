@@ -1,6 +1,6 @@
 source("libs_and_funcs.R")
 
-#Rawdata
+#Rawdata loading and processing
 
 #Wind data from 2020
 #Sensor malfunction after few days, predict wind speed using dmi data
@@ -38,10 +38,12 @@ summary(wnd_m2)
 
 #Predict for all observations
 wnd_predict <- dmi_wnd_interp |> 
-  mutate(wnd_pred = predict(wnd_m2, newdata = data.frame(wnd_dmi = wnd_dmi))) |> 
-  select(-wnd_dmi)
+  as_tibble() |> 
+  mutate(wnd_pred = predict(wnd_m2, newdata = data.frame(wnd_dmi = wnd_dmi)),
+         wnd_pred_10 = wind.scale.base(wnd_pred, 0.5)) |> 
+  select(-wnd_dmi, -wnd_pred)
 
-#Calibration curves for alk versus specifik conductivity
+#Calibration curves for alkalinity versus specific conductivity for both 2019 and 2020
 calcurve_2019 <- tribble(~spec_cond, ~alk,
                          453.6,	1.527,
                          314.4,	1.036,
@@ -62,18 +64,28 @@ calcurve_2020_model <- lm(alk ~ spec_cond, data = calcurve_2020)
 summary(calcurve_2020_model)
 
 #Sensor data
+#Adjust time zone and round datetime
 sensor_data_2019 <- read_excel("data/sensor_data_2019.xlsx") |> 
-  mutate(datetime = Date_time - 2*60*60) |> 
+  mutate(datetime = Date_time - 2*60*60,
+         datetime = round_date(datetime, "10 mins")) |> 
   select(-Date_time)
 sensor_data_2020_1 <- read_excel("data/sensor_data_2020.xlsx", sheet = 1) |> 
-  mutate(datetime = Date_time - 1*60*60)|> 
+  mutate(datetime = Date_time - 1*60*60,
+         datetime = round_date(datetime, "10 mins"))|> 
   select(-Date_time)
 sensor_data_2020_2 <- read_excel("data/sensor_data_2020.xlsx", sheet = 2) |> 
-  mutate(datetime = Date_time - 2*60*60)|> 
+  mutate(datetime = Date_time - 2*60*60,
+         datetime = round_date(datetime, "10 mins"))|> 
   select(-Date_time)
 sensor_data_2020_3 <- read_excel("data/sensor_data_2020.xlsx", sheet = 3) |> 
-  mutate(datetime = Date_time - 2*60*60)|> 
+  mutate(datetime = Date_time - 2*60*60,
+         datetime = round_date(datetime, "10 mins"))|> 
   select(-Date_time)
+
+#Depth info for each measurement period
+sensor_depth <- list("total" = list("2019" = 0.66, "2020_1" = 0.665, "2020_2" = 0.665, "2020_3" = 0.57),
+                     "oxygen" = list("2019" = 0.39, "2020_1" = 0.115, "2020_2" = 0.06, "2020_3" = 0.085),
+                     "ph" = list("2019" = 0.27, "2020_1" = 0.515, "2020_2" = 0.37, "2020_3" = 0.165))
 
 #Water temperature data
 wtr_2019 <- sensor_data_2019 |> 
@@ -90,8 +102,7 @@ wtr_2020_3 <- sensor_data_2020_3 |>
 
 wtr_2020 <- bind_rows(wtr_2020_1, wtr_2020_2, wtr_2020_3)
 
-wtr_all <- bind_rows(wtr_2019, wtr_2020) |> 
-  mutate(datetime = round_date(datetime, "10 mins"))
+wtr_all <- bind_rows(wtr_2019, wtr_2020)
 
 #Datetime sequence used for figures
 datetime_seq <- data.frame(datetime = seq(min(wtr_all$datetime), max(wtr_all$datetime), "10 mins"))
@@ -113,11 +124,9 @@ oxygen_2020_3 <- sensor_data_2020_3 |>
 
 oxygen_2020 <- bind_rows(oxygen_2020_1, oxygen_2020_2, oxygen_2020_3)
 
-oxygen_all <- bind_rows(oxygen_2019, oxygen_2020) |> 
-  mutate(datetime = round_date(datetime, "10 mins"))
+oxygen_all <- bind_rows(oxygen_2019, oxygen_2020)
 
 #DIC calculations from pH and alk (predicted from spec cond)
-
 dic_2019 <- sensor_data_2019 |> 
   mutate(anc_predicted = predict(calcurve_2019_model, newdata = data.frame(spec_cond=`Sp.Cond._18`))) |> 
   select(datetime, wtr_dic = Temp_21, ph=pH_27, spec_cond = `Sp.Cond._18`, anc_predicted)
@@ -132,16 +141,49 @@ dic_2020_3 <- sensor_data_2020_3 |>
   select(datetime, wtr_dic = Temp_10748214, ph = pH_p40189, spec_cond = `Sp.Cond._10678349`)
 
 dic_2020 <- bind_rows(dic_2020_1, dic_2020_2, dic_2020_3) |> 
-  mutate(anc_predicted = predict(calcurve_2020_model, newdata = data.frame(spec_cond=spec_cond)))
+  mutate(anc_predicted = predict(calcurve_2020_model, newdata = data.frame(spec_cond=spec_cond)),
+         anc_predicted = anc_predicted/1000) #mmol/l to mol/l
 
 #Perform DIC calculations and cache result
 # dic_all <- bind_rows(dic_2019, dic_2020) |>
-#   mutate(aquaenv = pmap(list(wtr_dic, ph, anc_predicted), ~aquaenv(S=0, t=..1, SumCO2 = NULL, pH = ..2, TA = ..3/1000)),
-#          dic = map_dbl(aquaenv, ~.$SumCO2),
-#          datetime = round_date(datetime, "10 mins"))
+#   mutate(aquaenv = pmap(list(wtr_dic, ph, anc_predicted), ~aquaenv(S=0, t=..1, SumCO2 = NULL, pH = ..2, TA = ..3)),
+#          dic = map_dbl(aquaenv, ~.$SumCO2))
 # saveRDS(dic_all, "data/dic_all.rds")
 
 dic_all <- readRDS("data/dic_all.rds")
+
+#zmix calculations from vertical temperature profiles
+zmix_2019 <- sensor_data_2019 |> 
+  select(datetime, wtr_0.08 = Temp_8, wtr_0.21 = Temp_21, wtr_0.29 = Temp_29, wtr_0.37 = Temp_37, wtr_0.49 = Temp_49) |> 
+  as.data.frame() |> 
+  ts.thermo.depth() |> 
+  as_tibble() |> 
+  mutate(zmix = ifelse(is.na(thermo.depth), sensor_depth$total$`2019`, thermo.depth)) |> 
+  select(-thermo.depth)
+
+zmix_2020_1 <- sensor_data_2020_1 |> 
+  select(datetime, wtr_0.125 = Temp_10748214, wtr_0.415 = Temp_10748223, wtr_0.545 = Temp_10675577) |> 
+  as.data.frame() |> 
+  ts.thermo.depth() |> 
+  as_tibble() |> 
+  mutate(zmix = ifelse(is.na(thermo.depth), sensor_depth$total$`2020_1`, thermo.depth)) |> 
+  select(-thermo.depth)
+
+zmix_2020_2 <- sensor_data_2020_2 |> 
+  select(datetime, wtr_0.005 = Temp_10748214, wtr_0.25 = Temp_10748223, wtr_0.38 = Temp_10675577, wtr_0.53 = Temp_10748206) |> 
+  as.data.frame() |> 
+  ts.thermo.depth() |> 
+  as_tibble() |> 
+  mutate(zmix = ifelse(is.na(thermo.depth), sensor_depth$total$`2020_2`, thermo.depth)) |> 
+  select(-thermo.depth)
+
+zmix_2020_3 <- sensor_data_2020_3 |> 
+  select(datetime, wtr_0.02 = Temp_10748214, wtr_0.355 = Temp_10675577, wtr_0.505 = Temp_10748206) |> 
+  as.data.frame() |> 
+  ts.thermo.depth() |> 
+  as_tibble() |> 
+  mutate(zmix = ifelse(is.na(thermo.depth), sensor_depth$total$`2020_3`, thermo.depth)) |> 
+  select(-thermo.depth)
 
 #Plant survey rawdata
 lake_poly <- st_read("data/lake_nymolle.sqlite")

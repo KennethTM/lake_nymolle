@@ -2,9 +2,10 @@
 
 library(tidyverse);library(lubridate);library(patchwork);library(viridisLite)
 library(httr);library(jsonlite);library(readxl);library(LakeMetabolizer);library(rLakeAnalyzer)
-library(RColorBrewer);library(AquaEnv);library(zoo);library(sf);library(terra);library(gdalUtils)
+library(RColorBrewer);library(AquaEnv);library(zoo);library(sf);library(terra)
 library(fields);library(jpeg);library(grid)
 
+#;library(gdalUtils)
 
 #Figure sizing. For most journals the figures should be 39 mm, 84 mm, 129 mm, or 174 mm wide and not higher than 234 mm.
 #ggplot theme
@@ -16,7 +17,7 @@ theme_pub <- theme_bw() +
         strip.background = element_rect(fill = "white"))
 theme_set(theme_pub)
 
-Sys.setenv(TZ="GMT");Sys.setlocale("LC_TIME", "English")
+#Sys.setenv(TZ="GMT");Sys.setlocale("LC_TIME", "English")
 
 #Open site coordinates UTM32
 open_site_x <- 698630.5	

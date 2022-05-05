@@ -1,8 +1,8 @@
 #Functions for calculating lake metabolism (MLE)
-#Input for oxygen: datetime, doobs, dosat, kgas, zmix, lux, wtr, dummy
-#Input for oxygen: datetime, kgas, zmix, lux, wtr_dic, dummy, dic, pH
 
 #Oxygen metabolism model
+#Input for oxygen: datetime, doobs, dosat, kgas, zmix, lux, wtr, dummy
+
 #NLL function with linear GPP-light and respiration-water temperature relationships
 oxygen_nll <- function (pars, datain) {
   
@@ -89,7 +89,8 @@ oxygen_metab <- function(df){
   
   daily <- data.frame(datetime_min = min(datain$datetime), datetime_max = max(datain$datetime),
                       gppcoef = gppcoef, rcoef = rcoef, doinit = doinit, convergence = convergence,
-                      GPP = GPP, R = R, NEP = NEP, r_spear = r_spear, rmse = rmse, 
+                      GPP = GPP/32*1000, R = R/32*1000, NEP = NEP/32*1000, #convert g/m3/d to mmol/m3/day
+                      r_spear = r_spear, rmse = rmse, 
                       wtr_mean = mean(datain$wtr), lux_mean = mean(datain$lux))
   
   obs_pred <- data.frame(datetime = datain$datetime, dopred = dopred, doobs = datain$doobs)
@@ -98,6 +99,8 @@ oxygen_metab <- function(df){
 }
 
 #DIC metabolism model
+#Input for dic: datetime, kgas, zmix, lux, wtr_dic, dummy, dic, pH
+
 dic_nll <- function (pars, datain) {
   
   Pmax <- exp(pars[1])
@@ -194,7 +197,7 @@ dic_metab <- function(df){
   return(list("dic_daily" = daily, "dic_predict" = obs_pred))
 }
 
-#Function for calculating gas exchange velocity as the mean of three empirical models
+#Function for calculating gas exchange velocity (m/day) as the mean of three empirical models
 k_gas_ensemble <- function(wnd, wtr, area, gas){
   k600_cole <- k.cole.base(wnd)
   k600_crucius <- k.crusius.base(wnd)
@@ -251,7 +254,3 @@ k_gas_enchance <- function(kco2, wtr, ph, S=0){
   return(alpha)
   
 }
-
-
-#Make units of daily metabolism estimates as mmol/m3/d (*depth to get m2) 
-#(dic is in mol/l/d or *10^6 mmol/m3/d - convert before metabolism calc, o2 is g/m3/d convert by /32*1000 )

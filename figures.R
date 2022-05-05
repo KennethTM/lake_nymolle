@@ -239,4 +239,4 @@ ggsave("figures/figure_5.png", figure_5, width = 174, height = 84, units = "mm")
 
 #Figure 7. A) R vs GPP (normalized to 20 degrees). B) GPP vs incoming irradiance. Filled points are metabolism estimates based on O2 and empthy points are based on DIC.
 
-#Table 1. Lake characteristics (area, mean depth), plant data (LARS), and chemistry (chl a, total N, DOC, secchi depth, total P, alkalinity), site plant biomass.
+#Table 1. Lake characteristics (area, mean depth), plant data, and chemistry (secchi depth, total P, alkalinity), site plant biomass.
