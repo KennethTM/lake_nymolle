@@ -17,7 +17,7 @@ oxygen_nll <- function (pars, datain) {
   k.gas <- datain$kgas_o2
   Rwtr <- datain$wtr
   zmix <- datain$zmix
-  dummy <- datain$dummy
+  dummy <- datain$oxygen_dummy
   dosat <- datain$dosat
   
   #Set up output
@@ -49,7 +49,7 @@ oxygen_predict <- function(pars, datain) {
   k.gas <- datain$kgas_o2
   Rwtr <- datain$wtr
   zmix <- datain$zmix
-  dummy <- datain$dummy
+  dummy <- datain$oxygen_dummy
   dosat <- datain$dosat
   
   dopred <- rep(NA,nobs)
@@ -68,7 +68,7 @@ oxygen_predict <- function(pars, datain) {
 oxygen_metab <- function(df){
   datain <- df
   
-  parguess <- log(c(5E-5, 2E-3, datain$doobs[1])) #1.3E-4 #7E-6
+  parguess <- log(c(5E-5, 2E-3, datain$doobs[1]))
   
   fit <- tryCatch(optim(parguess, oxygen_nll, datain = datain, method = "Nelder-Mead"), error = function(err){NULL}) #BFGS
   if(is.null(fit)){return(NA)}
@@ -112,7 +112,7 @@ dic_nll <- function (pars, datain) {
   k.gas <- datain$kgas_co2
   Rwtr <- datain$wtr_dic
   zmix <- datain$zmix
-  dummy <- datain$dummy
+  dummy <- datain$dic_dummy
   dic <- datain$dic
   ph <- datain$ph
   calc <- datain$calcification
@@ -146,7 +146,7 @@ dic_predict <- function(pars, datain) {
   k.gas <- datain$kgas_co2
   Rwtr <- datain$wtr_dic
   zmix <- datain$zmix
-  dummy <- datain$dummy
+  dummy <- datain$dic_dummy
   dic <- datain$dic
   ph <- datain$ph
   calc <- datain$calcification
@@ -168,7 +168,7 @@ dic_predict <- function(pars, datain) {
 dic_metab <- function(df){
   datain <- df
   
-  parguess <- log(c(5E-6, 3E-6, datain$dic[1]))
+  parguess <- log(c(5E-10, 3E-6, datain$dic[1]))
   
   fit <- tryCatch(optim(parguess, dic_nll, datain = datain, method = "Nelder-Mead"), error = function(err){NULL}) #BFGS
   if(is.null(fit)){return(NA)}
@@ -189,7 +189,7 @@ dic_metab <- function(df){
   
   daily <- data.frame(datetime_min = min(datain$datetime), datetime_max = max(datain$datetime),
                       gppcoef = gppcoef, rcoef = rcoef, dic_init = dic_init, convergence = convergence,
-                      GPP = GPP, R = R, NEP = NEP, r_spear = r_spear, rmse = rmse, 
+                      GPP = GPP*10^6, R = R*10^6, NEP = NEP*10^6, r_spear = r_spear, rmse = rmse, #units to mmol/m3/day
                       wtr_mean = mean(datain$wtr_dic), lux_mean = mean(datain$lux))
   
   obs_pred <- data.frame(datetime = datain$datetime, dic_pred = dic_pred, dic = datain$dic)

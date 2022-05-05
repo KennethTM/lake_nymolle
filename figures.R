@@ -235,8 +235,15 @@ figure_5
 
 ggsave("figures/figure_5.png", figure_5, width = 174, height = 84, units = "mm")
 
-#Figure 6. A) Lake metabolism (R, GPP and NEP) based on O2. B) Lake metabolism (R, GPP and NEP) based on DIC. C) Metabolism O2 vs DIC. Filled points are metabolism estimates based on O2 and empthy points are based on DIC.
+#Figure 6. Lake metabolism (R, GPP and NEP) based on O2 (solid line) and DIC (dashed line). Or just points and smoothing?
+metab_colors <- c("GPP" = brewer.pal(n = 4, name = "Dark2")[1],
+                  "NEP" = brewer.pal(n = 4, name = "Dark2")[2],
+                  "R" = brewer.pal(n = 4, name = "Dark2")[3])
 
-#Figure 7. A) R vs GPP (normalized to 20 degrees). B) GPP vs incoming irradiance. Filled points are metabolism estimates based on O2 and empthy points are based on DIC.
+#Figure 7. A) R vs GPP (normalized to 20 degrees) with model II regression fit. 
+#B) GPP vs mean lux with linear or saturating curve. 
+#C) O2 vs DIC rates with 1:1 line, maybe model II regression fit. 
+#Filled points O2 and empty points are DIC
+#Solid lines are 02 and dashed are DIC
 
-#Table 1. Lake characteristics (area, mean depth), plant data, and chemistry (secchi depth, total P, alkalinity), site plant biomass.
+#Table 1. Lake characteristics (area, mean depth), and chemistry (secchi depth, total P, alkalinity), site plant biomass.

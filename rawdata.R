@@ -128,7 +128,8 @@ oxygen_all <- bind_rows(oxygen_2019, oxygen_2020)
 
 #DIC calculations from pH and alk (predicted from spec cond)
 dic_2019 <- sensor_data_2019 |> 
-  mutate(anc_predicted = predict(calcurve_2019_model, newdata = data.frame(spec_cond=`Sp.Cond._18`))) |> 
+  mutate(anc_predicted = predict(calcurve_2019_model, newdata = data.frame(spec_cond=`Sp.Cond._18`)),
+         anc_predicted = anc_predicted/1000) |> #mmol/l to mol/l
   select(datetime, wtr_dic = Temp_21, ph=pH_27, spec_cond = `Sp.Cond._18`, anc_predicted)
 
 dic_2020_1 <- sensor_data_2020_1 |> 
@@ -184,6 +185,19 @@ zmix_2020_3 <- sensor_data_2020_3 |>
   as_tibble() |> 
   mutate(zmix = ifelse(is.na(thermo.depth), sensor_depth$total$`2020_3`, thermo.depth)) |> 
   select(-thermo.depth)
+
+zmix_2020 <- bind_rows(zmix_2020_1 |> 
+                         mutate(oxygen_depth = sensor_depth$oxygen$`2020_1`,
+                                dic_depth = sensor_depth$ph$`2020_1`,
+                                depth = sensor_depth$total$`2020_1`), 
+                       zmix_2020_2 |> 
+                         mutate(oxygen_depth = sensor_depth$oxygen$`2020_2`,
+                                dic_depth = sensor_depth$ph$`2020_2`,
+                                depth = sensor_depth$total$`2020_2`),
+                       zmix_2020_3 |> 
+                         mutate(oxygen_depth = sensor_depth$oxygen$`2020_3`,
+                                dic_depth = sensor_depth$ph$`2020_3`,
+                                depth = sensor_depth$total$`2020_3`))
 
 #Plant survey rawdata
 lake_poly <- st_read("data/lake_nymolle.sqlite")
