@@ -139,12 +139,12 @@ wtr_sub_2020 <- wtr_plot_data |>
 
 figure_3 <- wtr_all_plot/(wtr_sub_2019+wtr_sub_2020)+
   plot_annotation(tag_levels = "A")+
-  plot_layout(guides = "collect", heights = c(1,0.5)) &
+  plot_layout(guides = "collect", heights = c(1,1)) &
   theme(legend.position='bottom')
 
 figure_3
 
-ggsave("figures/figure_3.png", figure_3, width = 174, height = 120, units = "mm")
+ggsave("figures/figure_3.png", figure_3, width = 174, height = 150, units = "mm")
 
 #Figure 4 - oxygen dynamics
 oxygen_pal <- brewer.pal(n = 3, name = "Dark2")[c(2, 1, 3)]
@@ -191,12 +191,12 @@ oxygen_sub_2020 <- oxygen_plot_data |>
 
 figure_4 <- oxygen_all_plot/(oxygen_sub_2019+oxygen_sub_2020)+
   plot_annotation(tag_levels = "A")+
-  plot_layout(guides = "collect", heights = c(1,0.5)) &
+  plot_layout(guides = "collect", heights = c(1,1)) &
   theme(legend.position='bottom')
 
 figure_4
 
-ggsave("figures/figure_4.png", figure_4, width = 174, height = 120, units = "mm")
+ggsave("figures/figure_4.png", figure_4, width = 174, height = 150, units = "mm")
 
 #Figure 5 - ph and dic
 ph_dic_col <- brewer.pal(n = 4, name = "Dark2")[c(3, 4)]
@@ -233,17 +233,88 @@ figure_5 <- ph_dic_data |>
 
 figure_5
 
-ggsave("figures/figure_5.png", figure_5, width = 174, height = 84, units = "mm")
+ggsave("figures/figure_5.png", figure_5, width = 174, height = 75, units = "mm")
 
 #Figure 6. Lake metabolism (R, GPP and NEP) based on O2 (solid line) and DIC (dashed line). Or just points and smoothing?
+daily_metab <- readRDS("data/daily_metab.rds")
+
+daily_depth <- bind_rows(daily_metab$`2019`[, c("date", "depth")], 
+                         daily_metab$`2020`[, c("date", "depth")])
+
+oxygen_daily <- bind_rows(daily_metab$`2019`$oxygen_daily,
+                          daily_metab$`2020`$oxygen_daily)
+
+dic_daily <- bind_rows(daily_metab$`2019`$dic_daily,
+                       daily_metab$`2020`$dic_daily)
+
+all_daily <- bind_rows(add_column(oxygen_daily, method = "oxygen"),
+                       add_column(dic_daily, method = "dic")) |> 
+  mutate(period = year(datetime_min),
+         date = as_date(datetime_min))
+
 metab_colors <- c("GPP" = brewer.pal(n = 4, name = "Dark2")[1],
-                  "NEP" = brewer.pal(n = 4, name = "Dark2")[2],
-                  "R" = brewer.pal(n = 4, name = "Dark2")[3])
+                  "NEP" = brewer.pal(n = 4, name = "Dark2")[3],
+                  "R" = brewer.pal(n = 4, name = "Dark2")[2])
+
+figure_6_data <- all_daily |> 
+  gather(variable, value, GPP, R, NEP) |> 
+  left_join(daily_depth) |> 
+  mutate(value_m2 = value*depth,
+         value_m2 = ifelse(variable == "R", value_m2*-1, value_m2)) 
+
+figure_6_data |> 
+  ggplot(aes(date, value_m2, col = variable, linetype=method, shape = method))+
+  geom_hline(yintercept = 0, linetype=2)+
+  geom_line()+
+  geom_point()+
+  facet_grid(.~period, scales="free_x", space = "free_x")+
+  scale_color_manual(values = metab_colors)+
+  scale_linetype_manual(values = c(3, 1))+
+  scale_shape_manual(values = c(1, 16))+
+  ylab(expression("Metabolism (mmol m"^{-2}~d^{-1}*")"))+
+  xlab("Date")
+
+
+
+
+
 
 #Figure 7. A) R vs GPP (normalized to 20 degrees) with model II regression fit. 
+rate_20 <- rate/(1.073^(wtr_mean - 20))
+library(lmodel2)
+
 #B) GPP vs mean lux with linear or saturating curve. 
+#Use gpp20 
+m0 <- lm(gpp ~ 1, data = .)
+m1 <- lm(gpp ~ lux - 1, data = .)
+m2 <- lm(gpp ~ lux, data = .)
+m3 <- lm(gpp ~ 1, data = .)
+m4 <- nls(gpp ~ gpp_max*tanh(alpha*lux/gpp_max),
+          start=list(gpp_max = 10, alpha = 0.01), data=.)
+AIC(m0, m1, m2, m3, m4)
+
 #C) O2 vs DIC rates with 1:1 line, maybe model II regression fit. 
 #Filled points O2 and empty points are DIC
 #Solid lines are 02 and dashed are DIC
 
-#Table 1. Lake characteristics (area, mean depth), and chemistry (secchi depth, total P, alkalinity), site plant biomass.
+#Lake stats, e.g. depth, biomass, and chemistry
+z_mean <- mean(depth_interp_mask[], na.rm =TRUE) #0.94 m
+lake_area
+
+chemistry <- read.delim2("data/chemistry.txt")
+summary(chemistry)
+
+chemistry |> 
+  select(secchi_depth, alk_mmol_l, chla_ug_l, tp_mg_p_l, tn_mg_n_l) |> 
+  summarise_all(list("mean" = mean,"sd" = sd))
+
+#Table S1
+#Species list
+plants_edit |> 
+  st_drop_geometry() |> 
+  group_by(species) |> 
+  summarise(count = n(),
+            max_depth = max(depth),
+            avg_cover = mean(species_cover)) |> 
+  na.omit() |> 
+  write_csv("figures/table_s1.csv")

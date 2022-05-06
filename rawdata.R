@@ -133,13 +133,13 @@ dic_2019 <- sensor_data_2019 |>
   select(datetime, wtr_dic = Temp_21, ph=pH_27, spec_cond = `Sp.Cond._18`, anc_predicted)
 
 dic_2020_1 <- sensor_data_2020_1 |> 
-  select(datetime, wtr_dic = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond._10745652`)
+  select(datetime, wtr_dic = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond._10678349`)
 
 dic_2020_2 <- sensor_data_2020_2 |> 
-  select(datetime, wtr_dic = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond_10745652`)
+  select(datetime, wtr_dic = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond._10678349`)
 
 dic_2020_3 <- sensor_data_2020_3 |> 
-  select(datetime, wtr_dic = Temp_10748214, ph = pH_p40189, spec_cond = `Sp.Cond._10678349`)
+  select(datetime, wtr_dic = Temp_10748214, ph = pH_p40189, spec_cond = `Sp.Cond._10745653`)
 
 dic_2020 <- bind_rows(dic_2020_1, dic_2020_2, dic_2020_3) |> 
   mutate(anc_predicted = predict(calcurve_2020_model, newdata = data.frame(spec_cond=spec_cond)),

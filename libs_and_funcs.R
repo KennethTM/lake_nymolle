@@ -3,7 +3,7 @@
 library(tidyverse);library(lubridate);library(patchwork);library(viridisLite)
 library(httr);library(jsonlite);library(readxl);library(LakeMetabolizer);library(rLakeAnalyzer)
 library(RColorBrewer);library(AquaEnv);library(zoo);library(sf);library(terra)
-library(fields);library(jpeg);library(grid)
+library(fields);library(jpeg);library(grid);library(ggspatial)
 
 #;library(gdalUtils)
 

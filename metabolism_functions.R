@@ -68,7 +68,7 @@ oxygen_predict <- function(pars, datain) {
 oxygen_metab <- function(df){
   datain <- df
   
-  parguess <- log(c(5E-5, 2E-3, datain$doobs[1]))
+  parguess <- log(c(3E-6, 2E-2, datain$doobs[1]))
   
   fit <- tryCatch(optim(parguess, oxygen_nll, datain = datain, method = "Nelder-Mead"), error = function(err){NULL}) #BFGS
   if(is.null(fit)){return(NA)}
@@ -138,7 +138,7 @@ dic_nll <- function (pars, datain) {
   return(NLL)
 }
 
-#Function for obtaining predicted oxygen
+#Function for obtaining predicted dic
 dic_predict <- function(pars, datain) {
   
   nobs <- nrow(datain)
@@ -209,6 +209,13 @@ k_gas_ensemble <- function(wnd, wtr, area, gas){
   return(k_mean)
 }
 k_gas_ensemble_vec <- Vectorize(k_gas_ensemble)
+
+k_gas_crusius <- function(wnd, wtr, gas){
+  k600_crucius <- k.crusius.base(wnd)
+  k_crucius <- k600.2.kGAS.base(k600_crucius, wtr, gas=gas)
+  return(k_crucius)
+}
+k_gas_crusius_vec <- Vectorize(k_gas_crusius)
 
 #Calculation of chemical enhancement (Hoover and Berkshire mode, Wanninkhof & Knox 1996)
 k_gas_enchance <- function(kco2, wtr, ph, S=0){
