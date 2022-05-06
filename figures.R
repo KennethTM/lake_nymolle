@@ -235,7 +235,7 @@ figure_5
 
 ggsave("figures/figure_5.png", figure_5, width = 174, height = 75, units = "mm")
 
-#Figure 6. Lake metabolism (R, GPP and NEP) based on O2 (solid line) and DIC (dashed line). Or just points and smoothing?
+#Figure 6. Lake metabolism (R, GPP and NEP) based on O2 (solid line) and DIC (dashed line) with smoother to shown trend.
 daily_metab <- readRDS("data/daily_metab.rds")
 
 daily_depth <- bind_rows(daily_metab$`2019`[, c("date", "depth")], 
@@ -244,8 +244,8 @@ daily_depth <- bind_rows(daily_metab$`2019`[, c("date", "depth")],
 oxygen_daily <- bind_rows(daily_metab$`2019`$oxygen_daily,
                           daily_metab$`2020`$oxygen_daily)
 
-dic_daily <- bind_rows(daily_metab$`2019`$dic_daily,
-                       daily_metab$`2020`$dic_daily)
+dic_daily <- bind_rows(daily_metab$`2019`$dic_daily)
+                       #daily_metab$`2020`$dic_daily)
 
 all_daily <- bind_rows(add_column(oxygen_daily, method = "oxygen"),
                        add_column(dic_daily, method = "dic")) |> 
@@ -260,42 +260,113 @@ figure_6_data <- all_daily |>
   gather(variable, value, GPP, R, NEP) |> 
   left_join(daily_depth) |> 
   mutate(value_m2 = value*depth,
-         value_m2 = ifelse(variable == "R", value_m2*-1, value_m2)) 
+         value_m2 = ifelse(variable == "R", value_m2*-1, value_m2))
 
-figure_6_data |> 
+figure_6 <- figure_6_data |> 
   ggplot(aes(date, value_m2, col = variable, linetype=method, shape = method))+
-  geom_hline(yintercept = 0, linetype=2)+
-  geom_line()+
+  geom_hline(yintercept = 0, linetype=3)+
+  #geom_line()+
+  geom_smooth(se=FALSE, size=0.5, show.legend = FALSE)+
   geom_point()+
   facet_grid(.~period, scales="free_x", space = "free_x")+
-  scale_color_manual(values = metab_colors)+
-  scale_linetype_manual(values = c(3, 1))+
-  scale_shape_manual(values = c(1, 16))+
+  scale_color_manual(values = metab_colors, name="Component")+
+  scale_linetype_manual(values = c(2, 1))+
+  scale_shape_manual(values = c(1, 16), name="Method")+
+  scale_x_date(date_labels = "%d %b.", date_breaks = "10 days")+
   ylab(expression("Metabolism (mmol m"^{-2}~d^{-1}*")"))+
-  xlab("Date")
+  xlab("Date")+
+  guides(color = guide_legend(title.position = "top", title.hjust = 0.5),
+         shape = guide_legend(title.position = "top", title.hjust = 0.5))+
+  theme(legend.position = c(0.6, 0.8),
+        legend.direction = "horizontal", legend.box = "horizontal",
+        strip.background = element_blank())
 
+figure_6
 
+ggsave("figures/figure_6.png", figure_6, width = 174, height = 75, units = "mm")
 
-
-
-
-#Figure 7. A) R vs GPP (normalized to 20 degrees) with model II regression fit. 
-rate_20 <- rate/(1.073^(wtr_mean - 20))
-library(lmodel2)
-
-#B) GPP vs mean lux with linear or saturating curve. 
-#Use gpp20 
-m0 <- lm(gpp ~ 1, data = .)
-m1 <- lm(gpp ~ lux - 1, data = .)
-m2 <- lm(gpp ~ lux, data = .)
-m3 <- lm(gpp ~ 1, data = .)
-m4 <- nls(gpp ~ gpp_max*tanh(alpha*lux/gpp_max),
-          start=list(gpp_max = 10, alpha = 0.01), data=.)
-AIC(m0, m1, m2, m3, m4)
-
-#C) O2 vs DIC rates with 1:1 line, maybe model II regression fit. 
+#Figure 7. 
+#A) O2 vs DIC rates with 1:1 line, maybe model II regression fit. 
 #Filled points O2 and empty points are DIC
 #Solid lines are 02 and dashed are DIC
+figure_7_a <- figure_6_data |> 
+  select(date, variable, value_m2, method) |> 
+  spread(method, value_m2) |> 
+  na.omit() |> 
+  ggplot(aes(dic, oxygen, col=variable))+
+  geom_abline(intercept = 0, slope=1, linetype=3)+
+  geom_point()+
+  scale_color_manual(values = metab_colors, name="Component")+
+  ylab(expression(Metabolism-DIC~"(mmol m"^{-2}~d^{-1}*")"))+
+  xlab(expression(Metabolism-O[2]~"(mmol m"^{-2}~d^{-1}*")"))+
+  ylim(-500, 500)+
+  xlim(-500, 500)+
+  theme(legend.position = c(0.8, 0.3))
+
+#B) R vs GPP (normalized to 20 degrees) with model II regression fit. 
+library(lmodel2);library(ggpmisc)
+
+figure_7_b_data <- all_daily |> 
+  left_join(daily_depth) |> 
+  mutate(GPP_m2 = GPP*depth,
+         R_m2 = R*depth,
+         GPP_m2_20 = GPP_m2/(1.073^(wtr_mean - 20)),
+         R_m2_20 = R_m2/(1.073^(wtr_mean - 20)))
+
+metab_dic_20 <- figure_7_b_data |> 
+  filter(method=="dic")
+lm2_dic <- lmodel2(R_m2_20~GPP_m2_20, data = metab_dic_20)
+lm2_pred_dic <- data.frame(GPP_m2_20 = seq(min(metab_dic_20$GPP_m2_20), max(metab_dic_20$GPP_m2_20)))
+lm2_dic_df <- lm2_pred_dic |> 
+  bind_cols(predict(lm2_dic, method="SMA", interval = "confidence", newdata=lm2_pred_dic))
+
+metab_oxygen_20 <- figure_7_b_data |> 
+  filter(method=="oxygen")
+lm2_oxygen <- lmodel2(R_m2_20~GPP_m2_20, data = metab_oxygen_20)
+lm2_pred_oxygen <- data.frame(GPP_m2_20 = seq(min(metab_oxygen_20$GPP_m2_20), max(metab_oxygen_20$GPP_m2_20)))
+lm2_oxygen_df <- lm2_pred_oxygen |> 
+  bind_cols(predict(lm2_oxygen, method="SMA", interval = "confidence", newdata=lm2_pred_oxygen))
+
+figure_7_b <- figure_7_b_data |> 
+  ggplot()+
+  geom_abline(intercept = 0, slope=1, linetype=3)+
+  geom_ribbon(data = lm2_dic_df, aes(GPP_m2_20, fit, ymin=upr, ymax=lwr), fill=grey(0.5, alpha=0.3))+
+  geom_line(data = lm2_dic_df, aes(GPP_m2_20, fit), linetype=2, size=1)+
+  geom_ribbon(data = lm2_oxygen_df, aes(GPP_m2_20, fit, ymin=upr, ymax=lwr), fill=grey(0.5, alpha=0.3))+
+  geom_line(data = lm2_oxygen_df, aes(GPP_m2_20, fit), size=1)+
+  geom_point(aes(GPP_m2_20, R_m2_20, shape=method))+
+  scale_shape_manual(values = c(1, 16), name="Method")+
+  ylab(expression(R[20]~"(mmol m"^{-2}~d^{-1}*")"))+
+  xlab(expression(GPP[20]~"(mmol m"^{-2}~d^{-1}*")"))+
+  coord_cartesian(xlim=c(0, 425), ylim=c(0, 425))+
+  theme(legend.position = c(0.8, 0.3))
+
+#C) GPP vs mean lux with linear or saturating curve. 
+#Use gpp20 
+# m0 <- lm(gpp ~ 1, data = .)
+# m1 <- lm(gpp ~ lux - 1, data = .)
+# m2 <- lm(gpp ~ lux, data = .)
+# m3 <- lm(gpp ~ 1, data = .)
+# m4 <- nls(gpp ~ gpp_max*tanh(alpha*lux/gpp_max),
+#           start=list(gpp_max = 10, alpha = 0.01), data=.)
+# AIC(m0, m1, m2, m3, m4)
+
+figure_7_b_data |> 
+  left_join(daily_glob_rad) |> View()
+  ggplot(aes(globrad, GPP_m2_20, shape=method))+
+  geom_point() #lux is not suitable for this
+
+# geom_smooth(method="nls", 
+#             formula=y~1+Vmax*(1-exp(-x/tau)), # this is an nls argument, 
+#             #but stat_smooth passes the parameter along
+#             start=c(tau=0.2,Vmax=2), # this too
+#             se=FALSE) 
+
+figure_7 <- figure_7_a + figure_7_b + plot_layout(ncol=1)+plot_annotation(tag_levels = "A")
+
+figure_7
+
+ggsave("figures/figure_7.png", figure_7, width = 84, height = 160, units = "mm")
 
 #Lake stats, e.g. depth, biomass, and chemistry
 z_mean <- mean(depth_interp_mask[], na.rm =TRUE) #0.94 m

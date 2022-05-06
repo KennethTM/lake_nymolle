@@ -20,6 +20,15 @@ dmi_wnd_all <- bind_rows(dmi_wnd_1, dmi_wnd_2) |>
   rename(wnd_dmi = wnd) |> 
   arrange(datetime)
 
+#Global radiation data from DMI station
+dmi_rad_1 <- read_csv("data/dmi_globrad_1.csv")
+dmi_rad_2 <- read_csv("data/dmi_globrad_2.csv")
+
+daily_glob_rad <- bind_rows(dmi_rad_1, dmi_rad_2) |> 
+  mutate(date = as_date(datetime)) |> 
+  group_by(date) |> 
+  summarise(globrad = mean(globrad))
+
 #Perform linear interpolation for small gaps
 wnd_seq <- data.frame(datetime = seq(min(dmi_wnd_1$datetime), max(dmi_wnd_2$datetime), "10 min"))
 
