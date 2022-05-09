@@ -5,8 +5,6 @@ library(httr);library(jsonlite);library(readxl);library(LakeMetabolizer);library
 library(RColorBrewer);library(AquaEnv);library(zoo);library(sf);library(terra)
 library(fields);library(jpeg);library(grid);library(ggspatial)
 
-#;library(gdalUtils)
-
 #Figure sizing. For most journals the figures should be 39 mm, 84 mm, 129 mm, or 174 mm wide and not higher than 234 mm.
 #ggplot theme
 theme_pub <- theme_bw() + 

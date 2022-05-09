@@ -68,7 +68,7 @@ oxygen_predict <- function(pars, datain) {
 oxygen_metab <- function(df){
   datain <- df
   
-  parguess <- log(c(3E-6, 2E-2, datain$doobs[1]))
+  parguess <- log(c(3E-6, 5E-2, datain$doobs[1]))
   
   fit <- tryCatch(optim(parguess, oxygen_nll, datain = datain, method = "Nelder-Mead"), error = function(err){NULL}) #BFGS
   if(is.null(fit)){return(NA)}
@@ -197,25 +197,31 @@ dic_metab <- function(df){
   return(list("dic_daily" = daily, "dic_predict" = obs_pred))
 }
 
+k_schilder <- function(wnd){
+  k600 <- 0.9+0*wnd #0.97
+  k600_m_day <- k600*24/100
+  return(k600_m_day)
+}
+
 #Function for calculating gas exchange velocity (m/day) as the mean of three empirical models
 k_gas_ensemble <- function(wnd, wtr, area, gas){
   k600_cole <- k.cole.base(wnd)
   k600_crucius <- k.crusius.base(wnd)
-  k600_vachon <- k.vachon.base(wnd, area)
-  k_cole <- k600.2.kGAS.base(k600_cole, wtr, gas=gas)
-  k_crucius <- k600.2.kGAS.base(k600_crucius, wtr, gas=gas)
-  k_vachon <- k600.2.kGAS.base(k600_vachon, wtr, gas=gas)
-  k_mean <- mean(k_cole, k_crucius, k_vachon)
-  return(k_mean)
+  k600_schilder <- k_schilder(wnd)
+  #k600_vachon <- k.vachon.base(wnd, area)
+  k600_all <- c(k600_schilder, k600_crucius, k600_cole) #k600_vachon,
+  k_all <- sapply(k600_all, function(k600){k600.2.kGAS.base(k600, wtr, gas=gas)})
+  k_all_mean <- mean(k_all)
+  return(k_all_mean)
 }
 k_gas_ensemble_vec <- Vectorize(k_gas_ensemble)
 
-k_gas_crusius <- function(wnd, wtr, gas){
-  k600_crucius <- k.crusius.base(wnd)
-  k_crucius <- k600.2.kGAS.base(k600_crucius, wtr, gas=gas)
-  return(k_crucius)
-}
-k_gas_crusius_vec <- Vectorize(k_gas_crusius)
+# k_gas_crusius <- function(wnd, wtr, gas){
+#   k600_crucius <- k.crusius.base(wnd)
+#   k_crucius <- k600.2.kGAS.base(k600_crucius, wtr, gas=gas)
+#   return(k_crucius)
+# }
+# #k_gas_crusius_vec <- Vectorize(k_gas_crusius)
 
 #Calculation of chemical enhancement (Hoover and Berkshire mode, Wanninkhof & Knox 1996)
 k_gas_enchance <- function(kco2, wtr, ph, S=0){

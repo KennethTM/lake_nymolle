@@ -37,28 +37,28 @@ write_csv(df1, "data/dmi_wind_1.csv")
 write_csv(df2, "data/dmi_wind_2.csv")
 
 
-###########
-#get global radiation data
-#First request
-request1_rad <- paste0(base, "&parameterId=radia_glob", "&stationId=", stat, "&datetime=", date_range1, "&api-key=", dmi_key)
-response1_rad <- GET(request1_rad)
-json1_rad <- content(response1_rad, as="text") 
-
-#Second request
-request2_rad <- paste0(base, "&parameterId=radia_glob", "&stationId=", stat, "&datetime=", date_range2, "&api-key=", dmi_key)
-response2_rad <- GET(request2_rad)
-json2_rad <- content(response2_rad, as="text") 
-
-#Time zone is UTC+02
-df1_rad <- fromJSON(json1_rad)$features$properties %>% 
-  mutate(datetime = ymd_hms(observed) - 2*60*60) %>% 
-  select(datetime, globrad = value) %>% 
-  arrange(datetime)
-
-df2_rad <- fromJSON(json2_rad)$features$properties %>% 
-  mutate(datetime = ymd_hms(observed) - 2*60*60) %>% 
-  select(datetime, globrad = value) %>% 
-  arrange(datetime)
-
-write_csv(df1_rad, "data/dmi_globrad_1.csv")
-write_csv(df2_rad, "data/dmi_globrad_2.csv")
+# ###########
+# #get global radiation data
+# #First request
+# request1_rad <- paste0(base, "&parameterId=radia_glob", "&stationId=", stat, "&datetime=", date_range1, "&api-key=", dmi_key)
+# response1_rad <- GET(request1_rad)
+# json1_rad <- content(response1_rad, as="text") 
+# 
+# #Second request
+# request2_rad <- paste0(base, "&parameterId=radia_glob", "&stationId=", stat, "&datetime=", date_range2, "&api-key=", dmi_key)
+# response2_rad <- GET(request2_rad)
+# json2_rad <- content(response2_rad, as="text") 
+# 
+# #Time zone is UTC+02
+# df1_rad <- fromJSON(json1_rad)$features$properties %>% 
+#   mutate(datetime = ymd_hms(observed) - 2*60*60) %>% 
+#   select(datetime, globrad = value) %>% 
+#   arrange(datetime)
+# 
+# df2_rad <- fromJSON(json2_rad)$features$properties %>% 
+#   mutate(datetime = ymd_hms(observed) - 2*60*60) %>% 
+#   select(datetime, globrad = value) %>% 
+#   arrange(datetime)
+# 
+# write_csv(df1_rad, "data/dmi_globrad_1.csv")
+# write_csv(df2_rad, "data/dmi_globrad_2.csv")

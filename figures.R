@@ -201,31 +201,14 @@ ggsave("figures/figure_4.png", figure_4, width = 174, height = 150, units = "mm"
 #Figure 5 - ph and dic
 ph_dic_col <- brewer.pal(n = 4, name = "Dark2")[c(3, 4)]
 
-ph_dic_data <- dic_all |> 
-  select(datetime, ph, dic) |> 
-  right_join(datetime_seq) |> 
-  mutate(period = year(datetime),
-         datetime_hour = round_date(datetime, "hour")) |> 
-  group_by(datetime_hour, period) |> 
-  summarise(ph = mean(ph), dic=mean(dic) * 1000) |> 
-  ungroup() |> 
-  filter(between(datetime_hour, min(wtr_2019$datetime), max(wtr_2019$datetime)) | 
-           between(datetime_hour, min(wtr_2020$datetime), max(wtr_2020$datetime))) 
-
-a.diff <- max(ph_dic_data$ph, na.rm = TRUE) - min(ph_dic_data$ph, na.rm = TRUE)
-b.diff <- max(ph_dic_data$dic, na.rm = TRUE) - min(ph_dic_data$dic, na.rm = TRUE)
-a.min <- min(ph_dic_data$ph, na.rm = TRUE)
-b.min <- min(ph_dic_data$dic, na.rm = TRUE)
-
-figure_5 <- ph_dic_data |> 
-  ggplot(aes(datetime_hour))+
+figure_5 <- dic_2019 |> 
+  mutate(dic_mmol = dic*1000) |> 
+  ggplot(aes(datetime))+
   geom_line(aes(y = ph, col="pH"))+
-  geom_line(aes(y = (dic - b.min) / b.diff * a.diff + a.min, col="DIC"))+
-  scale_y_continuous(name = "pH", 
-                     sec.axis = sec_axis(~((. -a.min) * b.diff / a.diff) + b.min, name=expression("DIC (mmol L"^{-1}*")")))+
+  geom_line(aes(y = dic_mmol*5, col="DIC"))+
+  scale_y_continuous(name = "pH", sec.axis = sec_axis(~. / 5, name=expression("DIC (mmol L"^{-1}*")")))+
   scale_color_manual(values=ph_dic_col)+
-  facet_grid(.~period, scales="free_x", space = "free_x")+
-  scale_x_datetime(date_labels = "%d %b.", date_breaks = "10 days")+
+  scale_x_datetime(date_labels = "%d %b.", date_breaks = "5 days")+
   xlab("Date")+
   theme(strip.background = element_blank(), 
         legend.title = element_blank(),
@@ -233,7 +216,7 @@ figure_5 <- ph_dic_data |>
 
 figure_5
 
-ggsave("figures/figure_5.png", figure_5, width = 174, height = 75, units = "mm")
+ggsave("figures/figure_5.png", figure_5, width = 129, height = 75, units = "mm")
 
 #Figure 6. Lake metabolism (R, GPP and NEP) based on O2 (solid line) and DIC (dashed line) with smoother to shown trend.
 daily_metab <- readRDS("data/daily_metab.rds")
@@ -244,8 +227,7 @@ daily_depth <- bind_rows(daily_metab$`2019`[, c("date", "depth")],
 oxygen_daily <- bind_rows(daily_metab$`2019`$oxygen_daily,
                           daily_metab$`2020`$oxygen_daily)
 
-dic_daily <- bind_rows(daily_metab$`2019`$dic_daily)
-                       #daily_metab$`2020`$dic_daily)
+dic_daily <- bind_rows(daily_metab$`2019`$dic_daily) #daily_metab$`2020`$dic_daily
 
 all_daily <- bind_rows(add_column(oxygen_daily, method = "oxygen"),
                        add_column(dic_daily, method = "dic")) |> 

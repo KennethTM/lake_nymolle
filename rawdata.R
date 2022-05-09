@@ -136,31 +136,17 @@ oxygen_2020 <- bind_rows(oxygen_2020_1, oxygen_2020_2, oxygen_2020_3)
 oxygen_all <- bind_rows(oxygen_2019, oxygen_2020)
 
 #DIC calculations from pH and alk (predicted from spec cond)
-dic_2019 <- sensor_data_2019 |> 
-  mutate(anc_predicted = predict(calcurve_2019_model, newdata = data.frame(spec_cond=`Sp.Cond._18`)),
-         anc_predicted = anc_predicted/1000) |> #mmol/l to mol/l
-  select(datetime, wtr_dic = Temp_21, ph=pH_27, spec_cond = `Sp.Cond._18`, anc_predicted)
-
-dic_2020_1 <- sensor_data_2020_1 |> 
-  select(datetime, wtr_dic = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond._10678349`)
-
-dic_2020_2 <- sensor_data_2020_2 |> 
-  select(datetime, wtr_dic = Temp_10675577, ph = pH_P40189, spec_cond = `Sp.Cond._10678349`)
-
-dic_2020_3 <- sensor_data_2020_3 |> 
-  select(datetime, wtr_dic = Temp_10748214, ph = pH_p40189, spec_cond = `Sp.Cond._10745653`)
-
-dic_2020 <- bind_rows(dic_2020_1, dic_2020_2, dic_2020_3) |> 
-  mutate(anc_predicted = predict(calcurve_2020_model, newdata = data.frame(spec_cond=spec_cond)),
-         anc_predicted = anc_predicted/1000) #mmol/l to mol/l
-
-#Perform DIC calculations and cache result
-# dic_all <- bind_rows(dic_2019, dic_2020) |>
+# dic_2019 <- sensor_data_2019 |> 
+#   mutate(anc_predicted = predict(calcurve_2019_model, newdata = data.frame(spec_cond=`Sp.Cond._18`)),
+#          anc_predicted = anc_predicted/1000) |> #mmol/l to mol/l
+#   select(datetime, wtr_dic = Temp_21, ph=pH_27, spec_cond = `Sp.Cond._18`, anc_predicted) |> 
 #   mutate(aquaenv = pmap(list(wtr_dic, ph, anc_predicted), ~aquaenv(S=0, t=..1, SumCO2 = NULL, pH = ..2, TA = ..3)),
 #          dic = map_dbl(aquaenv, ~.$SumCO2))
-# saveRDS(dic_all, "data/dic_all.rds")
 
-dic_all <- readRDS("data/dic_all.rds")
+#Perform DIC calculations and cache result
+# saveRDS(dic_2019, "data/dic_2019.rds")
+
+dic_2019 <- readRDS("data/dic_2019.rds")
 
 #zmix calculations from vertical temperature profiles
 zmix_2019 <- sensor_data_2019 |> 
