@@ -282,8 +282,7 @@ figure_7_a <- figure_6_data |>
   ylab(expression(Metabolism-DIC~"(mmol m"^{-2}~d^{-1}*")"))+
   xlab(expression(Metabolism-O[2]~"(mmol m"^{-2}~d^{-1}*")"))+
   ylim(-500, 500)+
-  xlim(-500, 500)+
-  theme(legend.position = c(0.8, 0.3))
+  xlim(-500, 500)
 
 #B) R vs GPP (normalized to 20 degrees) with model II regression fit. 
 library(lmodel2);library(ggpmisc)
@@ -312,16 +311,15 @@ lm2_oxygen_df <- lm2_pred_oxygen |>
 figure_7_b <- figure_7_b_data |> 
   ggplot()+
   geom_abline(intercept = 0, slope=1, linetype=3)+
-  geom_ribbon(data = lm2_dic_df, aes(GPP_m2_20, fit, ymin=upr, ymax=lwr), fill=grey(0.5, alpha=0.3))+
+  #geom_ribbon(data = lm2_dic_df, aes(GPP_m2_20, fit, ymin=upr, ymax=lwr), fill=grey(0.5, alpha=0.3))+
   geom_line(data = lm2_dic_df, aes(GPP_m2_20, fit), linetype=2, size=1)+
-  geom_ribbon(data = lm2_oxygen_df, aes(GPP_m2_20, fit, ymin=upr, ymax=lwr), fill=grey(0.5, alpha=0.3))+
+  #geom_ribbon(data = lm2_oxygen_df, aes(GPP_m2_20, fit, ymin=upr, ymax=lwr), fill=grey(0.5, alpha=0.3))+
   geom_line(data = lm2_oxygen_df, aes(GPP_m2_20, fit), size=1)+
   geom_point(aes(GPP_m2_20, R_m2_20, shape=method))+
   scale_shape_manual(values = c(1, 16), name="Method")+
   ylab(expression(R[20]~"(mmol m"^{-2}~d^{-1}*")"))+
   xlab(expression(GPP[20]~"(mmol m"^{-2}~d^{-1}*")"))+
-  coord_cartesian(xlim=c(0, 425), ylim=c(0, 425))+
-  theme(legend.position = c(0.8, 0.3))
+  coord_cartesian(xlim=c(0, 425), ylim=c(0, 425))
 
 #C) GPP vs mean lux with linear or saturating curve. 
 #Use gpp20 
@@ -333,10 +331,10 @@ figure_7_b <- figure_7_b_data |>
 #           start=list(gpp_max = 10, alpha = 0.01), data=.)
 # AIC(m0, m1, m2, m3, m4)
 
-figure_7_b_data |> 
-  left_join(daily_glob_rad) |> View()
-  ggplot(aes(globrad, GPP_m2_20, shape=method))+
-  geom_point() #lux is not suitable for this
+# figure_7_b_data |> 
+#   left_join(daily_glob_rad) |> View()
+#   ggplot(aes(globrad, GPP_m2_20, shape=method))+
+#   geom_point() #lux is not suitable for this
 
 # geom_smooth(method="nls", 
 #             formula=y~1+Vmax*(1-exp(-x/tau)), # this is an nls argument, 
@@ -348,7 +346,7 @@ figure_7 <- figure_7_a + figure_7_b + plot_layout(ncol=1)+plot_annotation(tag_le
 
 figure_7
 
-ggsave("figures/figure_7.png", figure_7, width = 84, height = 160, units = "mm")
+ggsave("figures/figure_7.png", figure_7, width = 129, height = 170, units = "mm")
 
 #Lake stats, e.g. depth, biomass, and chemistry
 z_mean <- mean(depth_interp_mask[], na.rm =TRUE) #0.94 m

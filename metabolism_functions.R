@@ -61,6 +61,10 @@ oxygen_predict <- function(pars, datain) {
     dopred[i+1] <- dopred[i] + (pars$gppcoef*irr[i]) - (pars$rcoef*1.073^(Rwtr[i]-20)) + atmflux[i]
   }
   
+  # plot(doobs, type="l", main=as_date(datain$datetime[1]))
+  # lines(dopred, col="red")
+  # lines(irr, col="blue")
+  
   return(dopred)
 }
 
@@ -202,6 +206,8 @@ k_schilder <- function(wnd){
   k600_m_day <- k600*24/100
   return(k600_m_day)
 }
+
+#martinsen gribskov k model
 
 #Function for calculating gas exchange velocity (m/day) as the mean of three empirical models
 k_gas_ensemble <- function(wnd, wtr, area, gas){
