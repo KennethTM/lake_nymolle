@@ -373,6 +373,17 @@ chemistry |>
 #proportion of lake below 1 meter and chara cover > 80
 sum((chara_cover_raster_mask > 80 & depth_interp_mask < 1)[], na.rm=TRUE)/lake_area*100
 
+#carbon pool stats 2019
+dic_2019 |> 
+  mutate(co2 = map_dbl(aquaenv, ~.$CO2),
+         co2_sat = map_dbl(aquaenv, ~.$CO2_sat),
+         anc = anc_predicted*1000,
+         dic = dic*1000,
+         co2 = co2*10^6,
+         co2_sat = co2_sat*10^6) |> 
+  select(ph, dic, anc, co2, co2_sat) |>
+  summary()
+
 #Table S1
 #Species list
 plants_edit |> 
