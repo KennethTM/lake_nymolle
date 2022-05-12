@@ -371,7 +371,7 @@ chemistry |>
   summarise_all(list("mean" = mean,"sd" = sd))
 
 #proportion of lake below 1 meter and chara cover > 80
-sum((chara_cover_raster_mask > 80 & depth_interp_mask < 1)[], na.rm=TRUE)/lake_area*100
+sum((chara_cover_raster_mask > 75 & depth_interp_mask < 1)[], na.rm=TRUE)/lake_area*100
 
 #carbon pool stats 2019
 dic_2019 |> 
