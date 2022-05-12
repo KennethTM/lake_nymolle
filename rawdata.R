@@ -136,10 +136,10 @@ oxygen_2020 <- bind_rows(oxygen_2020_1, oxygen_2020_2, oxygen_2020_3)
 oxygen_all <- bind_rows(oxygen_2019, oxygen_2020)
 
 #DIC calculations from pH and alk (predicted from spec cond)
-# dic_2019 <- sensor_data_2019 |> 
+# dic_2019 <- sensor_data_2019 |>
 #   mutate(anc_predicted = predict(calcurve_2019_model, newdata = data.frame(spec_cond=`Sp.Cond._18`)),
 #          anc_predicted = anc_predicted/1000) |> #mmol/l to mol/l
-#   select(datetime, wtr_dic = Temp_21, ph=pH_27, spec_cond = `Sp.Cond._18`, anc_predicted) |> 
+#   select(datetime, wtr_dic = Temp_21, ph=pH_27, spec_cond = `Sp.Cond._18`, anc_predicted) |>
 #   mutate(aquaenv = pmap(list(wtr_dic, ph, anc_predicted), ~aquaenv(S=0, t=..1, SumCO2 = NULL, pH = ..2, TA = ..3)),
 #          dic = map_dbl(aquaenv, ~.$SumCO2))
 
@@ -193,6 +193,16 @@ zmix_2020 <- bind_rows(zmix_2020_1 |>
                          mutate(oxygen_depth = sensor_depth$oxygen$`2020_3`,
                                 dic_depth = sensor_depth$ph$`2020_3`,
                                 depth = sensor_depth$total$`2020_3`))
+
+#Light attenuation in summer 2019
+light_kd_2019 <- sensor_data_2019 |> 
+  select(datetime, contains("Light_"), -Light_37) |> 
+  gather(variable, value, -datetime) |> 
+  mutate(date = as_date(datetime), depth = parse_number(variable)/100) |> 
+  group_by(date, depth) |> 
+  summarise(lux = log(sum(value))) |> 
+  summarise(kd = coef(lm(lux~depth))[2]*-1,
+            r2 = summary(lm(lux~depth))$adj.r.squared)
 
 #Plant survey rawdata
 lake_poly <- st_read("data/lake_nymolle.sqlite")

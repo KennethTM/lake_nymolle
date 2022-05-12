@@ -65,6 +65,8 @@ chara_img_grob <- rasterGrob(chara_img)
 
 figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels = "A")+plot_layout(ncol=1, heights = c(1, 1, 0.95))
 
+figure_1
+
 ggsave("figures/figure_1.png", figure_1, width = 129, height = 234, units = "mm")
 
 #Figure 2 - open water water temperature, ph and oxygen profiles
@@ -72,13 +74,16 @@ profile <- read.delim2("data/profile.txt")
 
 profile_long <- profile |>  
   mutate(date = dmy(date), 
-         Date = strftime(date, format = "%b. %Y"),
-         Date = factor(Date, levels = unique(strftime(date, format = "%b. %Y")))) |>  
+         Date = strftime(date, format = "%b %Y"),
+         Date = factor(Date, levels = unique(strftime(date, format = "%b %Y")))) |>  
   select(-oxygen_mg_l, -date) |> 
   gather(variable, value, -Date, -depth_m) |> 
   mutate(variable = case_when(variable == "ph" ~ "'pH'",
                               variable == "oxygen_perc" ~ "'Oxygen saturation (%)'",
-                              variable == "temp" ~ "Water~temperature~'('*degree*C*')'")) |> 
+                              variable == "temp" ~ "Water~temperature~'('*degree*C*')'"),
+         variable = factor(variable, levels=c("Water~temperature~'('*degree*C*')'", 
+                                              "'Oxygen saturation (%)'",
+                                              "'pH'"))) |> 
   na.omit()
 
 figure_2 <- profile_long |> 
@@ -114,7 +119,7 @@ wtr_all_plot <- wtr_plot_data |>
   geom_line()+
   facet_grid(.~period, scales="free_x", space = "free_x")+
   scale_color_viridis_d(direction=-1)+
-  scale_x_datetime(date_labels = "%d %b.", date_breaks = "10 days")+
+  scale_x_datetime(date_labels = "%d %b", date_breaks = "10 days")+
   xlab("Date")+
   ylab(expression(Water~temperature~'('*degree*C*')'))+
   theme(strip.background = element_blank())
@@ -124,18 +129,18 @@ wtr_sub_2019 <- wtr_plot_data |>
   ggplot(aes(datetime_hour, value, col = Position))+
   geom_line(show.legend = FALSE)+
   scale_color_viridis_d(direction=-1)+
-  scale_x_datetime(date_labels = "%d %b.")+
+  scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
-  ylab(expression(Temp.~'('*degree*C*')'))
+  ylab(expression(Water~temp.~'('*degree*C*')'))
 
 wtr_sub_2020 <- wtr_plot_data |> 
   filter(between(datetime_hour, xmin_2020, xmax_2020)) |> 
   ggplot(aes(datetime_hour, value, col = Position))+
   geom_line(show.legend = FALSE)+
   scale_color_viridis_d(direction=-1)+
-  scale_x_datetime(date_labels = "%d %b.")+
+  scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
-  ylab(expression(Temp.~'('*degree*C*')'))
+  ylab(expression(Water~temp.~'('*degree*C*')'))
 
 figure_3 <- wtr_all_plot/(wtr_sub_2019+wtr_sub_2020)+
   plot_annotation(tag_levels = "A")+
@@ -166,7 +171,7 @@ oxygen_all_plot <- oxygen_plot_data |>
   geom_line()+
   facet_grid(.~period, scales="free_x", space = "free_x")+
   scale_color_manual(values=oxygen_pal)+
-  scale_x_datetime(date_labels = "%d %b.", date_breaks = "10 days")+
+  scale_x_datetime(date_labels = "%d %b", date_breaks = "10 days")+
   xlab("Date")+
   ylab(expression(Oxygen~saturation~'(%)'))+
   theme(strip.background = element_blank())
@@ -176,18 +181,18 @@ oxygen_sub_2019 <- oxygen_plot_data |>
   ggplot(aes(datetime_hour, value, col = Position))+
   geom_line(show.legend = FALSE)+
   scale_color_manual(values=oxygen_pal)+
-  scale_x_datetime(date_labels = "%d %b.")+
+  scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
-  ylab(expression(O[2]~'(%)'))
+  ylab(expression(Oxygen~sat.~'(%)'))
 
 oxygen_sub_2020 <- oxygen_plot_data |> 
   filter(between(datetime_hour, xmin_2020, xmax_2020)) |> 
   ggplot(aes(datetime_hour, value, col = Position))+
   geom_line(show.legend = FALSE)+
   scale_color_manual(values=oxygen_pal)+
-  scale_x_datetime(date_labels = "%d %b.")+
+  scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
-  ylab(expression(O[2]~'(%)'))
+  ylab(expression(Oxygen~sat.~'(%)'))
 
 figure_4 <- oxygen_all_plot/(oxygen_sub_2019+oxygen_sub_2020)+
   plot_annotation(tag_levels = "A")+
@@ -208,7 +213,7 @@ figure_5 <- dic_2019 |>
   geom_line(aes(y = dic_mmol*5, col="DIC"))+
   scale_y_continuous(name = "pH", sec.axis = sec_axis(~. / 5, name=expression("DIC (mmol L"^{-1}*")")))+
   scale_color_manual(values=ph_dic_col)+
-  scale_x_datetime(date_labels = "%d %b.", date_breaks = "5 days")+
+  scale_x_datetime(date_labels = "%d %b", date_breaks = "5 days")+
   xlab("Date")+
   theme(strip.background = element_blank(), 
         legend.title = element_blank(),
@@ -229,8 +234,8 @@ oxygen_daily <- bind_rows(daily_metab$`2019`$oxygen_daily,
 
 dic_daily <- bind_rows(daily_metab$`2019`$dic_daily) #daily_metab$`2020`$dic_daily
 
-all_daily <- bind_rows(add_column(oxygen_daily, method = "oxygen"),
-                       add_column(dic_daily, method = "dic")) |> 
+all_daily <- bind_rows(add_column(oxygen_daily, method = "Oxygen"),
+                       add_column(dic_daily, method = "DIC")) |> 
   mutate(period = year(datetime_min),
          date = as_date(datetime_min))
 
@@ -254,14 +259,14 @@ figure_6 <- figure_6_data |>
   scale_color_manual(values = metab_colors, name="Component")+
   scale_linetype_manual(values = c(2, 1))+
   scale_shape_manual(values = c(1, 16), name="Method")+
-  scale_x_date(date_labels = "%d %b.", date_breaks = "10 days")+
+  scale_x_date(date_labels = "%d %b", date_breaks = "10 days")+
   ylab(expression("Metabolism (mmol m"^{-2}~d^{-1}*")"))+
-  xlab("Date")+
-  guides(color = guide_legend(title.position = "top", title.hjust = 0.5),
-         shape = guide_legend(title.position = "top", title.hjust = 0.5))+
-  theme(legend.position = c(0.6, 0.8),
-        legend.direction = "horizontal", legend.box = "horizontal",
-        strip.background = element_blank())
+  xlab("Date")
+  # guides(color = guide_legend(title.position = "top", title.hjust = 0.5),
+  #        shape = guide_legend(title.position = "top", title.hjust = 0.5))+
+  # theme(legend.position = c(0.6, 0.8),
+  #       legend.direction = "horizontal", legend.box = "horizontal",
+  #       strip.background = element_blank())
 
 figure_6
 
@@ -275,18 +280,16 @@ figure_7_a <- figure_6_data |>
   select(date, variable, value_m2, method) |> 
   spread(method, value_m2) |> 
   na.omit() |> 
-  ggplot(aes(dic, oxygen, col=variable))+
+  ggplot(aes(DIC, Oxygen, col=variable))+
   geom_abline(intercept = 0, slope=1, linetype=3)+
   geom_point()+
   scale_color_manual(values = metab_colors, name="Component")+
-  ylab(expression(Metabolism-DIC~"(mmol m"^{-2}~d^{-1}*")"))+
-  xlab(expression(Metabolism-O[2]~"(mmol m"^{-2}~d^{-1}*")"))+
+  ylab(expression(Metabolism[DIC]~"(mmol m"^{-2}~d^{-1}*")"))+
+  xlab(expression(Metabolism[Oxygen]~"(mmol m"^{-2}~d^{-1}*")"))+
   ylim(-500, 500)+
   xlim(-500, 500)
 
 #B) R vs GPP (normalized to 20 degrees) with model II regression fit. 
-library(lmodel2);library(ggpmisc)
-
 figure_7_b_data <- all_daily |> 
   left_join(daily_depth) |> 
   mutate(GPP_m2 = GPP*depth,
@@ -295,14 +298,14 @@ figure_7_b_data <- all_daily |>
          R_m2_20 = R_m2/(1.073^(wtr_mean - 20)))
 
 metab_dic_20 <- figure_7_b_data |> 
-  filter(method=="dic")
+  filter(method=="DIC")
 lm2_dic <- lmodel2(R_m2_20~GPP_m2_20, data = metab_dic_20)
 lm2_pred_dic <- data.frame(GPP_m2_20 = seq(min(metab_dic_20$GPP_m2_20), max(metab_dic_20$GPP_m2_20)))
 lm2_dic_df <- lm2_pred_dic |> 
   bind_cols(predict(lm2_dic, method="SMA", interval = "confidence", newdata=lm2_pred_dic))
 
 metab_oxygen_20 <- figure_7_b_data |> 
-  filter(method=="oxygen")
+  filter(method=="Oxygen")
 lm2_oxygen <- lmodel2(R_m2_20~GPP_m2_20, data = metab_oxygen_20)
 lm2_pred_oxygen <- data.frame(GPP_m2_20 = seq(min(metab_oxygen_20$GPP_m2_20), max(metab_oxygen_20$GPP_m2_20)))
 lm2_oxygen_df <- lm2_pred_oxygen |> 
@@ -352,12 +355,23 @@ ggsave("figures/figure_7.png", figure_7, width = 129, height = 170, units = "mm"
 z_mean <- mean(depth_interp_mask[], na.rm =TRUE) #0.94 m
 lake_area
 
+littoral_site_chara_height <- c(34, 35, 33, 44, 32, 35, 38) #cm
+mean(littoral_site_chara_height)
+sd(littoral_site_chara_height)
+
+littoral_site_chara_biomass <- c(1039,	1287, 1367) #g dw/m2
+mean(littoral_site_chara_biomass)
+sd(littoral_site_chara_biomass)
+
 chemistry <- read.delim2("data/chemistry.txt")
 summary(chemistry)
 
 chemistry |> 
   select(secchi_depth, alk_mmol_l, chla_ug_l, tp_mg_p_l, tn_mg_n_l) |> 
   summarise_all(list("mean" = mean,"sd" = sd))
+
+#proportion of lake below 1 meter and chara cover > 80
+sum((chara_cover_raster_mask > 80 & depth_interp_mask < 1)[], na.rm=TRUE)/lake_area*100
 
 #Table S1
 #Species list
