@@ -204,7 +204,8 @@ figure_4
 ggsave("figures/figure_4.png", figure_4, width = 174, height = 150, units = "mm")
 
 #Figure 5 - ph and dic
-ph_dic_col <- brewer.pal(n = 4, name = "Dark2")[c(3, 4)]
+ph_dic_col <- c("pH" = brewer.pal(n = 4, name = "Dark2")[3],
+                "DIC" = brewer.pal(n = 4, name = "Dark2")[4])
 
 figure_5 <- dic_2019 |> 
   mutate(dic_mmol = dic*1000) |> 
@@ -223,7 +224,90 @@ figure_5
 
 ggsave("figures/figure_5.png", figure_5, width = 129, height = 75, units = "mm")
 
-#Figure 6. Lake metabolism (R, GPP and NEP) based on O2 (solid line) and DIC (dashed line) with smoother to shown trend.
+#Figure 6 - diel dic, ph and calcification dynamics
+diel_data <- dic_2019 %>% 
+  mutate(hco3 = map_dbl(aquaenv, ~.$HCO3),
+         co3 = map_dbl(aquaenv, ~.$CO3),
+         co2 = map_dbl(aquaenv, ~.$CO2),
+         co2_sat = map_dbl(aquaenv, ~.$CO2_sat),
+         calcification = -1*(c(0, diff(anc_predicted))/2)*6,
+         hours = as.numeric(datetime - floor_date(datetime, "day"))/60/60) #calc in units mol/l/hour
+
+mean_sun <- sensor_data_2019 %>% 
+  select(datetime, Light_8) %>% 
+  mutate(dark = as.numeric(Light_8 == 0), date = as_date(datetime), dark_shift = c(0, diff(dark)) ) %>% 
+  group_by(date) %>% 
+  summarise(rise = datetime[which.min(dark_shift)], set = datetime[which.max(dark_shift)]) %>% 
+  slice(2:(n()-1)) %>% 
+  summarise(rise_mean = mean(rise), set_mean = mean(set)) %>% 
+  mutate(rise_mean_hour = as.numeric(rise_mean - floor_date(rise_mean, "day")),
+         set_mean_hour = as.numeric(set_mean - floor_date(set_mean, "day")))
+
+ph_diel <-  diel_data %>% 
+  ggplot(aes(hours))+
+  annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  annotate("rect", xmax=Inf, xmin = mean_sun$set_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  geom_smooth(aes(y = ph), method="gam", formula = y~s(x, bs="cc"), col=brewer.pal(n = 4, name = "Dark2")[3], fill = brewer.pal(n = 4, name = "Dark2")[3])+
+  scale_x_continuous(breaks = seq(0, 24, 6))+
+  ylab("pH")+
+  xlab("Time of day")
+
+dic_diel_col <- c("DIC" = brewer.pal(n = 4, name = "Dark2")[4],
+                  "HCO3" = brewer.pal(n = 4, name = "Dark2")[1],
+                  "CO3" = brewer.pal(n = 4, name = "Dark2")[2])
+
+dic_diel_labels <- c("DIC",
+                     expression(HCO[3]^{"-"}),
+                     expression(CO[3]^{"2-"}))
+
+dic_diel <- diel_data %>% 
+  mutate(dic_mmol = dic*1000,
+         hco3_mmol = hco3*1000,
+         co3_mmol = co3*1000) %>% 
+  ggplot(aes(hours))+
+  annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  annotate("rect", xmax=Inf, xmin = mean_sun$set_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  geom_smooth(aes(y = dic_mmol, col="DIC"), method="gam", formula = y~s(x, bs="cc"))+
+  geom_smooth(aes(y = hco3_mmol, col="HCO3"), method="gam", formula = y~s(x, bs="cc"))+
+  geom_smooth(aes(y = co3_mmol, col="CO3"), method="gam", formula = y~s(x, bs="cc"))+
+  scale_x_continuous(breaks = seq(0, 24, 6))+
+  scale_color_manual(values=dic_diel_col, labels = dic_diel_labels)+
+  xlab("Time of day")+
+  ylab(expression("DIC, HCO"[3]^{"-"}*", and CO"[3]^{"2-"}~"(mmol L"^{-1}*")"))+
+  theme(legend.title = element_blank(),
+        legend.position = "bottom")
+
+diel_co2_sat <- diel_data %>% 
+  group_by(hours) %>% 
+  summarise(co2_sat_mean = mean(co2_sat)*10^6)
+
+co2_diel <- diel_data %>% 
+  mutate(co2_umol = co2*10^6) %>% 
+  ggplot(aes(hours))+
+  annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  annotate("rect", xmax=Inf, xmin = mean_sun$set_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  geom_line(data = diel_co2_sat, aes(y=co2_sat_mean), show.legend = FALSE, linetype=2)+
+  geom_smooth(aes(y = co2_umol, col="CO2"), method="gam", formula = y~s(x, bs="cc"), col=brewer.pal(n = 4, name = "Dark2")[3], fill = brewer.pal(n = 4, name = "Dark2")[3])+
+  scale_x_continuous(breaks = seq(0, 24, 6))+
+  ylab(expression(CO[2]~concentration~"("*mu*mol~L^{-1}*")"))+
+  xlab("Time of day")
+
+calc_diel <- diel_data %>% 
+  ggplot(aes(hours))+
+  annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  annotate("rect", xmax=Inf, xmin = mean_sun$set_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  geom_hline(yintercept = 0, linetype = 3)+
+  geom_smooth(aes(y = calcification*10^6, col="Calcification"), method="gam", formula = y~s(x, bs="cc"), col=brewer.pal(n = 4, name = "Dark2")[3], fill = brewer.pal(n = 4, name = "Dark2")[3])+
+  ylab(expression("Calcification ("*mu*mol~L^{-1}~h^{-1}*")"))+
+  xlab("Time of day")
+
+figure_6 <- ph_diel + dic_diel + co2_diel + calc_diel + plot_layout(ncol=2)+plot_annotation(tag_levels = "A")
+
+figure_6
+
+ggsave("figures/figure_6.png", figure_6, width = 174, height = 150, units = "mm")
+
+#Figure 7. Lake metabolism (R, GPP and NEP) based on O2 (solid line) and DIC (dashed line) with smoother to shown trend.
 daily_metab <- readRDS("data/daily_metab.rds")
 
 daily_depth <- bind_rows(daily_metab$`2019`[, c("date", "depth")], 
@@ -243,13 +327,13 @@ metab_colors <- c("GPP" = brewer.pal(n = 4, name = "Dark2")[1],
                   "NEP" = brewer.pal(n = 4, name = "Dark2")[3],
                   "R" = brewer.pal(n = 4, name = "Dark2")[2])
 
-figure_6_data <- all_daily |> 
+figure_7_data <- all_daily |> 
   gather(variable, value, GPP, R, NEP) |> 
   left_join(daily_depth) |> 
   mutate(value_m2 = value*depth,
          value_m2 = ifelse(variable == "R", value_m2*-1, value_m2))
 
-figure_6 <- figure_6_data |> 
+figure_7 <- figure_7_data |> 
   ggplot(aes(date, value_m2, col = variable, linetype=method, shape = method))+
   geom_hline(yintercept = 0, linetype=3)+
   #geom_line()+
@@ -268,15 +352,15 @@ figure_6 <- figure_6_data |>
   #       legend.direction = "horizontal", legend.box = "horizontal",
   #       strip.background = element_blank())
 
-figure_6
+figure_7
 
-ggsave("figures/figure_6.png", figure_6, width = 174, height = 75, units = "mm")
+ggsave("figures/figure_7.png", figure_7, width = 174, height = 75, units = "mm")
 
-#Figure 7. 
+#Figure 8. 
 #A) O2 vs DIC rates with 1:1 line, maybe model II regression fit. 
 #Filled points O2 and empty points are DIC
 #Solid lines are 02 and dashed are DIC
-figure_7_a <- figure_6_data |> 
+figure_8_a <- figure_7_data |> 
   select(date, variable, value_m2, method) |> 
   spread(method, value_m2) |> 
   na.omit() |> 
@@ -290,28 +374,28 @@ figure_7_a <- figure_6_data |>
   xlim(-500, 500)
 
 #B) R vs GPP (normalized to 20 degrees) with model II regression fit. 
-figure_7_b_data <- all_daily |> 
+figure_8_b_data <- all_daily |> 
   left_join(daily_depth) |> 
   mutate(GPP_m2 = GPP*depth,
          R_m2 = R*depth,
          GPP_m2_20 = GPP_m2/(1.073^(wtr_mean - 20)),
          R_m2_20 = R_m2/(1.073^(wtr_mean - 20)))
 
-metab_dic_20 <- figure_7_b_data |> 
+metab_dic_20 <- figure_8_b_data |> 
   filter(method=="DIC")
 lm2_dic <- lmodel2(R_m2_20~GPP_m2_20, data = metab_dic_20)
 lm2_pred_dic <- data.frame(GPP_m2_20 = seq(min(metab_dic_20$GPP_m2_20), max(metab_dic_20$GPP_m2_20)))
 lm2_dic_df <- lm2_pred_dic |> 
   bind_cols(predict(lm2_dic, method="SMA", interval = "confidence", newdata=lm2_pred_dic))
 
-metab_oxygen_20 <- figure_7_b_data |> 
+metab_oxygen_20 <- figure_8_b_data |> 
   filter(method=="Oxygen")
 lm2_oxygen <- lmodel2(R_m2_20~GPP_m2_20, data = metab_oxygen_20)
 lm2_pred_oxygen <- data.frame(GPP_m2_20 = seq(min(metab_oxygen_20$GPP_m2_20), max(metab_oxygen_20$GPP_m2_20)))
 lm2_oxygen_df <- lm2_pred_oxygen |> 
   bind_cols(predict(lm2_oxygen, method="SMA", interval = "confidence", newdata=lm2_pred_oxygen))
 
-figure_7_b <- figure_7_b_data |> 
+figure_8_b <- figure_8_b_data |> 
   ggplot()+
   geom_abline(intercept = 0, slope=1, linetype=3)+
   #geom_ribbon(data = lm2_dic_df, aes(GPP_m2_20, fit, ymin=upr, ymax=lwr), fill=grey(0.5, alpha=0.3))+
@@ -345,11 +429,11 @@ figure_7_b <- figure_7_b_data |>
 #             start=c(tau=0.2,Vmax=2), # this too
 #             se=FALSE) 
 
-figure_7 <- figure_7_a + figure_7_b + plot_layout(ncol=1)+plot_annotation(tag_levels = "A")
+figure_8 <- figure_8_a + figure_8_b + plot_layout(ncol=1)+plot_annotation(tag_levels = "A")
 
-figure_7
+figure_8
 
-ggsave("figures/figure_7.png", figure_7, width = 129, height = 170, units = "mm")
+ggsave("figures/figure_8.png", figure_8, width = 129, height = 170, units = "mm")
 
 #Lake stats, e.g. depth, biomass, and chemistry
 z_mean <- mean(depth_interp_mask[], na.rm =TRUE) #0.94 m
@@ -372,17 +456,6 @@ chemistry |>
 
 #proportion of lake below 1 meter and chara cover > 80
 sum((chara_cover_raster_mask > 75 & depth_interp_mask < 1)[], na.rm=TRUE)/lake_area*100
-
-#carbon pool stats 2019
-dic_2019 |> 
-  mutate(co2 = map_dbl(aquaenv, ~.$CO2),
-         co2_sat = map_dbl(aquaenv, ~.$CO2_sat),
-         anc = anc_predicted*1000,
-         dic = dic*1000,
-         co2 = co2*10^6,
-         co2_sat = co2_sat*10^6) |> 
-  select(ph, dic, anc, co2, co2_sat) |>
-  summary()
 
 #Table S1
 #Species list
