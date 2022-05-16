@@ -9,6 +9,7 @@ oxygen_nll <- function (pars, datain) {
   Pmax <- exp(pars[1])
   Rmax <- exp(pars[2])
   doinit <- exp(pars[3])
+  alpha <- exp(pars[4])
   
   #Define variables from datain
   nobs <- nrow(datain)
@@ -28,7 +29,8 @@ oxygen_nll <- function (pars, datain) {
   #Metabolism model
   for (i in 1:(nobs-1)) {
     atmflux[i] <- dummy[i] * -k.gas[i] * (dohat[i] - dosat[i]) / zmix[i]
-    dohat[i+1] <- dohat[i] + (Pmax*irr[i]) - (Rmax*1.073^(Rwtr[i]-20)) + atmflux[i]
+    #dohat[i+1] <- dohat[i] + (Pmax*irr[i]) - (Rmax*1.073^(Rwtr[i]-20)) + atmflux[i]
+    dohat[i+1] <- dohat[i] + (Pmax*tanh(alpha*irr[i]/Pmax)) - (Rmax*1.073^(Rwtr[i]-20)) + atmflux[i]
   }
   
   #Calculation of residuals, sigma2 and negative log likelihood
@@ -58,7 +60,8 @@ oxygen_predict <- function(pars, datain) {
   
   for (i in 1:(nobs-1)) {
     atmflux[i] <- dummy[i] * -k.gas[i] * (dopred[i] - dosat[i]) / zmix[i]  
-    dopred[i+1] <- dopred[i] + (pars$gppcoef*irr[i]) - (pars$rcoef*1.073^(Rwtr[i]-20)) + atmflux[i]
+    #dopred[i+1] <- dopred[i] + (pars$gppcoef*irr[i]) - (pars$rcoef*1.073^(Rwtr[i]-20)) + atmflux[i]
+    dopred[i+1] <- dopred[i] + (pars$gppcoef*tanh(pars$alpha*irr[i]/pars$gppcoef)) - (pars$rcoef*1.073^(Rwtr[i]-20)) + atmflux[i]
   }
   
   # plot(doobs, type="l", main=as_date(datain$datetime[1]))
@@ -72,7 +75,8 @@ oxygen_predict <- function(pars, datain) {
 oxygen_metab <- function(df){
   datain <- df
   
-  parguess <- log(c(3E-6, 5E-2, datain$doobs[1]))
+  #parguess <- log(c(3E-6, 5E-2, datain$doobs[1]))
+  parguess <- log(c(3E-2, 5E-2, datain$doobs[1], 1e-5))
   
   fit <- tryCatch(optim(parguess, oxygen_nll, datain = datain, method = "Nelder-Mead"), error = function(err){NULL}) #BFGS
   if(is.null(fit)){return(NA)}
@@ -80,13 +84,16 @@ oxygen_metab <- function(df){
   gppcoef <- exp(fit$par[1])
   rcoef <- exp(fit$par[2])
   doinit <- exp(fit$par[3])
+  alpha <- exp(fit$par[4])
   convergence <- fit$convergence
   
-  GPP <- mean(gppcoef*datain$lux)*144
+  #GPP <- mean(gppcoef*datain$lux)*144
+  GPP <- mean(gppcoef*tanh(alpha*datain$lux/gppcoef))*144
   R <- mean(rcoef*1.073^(datain$wtr-20))*144
   NEP <- GPP - R
   
-  pars <- list(gppcoef = gppcoef, rcoef = rcoef, doinit = doinit) 
+  #pars <- list(gppcoef = gppcoef, rcoef = rcoef, doinit = doinit)
+  pars <- list(gppcoef = gppcoef, rcoef = rcoef, doinit = doinit, alpha=alpha)
   dopred <- oxygen_predict(pars = pars, datain = datain)
   r_spear <- cor(dopred, datain$doobs, method = "spearman")
   rmse <- sqrt(mean((datain$doobs-dopred)^2))
