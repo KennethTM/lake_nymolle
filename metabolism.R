@@ -13,11 +13,11 @@ metab_data_2019 <- sensor_data_2019 |>
          dic_dummy = as.numeric(zmix > dic_depth),
          date = as_date(datetime),
          lux = Light_8,
-         kgas_o2_m_day = k_gas_ensemble_vec(wnd_pred_10, Temp_8, lake_area, "O2"),
-         kgas_co2_m_day = k_gas_ensemble_vec(wnd_pred_10, Temp_8, lake_area, "CO2"),
+         kgas_o2_m_day = k_gas_ensemble_vec(wnd_pred_10, Temp_8, "O2"),
          kgas_o2 = kgas_o2_m_day/24/6,
-         kgas_co2_alpha = k_gas_enchance(kgas_co2_m_day, Temp_8, ph),
-         kgas_co2 = (kgas_co2_m_day*kgas_co2_alpha)/24/6,
+         kgas_co2_m_day = k_gas_ensemble_vec(wnd_pred_10, Temp_8, "CO2"),
+         chem_enh = k_gas_enchance(kgas_co2_m_day, Temp_8, ph),
+         kgas_co2 = kgas_co2_m_day*chem_enh/24/6,
          calcification = (c(0, diff(anc_predicted))/2)) |> 
   select(date, datetime, doobs = `DO_mg/L_39`, dosat, lux, wtr = Temp_37, zmix, 
          oxygen_dummy, dic_dummy, kgas_o2, kgas_co2, dic, wtr_dic, ph, calcification)
@@ -31,7 +31,7 @@ daily_metab_2019 <- metab_data_2019 |>
   mutate(depth = sensor_depth$total$`2019`) |> 
   mutate(dic_mle = map(data, ~dic_metab(.x)),
          dic_daily = map(dic_mle, ~.x$dic_daily),
-         dic_predict = map(dic_mle, ~.x$dic_predict)) |> 
+         dic_predict = map(dic_mle, ~.x$dic_predict)) |>
   mutate(oxygen_mle = map(data, ~oxygen_metab(.x)),
          oxygen_daily = map(oxygen_mle, ~.x$oxygen_daily),
          oxygen_predict = map(oxygen_mle, ~.x$oxygen_predict))
@@ -56,7 +56,7 @@ metab_data_2020 <- bind_rows(sensor_data_2020_1, sensor_data_2020_2, sensor_data
          oxygen_dummy = as.numeric(zmix > oxygen_depth),
          date = as_date(datetime),
          lux = Light_10748214,
-         kgas_o2_m_day = k_gas_ensemble_vec(wnd_pred_10, Temp_10748214, lake_area, "O2"),
+         kgas_o2_m_day = k_gas_ensemble_vec(wnd_pred_10, Temp_10748214, "O2"),
          kgas_o2 = kgas_o2_m_day/24/6) |> 
   select(date, depth, datetime, doobs = `DO_mgL_500098`, dosat, lux, wtr = Temp_10748214, 
          zmix, oxygen_dummy, kgas_o2)

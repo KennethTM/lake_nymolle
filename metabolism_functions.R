@@ -1,22 +1,40 @@
 #Functions for calculating lake metabolism (MLE)
 
+#Jassby-Platt GPP-light relationship
+GPP <- function(Pmax, Palpha, light){
+  return(Pmax*tanh(Palpha*light/Pmax))
+}
+
+#Arrhenius temperature dependant respiration with Q10 ~ 2
+R <- function(Rmax, wtr, temp_const = 1.073){
+  return(Rmax*temp_const^(wtr-20))
+}
+
+#NLL function
+NLL <- function(obs, hat){
+  res <- obs - hat
+  nres <- length(res)
+  SSE <- sum(res^2)
+  sigma2 <- SSE/nres
+  NLL <- -sum(dnorm(obs, hat, sd=sqrt(sigma2), log=TRUE))
+  return(NLL)
+}
+
 #Oxygen metabolism model
 #Input for oxygen: datetime, doobs, dosat, kgas, zmix, lux, wtr, dummy
-
-#NLL function with linear GPP-light and respiration-water temperature relationships
 oxygen_nll <- function (pars, datain) {
   
   Pmax <- exp(pars[1])
-  Rmax <- exp(pars[2])
-  doinit <- exp(pars[3])
-  alpha <- exp(pars[4])
+  Palpha <- exp(pars[2])
+  Rmax <- exp(pars[3])
+  doinit <- exp(pars[4])
   
   #Define variables from datain
   nobs <- nrow(datain)
   irr <- datain$lux
   doobs <- datain$doobs
   k.gas <- datain$kgas_o2
-  Rwtr <- datain$wtr
+  wtr <- datain$wtr
   zmix <- datain$zmix
   dummy <- datain$oxygen_dummy
   dosat <- datain$dosat
@@ -29,17 +47,12 @@ oxygen_nll <- function (pars, datain) {
   #Metabolism model
   for (i in 1:(nobs-1)) {
     atmflux[i] <- dummy[i] * -k.gas[i] * (dohat[i] - dosat[i]) / zmix[i]
-    #dohat[i+1] <- dohat[i] + (Pmax*irr[i]) - (Rmax*1.073^(Rwtr[i]-20)) + atmflux[i]
-    dohat[i+1] <- dohat[i] + (Pmax*tanh(alpha*irr[i]/Pmax)) - (Rmax*1.073^(Rwtr[i]-20)) + atmflux[i]
+    dohat[i+1] <- dohat[i] + GPP(Pmax, Palpha, irr[i]) - R(Rmax, wtr[i]) + atmflux[i]
   }
   
   #Calculation of residuals, sigma2 and negative log likelihood
-  res <- doobs - dohat
-  nres <- length(res)
-  SSE <- sum(res^2)
-  sigma2 <- SSE/nres
-  NLL <- -sum(dnorm(doobs, dohat, sd=sqrt(sigma2), log=TRUE)) 
-  return(NLL)
+  nll <- NLL(doobs, dohat)
+  return(nll)
 }
 
 #Function for obtaining predicted oxygen
@@ -49,7 +62,7 @@ oxygen_predict <- function(pars, datain) {
   irr <- datain$lux
   doobs <- datain$doobs
   k.gas <- datain$kgas_o2
-  Rwtr <- datain$wtr
+  wtr <- datain$wtr
   zmix <- datain$zmix
   dummy <- datain$oxygen_dummy
   dosat <- datain$dosat
@@ -60,93 +73,78 @@ oxygen_predict <- function(pars, datain) {
   
   for (i in 1:(nobs-1)) {
     atmflux[i] <- dummy[i] * -k.gas[i] * (dopred[i] - dosat[i]) / zmix[i]  
-    #dopred[i+1] <- dopred[i] + (pars$gppcoef*irr[i]) - (pars$rcoef*1.073^(Rwtr[i]-20)) + atmflux[i]
-    dopred[i+1] <- dopred[i] + (pars$gppcoef*tanh(pars$alpha*irr[i]/pars$gppcoef)) - (pars$rcoef*1.073^(Rwtr[i]-20)) + atmflux[i]
+    dopred[i+1] <- dopred[i] + GPP(pars$Pmax, pars$Palpha, irr[i]) - R(pars$Rmax, wtr[i]) + atmflux[i]
   }
-  
-  # plot(doobs, type="l", main=as_date(datain$datetime[1]))
-  # lines(dopred, col="red")
-  # lines(irr, col="blue")
   
   return(dopred)
 }
 
 #Function calculating oxygen metabolism
-oxygen_metab <- function(df){
-  datain <- df
+oxygen_metab <- function(datain){
   
-  #parguess <- log(c(3E-6, 5E-2, datain$doobs[1]))
-  parguess <- log(c(3E-2, 5E-2, datain$doobs[1], 1e-5))
+  parguess <- log(c(2e-2, 5e-6, 1e-3, datain$doobs[1]))
   
-  fit <- tryCatch(optim(parguess, oxygen_nll, datain = datain, method = "Nelder-Mead"), error = function(err){NULL}) #BFGS
+  fit <- tryCatch(optim(parguess, oxygen_nll, datain = datain, method = "BFGS"), error = function(err){NULL})
   if(is.null(fit)){return(NA)}
   
-  gppcoef <- exp(fit$par[1])
-  rcoef <- exp(fit$par[2])
-  doinit <- exp(fit$par[3])
-  alpha <- exp(fit$par[4])
+  Pmax <- exp(fit$par[1])
+  Palpha <- exp(fit$par[2])
+  Rmax <- exp(fit$par[3])
+  doinit <- exp(fit$par[4])
   convergence <- fit$convergence
   
-  #GPP <- mean(gppcoef*datain$lux)*144
-  GPP <- mean(gppcoef*tanh(alpha*datain$lux/gppcoef))*144
-  R <- mean(rcoef*1.073^(datain$wtr-20))*144
+  GPP <- mean(GPP(Pmax, Palpha, datain$lux))*144
+  R <- mean(R(Rmax, datain$wtr))*144
   NEP <- GPP - R
   
-  #pars <- list(gppcoef = gppcoef, rcoef = rcoef, doinit = doinit)
-  pars <- list(gppcoef = gppcoef, rcoef = rcoef, doinit = doinit, alpha=alpha)
+  pars <- list(Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, doinit = doinit)
   dopred <- oxygen_predict(pars = pars, datain = datain)
   r_spear <- cor(dopred, datain$doobs, method = "spearman")
   rmse <- sqrt(mean((datain$doobs-dopred)^2))
   
   daily <- data.frame(datetime_min = min(datain$datetime), datetime_max = max(datain$datetime),
-                      gppcoef = gppcoef, rcoef = rcoef, doinit = doinit, convergence = convergence,
+                      Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, doinit = doinit, convergence = convergence,
                       GPP = GPP/32*1000, R = R/32*1000, NEP = NEP/32*1000, #convert g/m3/d to mmol/m3/day
                       r_spear = r_spear, rmse = rmse, 
                       wtr_mean = mean(datain$wtr), lux_mean = mean(datain$lux))
   
-  obs_pred <- data.frame(datetime = datain$datetime, dopred = dopred, doobs = datain$doobs)
+  predictions <- data.frame(datetime = datain$datetime, dopred = dopred, doobs = datain$doobs)
   
-  return(list("oxygen_daily" = daily, "oxygen_predict" = obs_pred))
+  return(list("oxygen_daily" = daily, "oxygen_predict" = predictions))
 }
 
 #DIC metabolism model
 #Input for dic: datetime, kgas, zmix, lux, wtr_dic, dummy, dic, pH
-
-dic_nll <- function (pars, datain) {
+dic_nll <- function(pars, datain){
   
   Pmax <- exp(pars[1])
-  Rmax <- exp(pars[2])
-  dic_init <- exp(pars[3])
+  Palpha <- exp(pars[2])
+  Rmax <- exp(pars[3])
+  dic_init <- exp(pars[4])
   
   nobs <- nrow(datain)
   irr <- datain$lux
   k.gas <- datain$kgas_co2
-  Rwtr <- datain$wtr_dic
+  wtr <- datain$wtr_dic
   zmix <- datain$zmix
   dummy <- datain$dic_dummy
   dic <- datain$dic
   ph <- datain$ph
   calc <- datain$calcification
 
-  #Set up output
   dic_hat <- rep(NA,nobs)
   atmflux <- rep(NA,nobs)
   dic_hat[1] <- dic_init
 
-  #Metabolism model
   for (i in 1:(nobs-1)){
-    carb_sys <- aquaenv(S=0, t=Rwtr[i], SumCO2 = dic_hat[i], pH = ph[i])
+    carb_sys <- aquaenv(S=0, t=wtr[i], SumCO2 = dic_hat[i], pH = ph[i])
     atmflux[i] <- dummy[i] * -k.gas[i] * (carb_sys$CO2 - carb_sys$CO2_sat) / zmix[i]
-    dic_hat[i+1] <- dic_hat[i] - (Pmax*irr[i]) + (Rmax*1.073^(Rwtr[i]-20)) + atmflux[i] + calc[i]
+    dic_hat[i+1] <- dic_hat[i] - GPP(Pmax, Palpha, irr[i]) + R(Rmax, wtr[i]) + atmflux[i] + calc[i]
+    
   }
   
-  #Calculation of residuals, sigma2 and negative log likelihood
-  res <- dic - dic_hat
-  nres <- length(res)
-  SSE <- sum(res^2)
-  sigma2 <- SSE/nres
-  NLL <- -sum(dnorm(dic, dic_hat, sd=sqrt(sigma2), log=TRUE)) 
-  return(NLL)
+  nll <- NLL(dic, dic_hat)
+  return(nll)
 }
 
 #Function for obtaining predicted dic
@@ -155,7 +153,7 @@ dic_predict <- function(pars, datain) {
   nobs <- nrow(datain)
   irr <- datain$lux
   k.gas <- datain$kgas_co2
-  Rwtr <- datain$wtr_dic
+  wtr <- datain$wtr_dic
   zmix <- datain$zmix
   dummy <- datain$dic_dummy
   dic <- datain$dic
@@ -167,74 +165,64 @@ dic_predict <- function(pars, datain) {
   dic_pred[1] <- pars$dic_init
   
   for (i in 1:(nobs-1)){
-    carb_sys <- aquaenv(S=0, t=Rwtr[i], SumCO2 = dic_pred[i], pH = ph[i])
+    carb_sys <- aquaenv(S=0, t=wtr[i], SumCO2 = dic_pred[i], pH = ph[i])
     atmflux[i] <- dummy[i] * -k.gas[i] * (carb_sys$CO2 - carb_sys$CO2_sat) / zmix[i]
-    dic_pred[i+1] <- dic_pred[i] - (pars$gppcoef*irr[i]) + (pars$rcoef*1.073^(Rwtr[i]-20)) + atmflux[i] + calc[i]
+    dic_pred[i+1] <- dic_pred[i] - GPP(pars$Pmax, pars$Palpha, irr[i]) + R(pars$Rmax, wtr[i]) + atmflux[i] + calc[i]
   }
   
   return(dic_pred)
 }
 
 #Function collecting DIC metabolism functions
-dic_metab <- function(df){
-  datain <- df
+dic_metab <- function(datain){
+
+  parguess <- log(c(3E-5, 1e-8, 5E-6, datain$dic[1]))
   
-  parguess <- log(c(5E-10, 3E-6, datain$dic[1]))
-  
-  fit <- tryCatch(optim(parguess, dic_nll, datain = datain, method = "Nelder-Mead"), error = function(err){NULL}) #BFGS
+  fit <- tryCatch(optim(parguess, dic_nll, datain = datain, method = "BFGS"), error = function(err){NULL}) #BFGS
   if(is.null(fit)){return(NA)}
   
-  gppcoef <- exp(fit$par[1])
-  rcoef <- exp(fit$par[2])
-  dic_init <- exp(fit$par[3])
+  Pmax <- exp(fit$par[1])
+  Palpha <- exp(fit$par[2])
+  Rmax <- exp(fit$par[3])
+  dic_init <- exp(fit$par[4])
   convergence <- fit$convergence
   
-  GPP <- mean(gppcoef*datain$lux)*144
-  R <- mean(rcoef*1.073^(datain$wtr_dic-20))*144
+  GPP <- mean(GPP(Pmax, Palpha, datain$lux))*144
+  R <- mean(R(Rmax, datain$wtr_dic))*144
   NEP <- GPP - R
   
-  pars <- list(gppcoef = gppcoef, rcoef = rcoef, dic_init = dic_init) 
+  pars <- list(Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, dic_init = dic_init) 
   dic_pred <- dic_predict(pars = pars, datain = datain)
   r_spear <- cor(dic_pred, datain$dic, method = "spearman")
   rmse <- sqrt(mean((datain$dic-dic_pred)^2))
   
   daily <- data.frame(datetime_min = min(datain$datetime), datetime_max = max(datain$datetime),
-                      gppcoef = gppcoef, rcoef = rcoef, dic_init = dic_init, convergence = convergence,
+                      Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, dic_init = dic_init, convergence = convergence,
                       GPP = GPP*10^6, R = R*10^6, NEP = NEP*10^6, r_spear = r_spear, rmse = rmse, #units to mmol/m3/day
                       wtr_mean = mean(datain$wtr_dic), lux_mean = mean(datain$lux))
   
-  obs_pred <- data.frame(datetime = datain$datetime, dic_pred = dic_pred, dic = datain$dic)
+  predictions <- data.frame(datetime = datain$datetime, dic_pred = dic_pred, dic = datain$dic)
   
-  return(list("dic_daily" = daily, "dic_predict" = obs_pred))
+  return(list("dic_daily" = daily, "dic_predict" = predictions))
 }
 
 k_schilder <- function(wnd){
-  k600 <- 0.9+0*wnd #0.97
+  k600 <- 0.9+0.97*wnd 
   k600_m_day <- k600*24/100
   return(k600_m_day)
 }
 
-#martinsen gribskov k model
-
 #Function for calculating gas exchange velocity (m/day) as the mean of three empirical models
-k_gas_ensemble <- function(wnd, wtr, area, gas){
+k_gas_ensemble <- function(wnd, wtr, gas){
   k600_cole <- k.cole.base(wnd)
   k600_crucius <- k.crusius.base(wnd)
   k600_schilder <- k_schilder(wnd)
-  #k600_vachon <- k.vachon.base(wnd, area)
-  k600_all <- c(k600_schilder, k600_crucius, k600_cole) #k600_vachon,
+  k600_all <- c(k600_schilder, k600_crucius, k600_cole)
   k_all <- sapply(k600_all, function(k600){k600.2.kGAS.base(k600, wtr, gas=gas)})
   k_all_mean <- mean(k_all)
   return(k_all_mean)
 }
 k_gas_ensemble_vec <- Vectorize(k_gas_ensemble)
-
-# k_gas_crusius <- function(wnd, wtr, gas){
-#   k600_crucius <- k.crusius.base(wnd)
-#   k_crucius <- k600.2.kGAS.base(k600_crucius, wtr, gas=gas)
-#   return(k_crucius)
-# }
-# #k_gas_crusius_vec <- Vectorize(k_gas_crusius)
 
 #Calculation of chemical enhancement (Hoover and Berkshire mode, Wanninkhof & Knox 1996)
 k_gas_enchance <- function(kco2, wtr, ph, S=0){
@@ -275,6 +263,7 @@ k_gas_enchance <- function(kco2, wtr, ph, S=0){
   
   q <- (r*t/d)^0.5
   
+  #Calculate chemical enhancement factor alpha
   alpha <- t/((t-1) + (tanh(q*z)/(q*z)))
   
   return(alpha)
