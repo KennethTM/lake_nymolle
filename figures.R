@@ -30,6 +30,28 @@ depth_interp <- interpolate(raster_template, tps_mod)
 depth_interp_mask <- mask(depth_interp, vect(lake_poly))
 depth_interp_mask[depth_interp_mask < 0] = 0
 
+#Lake stats, e.g. depth, biomass, and chemistry
+z_mean <- mean(depth_interp_mask[], na.rm =TRUE) #0.94 m
+lake_area
+
+littoral_site_chara_height <- c(34, 35, 33, 44, 32, 35, 38) #cm
+mean(littoral_site_chara_height)
+sd(littoral_site_chara_height)
+
+littoral_site_chara_biomass <- c(1039,	1287, 1367) #g dw/m2
+mean(littoral_site_chara_biomass)
+sd(littoral_site_chara_biomass)
+
+summary(chemistry)
+
+chemistry |> 
+  select(secchi_depth, alk_mmol_l, chla_ug_l, tp_mg_p_l, tn_mg_n_l) |> 
+  summarise_all(list("mean" = mean,"sd" = sd))
+
+#Proportion of lake below 1 meter and chara cover > 80
+sum((chara_cover_raster_mask > 75 & depth_interp_mask < 1)[], na.rm=TRUE)/lake_area*100
+
+#Data frames for plotting
 depth_df <- as.data.frame(depth_interp_mask, xy = TRUE)
 total_cover_df <- as.data.frame(total_cover_raster_mask, xy = TRUE)
 chara_cover_df <- as.data.frame(chara_cover_raster_mask, xy = TRUE)
@@ -63,14 +85,37 @@ cover_map <- ggplot()+
 chara_img <- readJPEG("data/chara_image.jpg")
 chara_img_grob <- rasterGrob(chara_img)
 
-figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels = "A")+plot_layout(ncol=1, heights = c(1, 1, 0.95))
+figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels = "A")+plot_layout(ncol=1, heights = c(1, 1, 0.85))
 
 figure_1
 
-ggsave("figures/figure_1.png", figure_1, width = 129, height = 234, units = "mm")
+ggsave("figures/figure_1.png", figure_1, width = 129, height = 200, units = "mm")
 
 #Figure 2 - open water water temperature, ph and oxygen profiles
-profile <- read.delim2("data/profile.txt")
+
+#Stats
+#Gradient
+profile |> 
+  filter(between(month(date), 5, 9)) |> 
+  group_by(date) |> 
+  summarise(temp_grad = (temp[which(depth_m == 0.25)] - temp[which(depth_m == 3)])/(3-0.25)) |> 
+  summary()
+
+#Surface stats
+profile |> 
+  filter(between(month(date), 5, 9) & depth_m == 0.25) |> 
+  summary()
+
+#CO2 stats
+profile |> 
+  filter(between(month(date), 5, 9)) |> 
+  group_by(date) |> 
+  summarise(ph = mean(ph), temp=mean(temp)) |> 
+  na.omit() |> 
+  left_join(chemistry[, c("date", "alk_mmol_l")]) |> 
+  mutate(aquaenv = pmap(list(temp, ph, alk_mmol_l), ~aquaenv(S=0, t=..1, SumCO2 = NULL, pH = ..2, TA = ..3/1000)),
+         co2 = map_dbl(aquaenv, ~.$CO2)*10^6) |> 
+  summary()
 
 profile_long <- profile |>  
   mutate(date = dmy(date), 
@@ -112,6 +157,15 @@ wtr_plot_data <- left_join(datetime_seq, wtr_all) |>
   ungroup() |> 
   filter(between(datetime_hour, min(wtr_2019$datetime), max(wtr_2019$datetime)) | 
            between(datetime_hour, min(wtr_2020$datetime), max(wtr_2020$datetime))) 
+
+wtr_all |> 
+  mutate(date = as_date(datetime),
+         year = year(datetime)) |> 
+  group_by(year, date) |> 
+  summarise(diel_wtr = mean(wtr_1)) |>View()
+  summarise(mean_wtr = mean(diel_wtr),
+            min_wtr = min(diel_wtr),
+            max_wtr = max(diel_wtr)) |> 
 
 wtr_all_plot <- wtr_plot_data |> 
   ggplot(aes(datetime_hour, value, col = Position))+
@@ -243,6 +297,16 @@ mean_sun <- sensor_data_2019 %>%
   mutate(rise_mean_hour = as.numeric(rise_mean - floor_date(rise_mean, "day")),
          set_mean_hour = as.numeric(set_mean - floor_date(set_mean, "day")))
 
+#Calc stats
+diel_data |> 
+  mutate(date = as_date(datetime)) |> 
+  filter(between(hours, mean_sun$rise_mean_hour, mean_sun$set_mean_hour)) |> 
+  group_by(date) |> 
+  summarise(mean_calc = mean(calcification)*1000*(mean_sun$set_mean_hour-mean_sun$rise_mean_hour), #calc in mmol/l/daytime period
+            drop_dic = (max(dic)-min(dic))*1000) |>  #dic drop in mmol/l/daytime period
+  mutate(calc_dic_prop = mean_calc/drop_dic*100) |> 
+  summary()
+  
 ph_diel <-  diel_data %>% 
   ggplot(aes(hours))+
   annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
@@ -316,7 +380,7 @@ daily_depth <- bind_rows(daily_metab$`2019`[, c("date", "depth")],
 oxygen_daily <- bind_rows(daily_metab$`2019`$oxygen_daily,
                           daily_metab$`2020`$oxygen_daily)
 
-dic_daily <- bind_rows(daily_metab$`2019`$dic_daily) #daily_metab$`2020`$dic_daily
+dic_daily <- bind_rows(daily_metab$`2019`$dic_daily)
 
 all_daily <- bind_rows(add_column(oxygen_daily, method = "Oxygen"),
                        add_column(dic_daily, method = "DIC")) |> 
@@ -337,7 +401,7 @@ figure_7 <- figure_7_data |>
   ggplot(aes(date, value_m2, col = variable, linetype=method, shape = method))+
   geom_hline(yintercept = 0, linetype=3)+
   #geom_line()+
-  geom_smooth(se=FALSE, size=0.5, show.legend = FALSE)+
+  #geom_smooth(se=FALSE, size=0.5, show.legend = FALSE)+
   geom_point()+
   facet_grid(.~period, scales="free_x", space = "free_x")+
   scale_color_manual(values = metab_colors, name="Component")+
@@ -370,8 +434,7 @@ figure_8_a <- figure_7_data |>
   scale_color_manual(values = metab_colors, name="Component")+
   ylab(expression(Metabolism[DIC]~"(mmol m"^{-2}~d^{-1}*")"))+
   xlab(expression(Metabolism[Oxygen]~"(mmol m"^{-2}~d^{-1}*")"))+
-  ylim(-500, 500)+
-  xlim(-500, 500)
+  coord_equal()
 
 #B) R vs GPP (normalized to 20 degrees) with model II regression fit. 
 figure_8_b_data <- all_daily |> 
@@ -405,57 +468,13 @@ figure_8_b <- figure_8_b_data |>
   geom_point(aes(GPP_m2_20, R_m2_20, shape=method))+
   scale_shape_manual(values = c(1, 16), name="Method")+
   ylab(expression(R[20]~"(mmol m"^{-2}~d^{-1}*")"))+
-  xlab(expression(GPP[20]~"(mmol m"^{-2}~d^{-1}*")"))+
-  coord_cartesian(xlim=c(0, 425), ylim=c(0, 425))
-
-#C) GPP vs mean lux with linear or saturating curve. 
-#Use gpp20 
-# m0 <- lm(gpp ~ 1, data = .)
-# m1 <- lm(gpp ~ lux - 1, data = .)
-# m2 <- lm(gpp ~ lux, data = .)
-# m3 <- lm(gpp ~ 1, data = .)
-# m4 <- nls(gpp ~ gpp_max*tanh(alpha*lux/gpp_max),
-#           start=list(gpp_max = 10, alpha = 0.01), data=.)
-# AIC(m0, m1, m2, m3, m4)
-
-# figure_7_b_data |> 
-#   left_join(daily_glob_rad) |> View()
-#   ggplot(aes(globrad, GPP_m2_20, shape=method))+
-#   geom_point() #lux is not suitable for this
-
-# geom_smooth(method="nls", 
-#             formula=y~1+Vmax*(1-exp(-x/tau)), # this is an nls argument, 
-#             #but stat_smooth passes the parameter along
-#             start=c(tau=0.2,Vmax=2), # this too
-#             se=FALSE) 
+  xlab(expression(GPP[20]~"(mmol m"^{-2}~d^{-1}*")"))
 
 figure_8 <- figure_8_a + figure_8_b + plot_layout(ncol=1)+plot_annotation(tag_levels = "A")
 
 figure_8
 
 ggsave("figures/figure_8.png", figure_8, width = 129, height = 170, units = "mm")
-
-#Lake stats, e.g. depth, biomass, and chemistry
-z_mean <- mean(depth_interp_mask[], na.rm =TRUE) #0.94 m
-lake_area
-
-littoral_site_chara_height <- c(34, 35, 33, 44, 32, 35, 38) #cm
-mean(littoral_site_chara_height)
-sd(littoral_site_chara_height)
-
-littoral_site_chara_biomass <- c(1039,	1287, 1367) #g dw/m2
-mean(littoral_site_chara_biomass)
-sd(littoral_site_chara_biomass)
-
-chemistry <- read.delim2("data/chemistry.txt")
-summary(chemistry)
-
-chemistry |> 
-  select(secchi_depth, alk_mmol_l, chla_ug_l, tp_mg_p_l, tn_mg_n_l) |> 
-  summarise_all(list("mean" = mean,"sd" = sd))
-
-#proportion of lake below 1 meter and chara cover > 80
-sum((chara_cover_raster_mask > 75 & depth_interp_mask < 1)[], na.rm=TRUE)/lake_area*100
 
 #Table S1
 #Species list
@@ -465,5 +484,5 @@ plants_edit |>
   summarise(count = n(),
             max_depth = max(depth),
             avg_cover = mean(species_cover)) |> 
-  na.omit() |> 
+  na.omit() |> #filter(!str_detect(species, "Chara")) |> summary()
   write_csv("figures/table_s1.csv")

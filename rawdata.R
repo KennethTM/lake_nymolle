@@ -1,6 +1,9 @@
 source("libs_and_funcs.R")
 
 #Rawdata loading and processing
+chemistry <- read.delim2("data/chemistry.txt")
+
+profile <- read.delim2("data/profile.txt")
 
 #Wind data from 2020
 #Sensor malfunction after few days, predict wind speed using dmi data
@@ -20,14 +23,14 @@ dmi_wnd_all <- bind_rows(dmi_wnd_1, dmi_wnd_2) |>
   rename(wnd_dmi = wnd) |> 
   arrange(datetime)
 
-#Global radiation data from DMI station
-dmi_rad_1 <- read_csv("data/dmi_globrad_1.csv")
-dmi_rad_2 <- read_csv("data/dmi_globrad_2.csv")
-
-daily_glob_rad <- bind_rows(dmi_rad_1, dmi_rad_2) |> 
-  mutate(date = as_date(datetime)) |> 
-  group_by(date) |> 
-  summarise(globrad = mean(globrad))
+# #Global radiation data from DMI station
+# dmi_rad_1 <- read_csv("data/dmi_globrad_1.csv")
+# dmi_rad_2 <- read_csv("data/dmi_globrad_2.csv")
+# 
+# daily_glob_rad <- bind_rows(dmi_rad_1, dmi_rad_2) |> 
+#   mutate(date = as_date(datetime)) |> 
+#   group_by(date) |> 
+#   summarise(globrad = mean(globrad))
 
 #Perform linear interpolation for small gaps
 wnd_seq <- data.frame(datetime = seq(min(dmi_wnd_1$datetime), max(dmi_wnd_2$datetime), "10 min"))
@@ -142,8 +145,8 @@ oxygen_all <- bind_rows(oxygen_2019, oxygen_2020)
 #   select(datetime, wtr_dic = Temp_21, ph=pH_27, spec_cond = `Sp.Cond._18`, anc_predicted) |>
 #   mutate(aquaenv = pmap(list(wtr_dic, ph, anc_predicted), ~aquaenv(S=0, t=..1, SumCO2 = NULL, pH = ..2, TA = ..3)),
 #          dic = map_dbl(aquaenv, ~.$SumCO2))
-
-#Perform DIC calculations and cache result
+# 
+# #Perform DIC calculations and cache result
 # saveRDS(dic_2019, "data/dic_2019.rds")
 
 dic_2019 <- readRDS("data/dic_2019.rds")

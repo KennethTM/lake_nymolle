@@ -27,8 +27,7 @@ oxygen_nll <- function (pars, datain) {
   Pmax <- exp(pars[1])
   Palpha <- exp(pars[2])
   Rmax <- exp(pars[3])
-  doinit <- exp(pars[4])
-  
+
   #Define variables from datain
   nobs <- nrow(datain)
   irr <- datain$lux
@@ -42,7 +41,7 @@ oxygen_nll <- function (pars, datain) {
   #Set up output
   dohat <- rep(NA,nobs)
   atmflux <- rep(NA,nobs)
-  dohat[1] <- doinit
+  dohat[1] <- doobs[1]
   
   #Metabolism model
   for (i in 1:(nobs-1)) {
@@ -69,7 +68,7 @@ oxygen_predict <- function(pars, datain) {
   
   dopred <- rep(NA,nobs)
   atmflux <- rep(NA,nobs)
-  dopred[1] <- pars$doinit
+  dopred[1] <- doobs[1]
   
   for (i in 1:(nobs-1)) {
     atmflux[i] <- dummy[i] * -k.gas[i] * (dopred[i] - dosat[i]) / zmix[i]  
@@ -81,29 +80,32 @@ oxygen_predict <- function(pars, datain) {
 
 #Function calculating oxygen metabolism
 oxygen_metab <- function(datain){
+
+  if(year(datain$date[1]) == 2019){
+    parguess <- log(c(0.25, 5e-6, 0.1))
+  }else{
+    parguess <- log(c(0.02, 2e-6, 0.01))
+  }
   
-  parguess <- log(c(2e-2, 5e-6, 1e-3, datain$doobs[1]))
-  
-  fit <- tryCatch(optim(parguess, oxygen_nll, datain = datain, method = "BFGS"), error = function(err){NULL})
+  fit <- tryCatch(optim(parguess, oxygen_nll, datain = datain, method="Nelder-Mead", control = list(maxit=2500)), error = function(err){NULL})
   if(is.null(fit)){return(NA)}
   
   Pmax <- exp(fit$par[1])
   Palpha <- exp(fit$par[2])
   Rmax <- exp(fit$par[3])
-  doinit <- exp(fit$par[4])
   convergence <- fit$convergence
   
   GPP <- mean(GPP(Pmax, Palpha, datain$lux))*144
   R <- mean(R(Rmax, datain$wtr))*144
   NEP <- GPP - R
   
-  pars <- list(Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, doinit = doinit)
+  pars <- list(Pmax = Pmax, Palpha = Palpha, Rmax = Rmax)
   dopred <- oxygen_predict(pars = pars, datain = datain)
   r_spear <- cor(dopred, datain$doobs, method = "spearman")
   rmse <- sqrt(mean((datain$doobs-dopred)^2))
   
   daily <- data.frame(datetime_min = min(datain$datetime), datetime_max = max(datain$datetime),
-                      Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, doinit = doinit, convergence = convergence,
+                      Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, convergence = convergence, 
                       GPP = GPP/32*1000, R = R/32*1000, NEP = NEP/32*1000, #convert g/m3/d to mmol/m3/day
                       r_spear = r_spear, rmse = rmse, 
                       wtr_mean = mean(datain$wtr), lux_mean = mean(datain$lux))
@@ -120,8 +122,7 @@ dic_nll <- function(pars, datain){
   Pmax <- exp(pars[1])
   Palpha <- exp(pars[2])
   Rmax <- exp(pars[3])
-  dic_init <- exp(pars[4])
-  
+
   nobs <- nrow(datain)
   irr <- datain$lux
   k.gas <- datain$kgas_co2
@@ -134,7 +135,7 @@ dic_nll <- function(pars, datain){
 
   dic_hat <- rep(NA,nobs)
   atmflux <- rep(NA,nobs)
-  dic_hat[1] <- dic_init
+  dic_hat[1] <- dic[1]
 
   for (i in 1:(nobs-1)){
     carb_sys <- aquaenv(S=0, t=wtr[i], SumCO2 = dic_hat[i], pH = ph[i])
@@ -162,7 +163,7 @@ dic_predict <- function(pars, datain) {
   
   dic_pred <- rep(NA,nobs)
   atmflux <- rep(NA,nobs)
-  dic_pred[1] <- pars$dic_init
+  dic_pred[1] <- dic[1]
   
   for (i in 1:(nobs-1)){
     carb_sys <- aquaenv(S=0, t=wtr[i], SumCO2 = dic_pred[i], pH = ph[i])
@@ -176,28 +177,27 @@ dic_predict <- function(pars, datain) {
 #Function collecting DIC metabolism functions
 dic_metab <- function(datain){
 
-  parguess <- log(c(3E-5, 1e-8, 5E-6, datain$dic[1]))
+  parguess <- log(c(7E-6, 2e-9, 2E-6))
   
-  fit <- tryCatch(optim(parguess, dic_nll, datain = datain, method = "BFGS"), error = function(err){NULL}) #BFGS
+  fit <- tryCatch(optim(parguess, dic_nll, datain = datain, method="Nelder-Mead", control = list(maxit=2500)), error = function(err){NULL}) #BFGS
   if(is.null(fit)){return(NA)}
   
   Pmax <- exp(fit$par[1])
   Palpha <- exp(fit$par[2])
   Rmax <- exp(fit$par[3])
-  dic_init <- exp(fit$par[4])
   convergence <- fit$convergence
   
   GPP <- mean(GPP(Pmax, Palpha, datain$lux))*144
   R <- mean(R(Rmax, datain$wtr_dic))*144
   NEP <- GPP - R
   
-  pars <- list(Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, dic_init = dic_init) 
+  pars <- list(Pmax = Pmax, Palpha = Palpha, Rmax = Rmax) 
   dic_pred <- dic_predict(pars = pars, datain = datain)
   r_spear <- cor(dic_pred, datain$dic, method = "spearman")
   rmse <- sqrt(mean((datain$dic-dic_pred)^2))
   
   daily <- data.frame(datetime_min = min(datain$datetime), datetime_max = max(datain$datetime),
-                      Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, dic_init = dic_init, convergence = convergence,
+                      Pmax = Pmax, Palpha = Palpha, Rmax = Rmax, convergence = convergence,
                       GPP = GPP*10^6, R = R*10^6, NEP = NEP*10^6, r_spear = r_spear, rmse = rmse, #units to mmol/m3/day
                       wtr_mean = mean(datain$wtr_dic), lux_mean = mean(datain$lux))
   
