@@ -378,7 +378,8 @@ daily_depth <- bind_rows(daily_metab$`2019`[, c("date", "depth")],
                          daily_metab$`2020`[, c("date", "depth")])
 
 oxygen_daily <- bind_rows(daily_metab$`2019`$oxygen_daily,
-                          daily_metab$`2020`$oxygen_daily)
+                          daily_metab$`2020`$oxygen_daily) |> 
+  filter(Rmax > 1e-3) #remove 5 days, 2 poor fits, 3 unrealistic R values
 
 dic_daily <- bind_rows(daily_metab$`2019`$dic_daily)
 
@@ -434,7 +435,8 @@ figure_8_a <- figure_7_data |>
   scale_color_manual(values = metab_colors, name="Component")+
   ylab(expression(Metabolism[DIC]~"(mmol m"^{-2}~d^{-1}*")"))+
   xlab(expression(Metabolism[Oxygen]~"(mmol m"^{-2}~d^{-1}*")"))+
-  coord_equal()
+  ylim(-700, 700)+
+  xlim(-700, 700)
 
 #B) R vs GPP (normalized to 20 degrees) with model II regression fit. 
 figure_8_b_data <- all_daily |> 
@@ -462,19 +464,21 @@ figure_8_b <- figure_8_b_data |>
   ggplot()+
   geom_abline(intercept = 0, slope=1, linetype=3)+
   #geom_ribbon(data = lm2_dic_df, aes(GPP_m2_20, fit, ymin=upr, ymax=lwr), fill=grey(0.5, alpha=0.3))+
-  geom_line(data = lm2_dic_df, aes(GPP_m2_20, fit), linetype=2, size=1)+
+  geom_line(data = lm2_dic_df, aes(GPP_m2_20, fit), size=1, col="grey")+
   #geom_ribbon(data = lm2_oxygen_df, aes(GPP_m2_20, fit, ymin=upr, ymax=lwr), fill=grey(0.5, alpha=0.3))+
   geom_line(data = lm2_oxygen_df, aes(GPP_m2_20, fit), size=1)+
-  geom_point(aes(GPP_m2_20, R_m2_20, shape=method))+
-  scale_shape_manual(values = c(1, 16), name="Method")+
+  geom_point(aes(GPP_m2_20, R_m2_20, col=method))+
+  scale_color_manual(values = c("Oxygen" = "black", "DIC" = "grey"), name="Method")+
   ylab(expression(R[20]~"(mmol m"^{-2}~d^{-1}*")"))+
-  xlab(expression(GPP[20]~"(mmol m"^{-2}~d^{-1}*")"))
+  xlab(expression(GPP[20]~"(mmol m"^{-2}~d^{-1}*")"))+
+  ylim(0, 600)+
+  xlim(0, 600)
 
 figure_8 <- figure_8_a + figure_8_b + plot_layout(ncol=1)+plot_annotation(tag_levels = "A")
 
 figure_8
 
-ggsave("figures/figure_8.png", figure_8, width = 129, height = 170, units = "mm")
+ggsave("figures/figure_8.png", figure_8, width = 129, height = 180, units = "mm")
 
 #Table S1
 #Species list

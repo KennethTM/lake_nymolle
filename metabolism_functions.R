@@ -81,11 +81,7 @@ oxygen_predict <- function(pars, datain) {
 #Function calculating oxygen metabolism
 oxygen_metab <- function(datain){
 
-  if(year(datain$date[1]) == 2019){
-    parguess <- log(c(0.25, 5e-6, 0.1))
-  }else{
-    parguess <- log(c(0.02, 2e-6, 0.01))
-  }
+  parguess <- log(c(2e-2, 1e-5, 0.1))
   
   fit <- tryCatch(optim(parguess, oxygen_nll, datain = datain, method="Nelder-Mead", control = list(maxit=2500)), error = function(err){NULL})
   if(is.null(fit)){return(NA)}
