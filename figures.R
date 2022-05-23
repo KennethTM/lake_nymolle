@@ -298,15 +298,16 @@ mean_sun <- sensor_data_2019 %>%
          set_mean_hour = as.numeric(set_mean - floor_date(set_mean, "day")))
 
 #Calc stats
-diel_data |> 
+diel_dic_stats <- diel_data |> 
   mutate(date = as_date(datetime)) |> 
   filter(between(hours, mean_sun$rise_mean_hour, mean_sun$set_mean_hour)) |> 
   group_by(date) |> 
   summarise(mean_calc = mean(calcification)*1000*(mean_sun$set_mean_hour-mean_sun$rise_mean_hour), #calc in mmol/l/daytime period
             drop_dic = (max(dic)-min(dic))*1000) |>  #dic drop in mmol/l/daytime period
-  mutate(calc_dic_prop = mean_calc/drop_dic*100) |> 
-  summary()
-  
+  mutate(calc_dic_prop = mean_calc/drop_dic*100)
+
+summary(diel_dic_stats)
+
 ph_diel <-  diel_data %>% 
   ggplot(aes(hours))+
   annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
@@ -421,14 +422,37 @@ figure_7
 
 ggsave("figures/figure_7.png", figure_7, width = 174, height = 75, units = "mm")
 
+#Table 2
+#Metabolism summary table
+figure_7_data |> 
+  select(period, method, variable, value_m2) |> 
+  mutate(value_m2 = abs(value_m2)) |> 
+  group_by(period, method, variable) |> 
+  summarise(mean = mean(value_m2), sd=sd(value_m2), min= min(value_m2), max=max(value_m2), n=n()) |> 
+  mutate(label = paste0(round(mean, digits = 0), " (±", round(sd, digits = 0), ", ", 
+                        round(min, digits = 0), "–", round(max, digits = 0), ")")) |> 
+  select(period, method, variable, label) |> 
+  spread(variable, label) |> 
+  write_csv("figures/table_2.csv")
+
 #Figure 8. 
 #A) O2 vs DIC rates with 1:1 line, maybe model II regression fit. 
 #Filled points O2 and empty points are DIC
 #Solid lines are 02 and dashed are DIC
-figure_8_a <- figure_7_data |> 
+figure_8_a_data <- figure_7_data |> 
   select(date, variable, value_m2, method) |> 
   spread(method, value_m2) |> 
-  na.omit() |> 
+  na.omit()
+
+lm2_o2_dic <- lmodel2(Oxygen~DIC, data = figure_8_a_data)
+lm2_o2_dic
+
+#t-tests for difference between dic and oxygen
+t.test(figure_8_a_data[figure_8_a_data$variable == "GPP", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "GPP", ]$Oxygen)
+t.test(figure_8_a_data[figure_8_a_data$variable == "R", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "R", ]$Oxygen)
+t.test(figure_8_a_data[figure_8_a_data$variable == "NEP", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "NEP", ]$Oxygen)
+
+figure_8_a <- figure_8_a_data |> 
   ggplot(aes(DIC, Oxygen, col=variable))+
   geom_abline(intercept = 0, slope=1, linetype=3)+
   geom_point()+
