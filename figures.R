@@ -169,7 +169,8 @@ wtr_plot_data <- left_join(datetime_seq, wtr_all) |>
 
 wtr_all_plot <- wtr_plot_data |> 
   ggplot(aes(datetime_hour, value, col = Position))+
-  geom_rect(data = rect_df, inherit.aes = FALSE, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill=grey(0.8))+
+  geom_rect(data = rect_df, inherit.aes = FALSE, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill = "white", linetype=2, col="black")+
+  geom_text(data = rect_df, inherit.aes = FALSE, aes(x=x, y=27, label=letter))+
   geom_line()+
   facet_grid(.~period, scales="free_x", space = "free_x")+
   scale_color_viridis_d(direction=-1)+
@@ -221,7 +222,8 @@ oxygen_plot_data <- left_join(datetime_seq, oxygen_all) |>
 
 oxygen_all_plot <- oxygen_plot_data |> 
   ggplot(aes(datetime_hour, value, col = Position))+
-  geom_rect(data = rect_df, inherit.aes = FALSE, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill=grey(0.8))+
+  geom_rect(data = rect_df, inherit.aes = FALSE, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill = "white", linetype=2, col="black")+
+  geom_text(data = rect_df, inherit.aes = FALSE, aes(x=x, y=y, label=letter))+
   geom_line()+
   facet_grid(.~period, scales="free_x", space = "free_x")+
   scale_color_manual(values=oxygen_pal)+
@@ -332,9 +334,9 @@ dic_diel <- diel_data %>%
   ggplot(aes(hours))+
   annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
   annotate("rect", xmax=Inf, xmin = mean_sun$set_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
-  geom_smooth(aes(y = dic_mmol, col="DIC"), method="gam", formula = y~s(x, bs="cc"))+
-  geom_smooth(aes(y = hco3_mmol, col="HCO3"), method="gam", formula = y~s(x, bs="cc"))+
-  geom_smooth(aes(y = co3_mmol, col="CO3"), method="gam", formula = y~s(x, bs="cc"))+
+  geom_smooth(aes(y = dic_mmol, col="DIC"), se=FALSE, method="gam", formula = y~s(x, bs="cc"))+
+  geom_smooth(aes(y = hco3_mmol, col="HCO3"), se=FALSE, method="gam", formula = y~s(x, bs="cc"))+
+  geom_smooth(aes(y = co3_mmol, col="CO3"), se=FALSE, method="gam", formula = y~s(x, bs="cc"))+
   scale_x_continuous(breaks = seq(0, 24, 6))+
   scale_color_manual(values=dic_diel_col, labels = dic_diel_labels)+
   xlab("Time of day")+
