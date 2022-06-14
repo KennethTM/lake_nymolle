@@ -75,17 +75,17 @@ cover_map <- ggplot()+
   geom_sf(data = lake_poly, fill=NA)+
   geom_sf(data=plant_points, aes(shape = chara_pres_abs))+
   coord_sf(datum=25832)+
-  scale_fill_gradient(low = brewer.pal(5, "Greens")[1], high = brewer.pal(5, "Greens")[5], name = "Cover (%)")+
+  scale_fill_gradient(low = brewer.pal(5, "Greens")[1], high = brewer.pal(5, "Greens")[5], name = "Macrophyte\ncover (%)")+
   scale_shape_manual(values = c(1, 19), name = "Charophytes")+
   ylab(NULL)+
   xlab(NULL)+
   theme(axis.ticks = element_blank(), axis.text = element_blank())
 
 #add image
-chara_img <- readJPEG("data/chara_image.jpg")
-chara_img_grob <- rasterGrob(chara_img)
+chara_img <- readJPEG("data/chara_image.jpg")[,1:1700,]
+chara_img_grob <- rasterGrob(chara_img, just=c(0.6, 0.5))
 
-figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels = "A")+plot_layout(ncol=1, heights = c(1, 1, 0.85))
+figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels = "A")+plot_layout(ncol=1, widths = c(1, 1, 1), heights = c(1, 1, 1))
 
 figure_1
 
@@ -158,14 +158,14 @@ wtr_plot_data <- left_join(datetime_seq, wtr_all) |>
   filter(between(datetime_hour, min(wtr_2019$datetime), max(wtr_2019$datetime)) | 
            between(datetime_hour, min(wtr_2020$datetime), max(wtr_2020$datetime))) 
 
-wtr_all |> 
-  mutate(date = as_date(datetime),
-         year = year(datetime)) |> 
-  group_by(year, date) |> 
-  summarise(diel_wtr = mean(wtr_1)) |>View()
-  summarise(mean_wtr = mean(diel_wtr),
-            min_wtr = min(diel_wtr),
-            max_wtr = max(diel_wtr)) |> 
+# wtr_all |> 
+#   mutate(date = as_date(datetime),
+#          year = year(datetime)) |> 
+#   group_by(year, date) |> 
+#   summarise(diel_wtr = mean(wtr_1)) |> View()
+#   summarise(mean_wtr = mean(diel_wtr),
+#             min_wtr = min(diel_wtr),
+#             max_wtr = max(diel_wtr)) |> 
 
 wtr_all_plot <- wtr_plot_data |> 
   ggplot(aes(datetime_hour, value, col = Position))+
@@ -185,7 +185,7 @@ wtr_sub_2019 <- wtr_plot_data |>
   scale_color_viridis_d(direction=-1)+
   scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
-  ylab(expression(Water~temp.~'('*degree*C*')'))
+  ylab(expression(Water~temperature~'('*degree*C*')'))
 
 wtr_sub_2020 <- wtr_plot_data |> 
   filter(between(datetime_hour, xmin_2020, xmax_2020)) |> 
@@ -194,7 +194,7 @@ wtr_sub_2020 <- wtr_plot_data |>
   scale_color_viridis_d(direction=-1)+
   scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
-  ylab(expression(Water~temp.~'('*degree*C*')'))
+  ylab(expression(Water~temperature~'('*degree*C*')'))
 
 figure_3 <- wtr_all_plot/(wtr_sub_2019+wtr_sub_2020)+
   plot_annotation(tag_levels = "A")+
@@ -237,7 +237,7 @@ oxygen_sub_2019 <- oxygen_plot_data |>
   scale_color_manual(values=oxygen_pal)+
   scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
-  ylab(expression(Oxygen~sat.~'(%)'))
+  ylab(expression(Oxygen~saturation~'(%)'))
 
 oxygen_sub_2020 <- oxygen_plot_data |> 
   filter(between(datetime_hour, xmin_2020, xmax_2020)) |> 
@@ -246,7 +246,7 @@ oxygen_sub_2020 <- oxygen_plot_data |>
   scale_color_manual(values=oxygen_pal)+
   scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
-  ylab(expression(Oxygen~sat.~'(%)'))
+  ylab(expression(Oxygen~saturation~'(%)'))
 
 figure_4 <- oxygen_all_plot/(oxygen_sub_2019+oxygen_sub_2020)+
   plot_annotation(tag_levels = "A")+
