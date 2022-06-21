@@ -450,9 +450,9 @@ lm2_o2_dic <- lmodel2(Oxygen~DIC, data = figure_8_a_data)
 lm2_o2_dic
 
 #t-tests for difference between dic and oxygen
-t.test(figure_8_a_data[figure_8_a_data$variable == "GPP", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "GPP", ]$Oxygen)
-t.test(figure_8_a_data[figure_8_a_data$variable == "R", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "R", ]$Oxygen)
-t.test(figure_8_a_data[figure_8_a_data$variable == "NEP", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "NEP", ]$Oxygen)
+t.test(figure_8_a_data[figure_8_a_data$variable == "GPP", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "GPP", ]$Oxygen, paired = TRUE)
+t.test(figure_8_a_data[figure_8_a_data$variable == "R", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "R", ]$Oxygen, paired = TRUE)
+t.test(figure_8_a_data[figure_8_a_data$variable == "NEP", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "NEP", ]$Oxygen, paired = TRUE)
 
 figure_8_a <- figure_8_a_data |> 
   ggplot(aes(DIC, Oxygen, col=variable))+
