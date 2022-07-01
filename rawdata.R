@@ -23,15 +23,6 @@ dmi_wnd_all <- bind_rows(dmi_wnd_1, dmi_wnd_2) |>
   rename(wnd_dmi = wnd) |> 
   arrange(datetime)
 
-# #Global radiation data from DMI station
-# dmi_rad_1 <- read_csv("data/dmi_globrad_1.csv")
-# dmi_rad_2 <- read_csv("data/dmi_globrad_2.csv")
-# 
-# daily_glob_rad <- bind_rows(dmi_rad_1, dmi_rad_2) |> 
-#   mutate(date = as_date(datetime)) |> 
-#   group_by(date) |> 
-#   summarise(globrad = mean(globrad))
-
 #Perform linear interpolation for small gaps
 wnd_seq <- data.frame(datetime = seq(min(dmi_wnd_1$datetime), max(dmi_wnd_2$datetime), "10 min"))
 
@@ -213,7 +204,7 @@ lake_poly <- st_read("data/lake_nymolle.sqlite")
 lake_area <- as.numeric(st_area(lake_poly))
 
 # #Read data from plant survey
-# plants <- read_excel("data/nymolle_plants_2019.xlsx") |>
+# plants <- read_excel("data/nymolle_plants_raw_2019.xlsx") |>
 #   select(pkt = Punkt, long, lat, species = `Art latin`,
 #          total_cover = `Total dækningsgrad %`, depth = `Dybde [m]`,
 #          species_cover = `Dækningsgrad art%`) |>
