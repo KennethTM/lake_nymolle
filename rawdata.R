@@ -214,7 +214,7 @@ lake_area <- as.numeric(st_area(lake_poly))
 # 
 # #Save to file to edit coordinates in Google earth
 # st_write(plants, "data/plants.kml")
-# st_write(lake_poly, "data/lake_poly.kml")
+# st_write(lake_poly, "data/lake_poly_plants.kml")
 
 plants_edit <- st_read("data/plants_edit.kml") |> 
   select(pkt, species, total_cover, depth, species_cover, chara_cover) |> 
