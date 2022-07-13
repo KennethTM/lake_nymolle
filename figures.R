@@ -90,6 +90,7 @@ figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels 
 figure_1
 
 ggsave("figures/figure_1.png", figure_1, width = 129, height = 200, units = "mm")
+ggsave("figures/figure_1.pdf", figure_1, width = 129, height = 200, units = "mm")
 
 #Figure 2 - open water water temperature, ph and oxygen profiles
 
@@ -145,6 +146,7 @@ figure_2 <- profile_long |>
 figure_2
 
 ggsave("figures/figure_2.png", figure_2, width = 174, height = 84, units = "mm")
+ggsave("figures/figure_2.pdf", figure_2, width = 174, height = 84, units = "mm")
 
 #Figure 3 - water temperature dynamics
 wtr_plot_data <- left_join(datetime_seq, wtr_all) |> 
@@ -205,6 +207,7 @@ figure_3 <- wtr_all_plot/(wtr_sub_2019+wtr_sub_2020)+
 figure_3
 
 ggsave("figures/figure_3.png", figure_3, width = 174, height = 150, units = "mm")
+ggsave("figures/figure_3.pdf", figure_3, width = 174, height = 150, units = "mm")
 
 #Figure 4 - oxygen dynamics
 oxygen_pal <- brewer.pal(n = 3, name = "Dark2")[c(2, 1, 3)]
@@ -258,6 +261,7 @@ figure_4 <- oxygen_all_plot/(oxygen_sub_2019+oxygen_sub_2020)+
 figure_4
 
 ggsave("figures/figure_4.png", figure_4, width = 174, height = 150, units = "mm")
+ggsave("figures/figure_4.pdf", figure_4, width = 174, height = 150, units = "mm")
 
 #Figure 5 - ph and dic
 ph_dic_col <- c("pH" = brewer.pal(n = 4, name = "Dark2")[3],
@@ -279,6 +283,7 @@ figure_5 <- dic_2019 |>
 figure_5
 
 ggsave("figures/figure_5.png", figure_5, width = 129, height = 75, units = "mm")
+ggsave("figures/figure_5.pdf", figure_5, width = 129, height = 75, units = "mm")
 
 #Figure 6 - diel dic, ph and calcification dynamics
 diel_data <- dic_2019 %>% 
@@ -373,6 +378,7 @@ figure_6 <- ph_diel + dic_diel + co2_diel + calc_diel + plot_layout(ncol=2)+plot
 figure_6
 
 ggsave("figures/figure_6.png", figure_6, width = 174, height = 150, units = "mm")
+ggsave("figures/figure_6.pdf", figure_6, width = 174, height = 150, units = "mm")
 
 #Figure 7. Lake metabolism (R, GPP and NEP) based on O2 (solid line) and DIC (dashed line) with smoother to shown trend.
 daily_metab <- readRDS("data/daily_metab.rds")
@@ -423,6 +429,7 @@ figure_7 <- figure_7_data |>
 figure_7
 
 ggsave("figures/figure_7.png", figure_7, width = 174, height = 75, units = "mm")
+ggsave("figures/figure_7.pdf", figure_7, width = 174, height = 75, units = "mm")
 
 #Table 2
 #Metabolism summary table
@@ -505,6 +512,7 @@ figure_8 <- figure_8_a + figure_8_b + plot_layout(ncol=1)+plot_annotation(tag_le
 figure_8
 
 ggsave("figures/figure_8.png", figure_8, width = 129, height = 180, units = "mm")
+ggsave("figures/figure_8.pdf", figure_8, width = 129, height = 180, units = "mm")
 
 #Table S1
 #Species list
