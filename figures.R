@@ -81,16 +81,12 @@ cover_map <- ggplot()+
   xlab(NULL)+
   theme(axis.ticks = element_blank(), axis.text = element_blank())
 
-#add image
-chara_img <- readJPEG("data/chara_image.jpg")[,1:1700,]
-chara_img_grob <- rasterGrob(chara_img, just=c(0.6, 0.5))
-
-figure_1 <- depth_map + cover_map + chara_img_grob + plot_annotation(tag_levels = "A")+plot_layout(ncol=1, widths = c(1, 1, 1), heights = c(1, 1, 1))
+figure_1 <- depth_map + cover_map + plot_annotation(tag_levels = "A")+plot_layout(ncol=1, guides = "collect")
 
 figure_1
 
-ggsave("figures/figure_1.png", figure_1, width = 129, height = 200, units = "mm")
-ggsave("figures/figure_1.pdf", figure_1, width = 129, height = 200, units = "mm")
+ggsave("figures/figure_1.png", figure_1, width = 129, height = 160, units = "mm")
+ggsave("figures/figure_1.pdf", figure_1, width = 129, height = 160, units = "mm")
 
 #Figure 2 - open water water temperature, ph and oxygen profiles
 
