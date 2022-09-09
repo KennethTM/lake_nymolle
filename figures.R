@@ -44,6 +44,7 @@ sd(littoral_site_chara_biomass)
 
 summary(chemistry)
 
+#Table S1
 chemistry |> 
   select(secchi_depth, alk_mmol_l, chla_ug_l, tp_mg_p_l, tn_mg_n_l) |> 
   summarise_all(list("mean" = mean,"sd" = sd))
@@ -427,18 +428,18 @@ figure_7
 ggsave("figures/figure_7.png", figure_7, width = 174, height = 75, units = "mm")
 ggsave("figures/figure_7.pdf", figure_7, width = 174, height = 75, units = "mm")
 
-#Table 2
+#Table S3
 #Metabolism summary table
 figure_7_data |> 
   select(period, method, variable, value_m2) |> 
-  mutate(value_m2 = abs(value_m2)) |> 
-  group_by(period, method, variable) |> 
+  group_by(period, method, variable) |>
+  mutate(value_m2 = ifelse(variable == "R", value_m2*-1, value_m2)) |> 
   summarise(mean = mean(value_m2), sd=sd(value_m2), min= min(value_m2), max=max(value_m2), n=n()) |> 
   mutate(label = paste0(round(mean, digits = 0), " (±", round(sd, digits = 0), ", ", 
                         round(min, digits = 0), "–", round(max, digits = 0), ")")) |> 
   select(period, method, variable, label) |> 
   spread(variable, label) |> 
-  write_csv("figures/table_2.csv")
+  write_csv("figures/table_s3.csv")
 
 #Figure 8. 
 #A) O2 vs DIC rates with 1:1 line, maybe model II regression fit. 
@@ -510,7 +511,7 @@ figure_8
 ggsave("figures/figure_8.png", figure_8, width = 129, height = 180, units = "mm")
 ggsave("figures/figure_8.pdf", figure_8, width = 129, height = 180, units = "mm")
 
-#Table S1
+#Table S2
 #Species list
 plants_edit |> 
   st_drop_geometry() |> 
@@ -519,4 +520,4 @@ plants_edit |>
             max_depth = max(depth),
             avg_cover = mean(species_cover)) |> 
   na.omit() |> #filter(!str_detect(species, "Chara")) |> summary()
-  write_csv("figures/table_s1.csv")
+  write_csv("figures/table_s2.csv")
