@@ -9,6 +9,7 @@
 		<SimpleField type="float" name="total_cover"></SimpleField>
 		<SimpleField type="float" name="depth"></SimpleField>
 		<SimpleField type="float" name="species_cover"></SimpleField>
+		<SimpleField type="float" name="height_m"></SimpleField>
 		<SimpleField type="float" name="chara_cover"></SimpleField>
 	</Schema>
 	<StyleMap id="default">
@@ -30,6 +31,7 @@
 	</Style>
 	<Folder>
 		<name>plants</name>
+		<open>1</open>
 		<Placemark>
 			<ExtendedData>
 				<SchemaData schemaUrl="#plants">
@@ -38,6 +40,7 @@
 					<SimpleData name="total_cover">60</SimpleData>
 					<SimpleData name="depth">0.53</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -53,6 +56,7 @@
 					<SimpleData name="total_cover">60</SimpleData>
 					<SimpleData name="depth">0.53</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -68,6 +72,7 @@
 					<SimpleData name="total_cover">40</SimpleData>
 					<SimpleData name="depth">2</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.5</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -84,11 +89,12 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.76</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15338388153512,55.62919178997267,0</coordinates>
+				<coordinates>12.15335258402749,55.62918552594778,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -100,11 +106,12 @@
 					<SimpleData name="total_cover">10</SimpleData>
 					<SimpleData name="depth">0.7</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15303792399706,55.62881376037429,0</coordinates>
+				<coordinates>12.15304158554497,55.628800095979,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -116,11 +123,12 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">1.4</SimpleData>
 					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="height_m">0.5</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15297769460809,55.62810978108243,0</coordinates>
+				<coordinates>12.15298270971804,55.6280984126598,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -131,6 +139,7 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">1.63</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -146,6 +155,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.69</SimpleData>
 					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">20</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -161,6 +171,7 @@
 					<SimpleData name="total_cover">70</SimpleData>
 					<SimpleData name="depth">0.43</SimpleData>
 					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">30</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -176,6 +187,7 @@
 					<SimpleData name="total_cover">40</SimpleData>
 					<SimpleData name="depth">0.2</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">1</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -191,6 +203,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.81</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">10</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -206,6 +219,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.66</SimpleData>
 					<SimpleData name="species_cover">25</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">25</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -221,6 +235,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">0.19</SimpleData>
 					<SimpleData name="species_cover">25</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">25</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -236,6 +251,7 @@
 					<SimpleData name="total_cover">75</SimpleData>
 					<SimpleData name="depth">0.16</SimpleData>
 					<SimpleData name="species_cover">45</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">45</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -251,6 +267,7 @@
 					<SimpleData name="total_cover">40</SimpleData>
 					<SimpleData name="depth">2</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.25</SimpleData>
 					<SimpleData name="chara_cover">1</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -266,6 +283,7 @@
 					<SimpleData name="total_cover">40</SimpleData>
 					<SimpleData name="depth">0.53</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">1</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -281,6 +299,7 @@
 					<SimpleData name="total_cover">10</SimpleData>
 					<SimpleData name="depth">1.15</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">5</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -296,6 +315,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">0.94</SimpleData>
 					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">80</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -311,6 +331,7 @@
 					<SimpleData name="total_cover">30</SimpleData>
 					<SimpleData name="depth">1.23</SimpleData>
 					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">30</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -326,6 +347,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.4</SimpleData>
 					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="height_m">0.25</SimpleData>
 					<SimpleData name="chara_cover">80</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -341,6 +363,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.26</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.2</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -356,6 +379,7 @@
 					<SimpleData name="total_cover">70</SimpleData>
 					<SimpleData name="depth">0.43</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">1</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -371,6 +395,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.51</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -387,11 +412,12 @@
 					<SimpleData name="total_cover">5</SimpleData>
 					<SimpleData name="depth">0.43</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">1</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15912655711367,55.62832790044334,0</coordinates>
+				<coordinates>12.15910610250856,55.62833755032435,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -402,6 +428,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">0.99</SimpleData>
 					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">30</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -417,6 +444,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.81</SimpleData>
 					<SimpleData name="species_cover">90</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">90</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -432,6 +460,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">1.2</SimpleData>
 					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="height_m">0.2</SimpleData>
 					<SimpleData name="chara_cover">80</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -447,6 +476,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.68</SimpleData>
 					<SimpleData name="species_cover">90</SimpleData>
+					<SimpleData name="height_m">0.25</SimpleData>
 					<SimpleData name="chara_cover">90</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -462,6 +492,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.69</SimpleData>
 					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">30</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -477,6 +508,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.66</SimpleData>
 					<SimpleData name="species_cover">75</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">75</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -492,6 +524,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">0.19</SimpleData>
 					<SimpleData name="species_cover">25</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">25</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -507,6 +540,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.47</SimpleData>
 					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">80</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -522,6 +556,7 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">1.14</SimpleData>
 					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">20</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -537,6 +572,7 @@
 					<SimpleData name="total_cover">10</SimpleData>
 					<SimpleData name="depth">1.13</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">5</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -552,6 +588,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.66</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.25</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -567,6 +604,7 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">3</SimpleData>
 					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="height_m">0.4</SimpleData>
 					<SimpleData name="chara_cover">50</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -582,6 +620,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.86</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.3</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -597,6 +636,7 @@
 					<SimpleData name="total_cover">75</SimpleData>
 					<SimpleData name="depth">0.16</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">10</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -612,6 +652,7 @@
 					<SimpleData name="total_cover">70</SimpleData>
 					<SimpleData name="depth">0.43</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">5</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -627,6 +668,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.66</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.35</SimpleData>
 					<SimpleData name="chara_cover">1</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -642,6 +684,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.4</SimpleData>
 					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="height_m">0.25</SimpleData>
 					<SimpleData name="chara_cover">20</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -657,6 +700,7 @@
 					<SimpleData name="total_cover">70</SimpleData>
 					<SimpleData name="depth">0.43</SimpleData>
 					<SimpleData name="species_cover">35</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">35</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -672,6 +716,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.18</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -687,6 +732,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.68</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.25</SimpleData>
 					<SimpleData name="chara_cover">10</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -702,6 +748,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.69</SimpleData>
 					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">30</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -717,6 +764,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.61</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -732,6 +780,7 @@
 					<SimpleData name="total_cover">10</SimpleData>
 					<SimpleData name="depth">1.13</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">5</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -747,6 +796,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">1.66</SimpleData>
 					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">80</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -762,6 +812,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.64</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -777,6 +828,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">1.67</SimpleData>
 					<SimpleData name="species_cover">80</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">80</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -792,6 +844,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.55</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -807,6 +860,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.65</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -822,6 +876,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.69</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -837,6 +892,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.89</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -852,6 +908,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.74</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">100</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -867,6 +924,7 @@
 					<SimpleData name="total_cover">10</SimpleData>
 					<SimpleData name="depth">1.15</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">5</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -882,6 +940,7 @@
 					<SimpleData name="total_cover">40</SimpleData>
 					<SimpleData name="depth">0.2</SimpleData>
 					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">20</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -897,6 +956,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.69</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">10</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -912,6 +972,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">0.19</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">10</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -927,6 +988,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.47</SimpleData>
 					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="height_m">0.2</SimpleData>
 					<SimpleData name="chara_cover">20</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -942,6 +1004,7 @@
 					<SimpleData name="total_cover">75</SimpleData>
 					<SimpleData name="depth">0.16</SimpleData>
 					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">20</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -957,6 +1020,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.74</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.2</SimpleData>
 					<SimpleData name="chara_cover">1</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -972,6 +1036,7 @@
 					<SimpleData name="total_cover">60</SimpleData>
 					<SimpleData name="depth">0.53</SimpleData>
 					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -987,6 +1052,7 @@
 					<SimpleData name="total_cover">40</SimpleData>
 					<SimpleData name="depth">2</SimpleData>
 					<SimpleData name="species_cover">40</SimpleData>
+					<SimpleData name="height_m">0.2</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1003,11 +1069,12 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.76</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.2</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15337576563891,55.62918624739522,0</coordinates>
+				<coordinates>12.15336582931916,55.62921188495128,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1019,11 +1086,12 @@
 					<SimpleData name="total_cover">10</SimpleData>
 					<SimpleData name="depth">0.7</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15303831210703,55.62881772839022,0</coordinates>
+				<coordinates>12.15305545924963,55.62880624558761,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1034,6 +1102,7 @@
 					<SimpleData name="total_cover">40</SimpleData>
 					<SimpleData name="depth">0.53</SimpleData>
 					<SimpleData name="species_cover">40</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1050,11 +1119,12 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">0.16</SimpleData>
 					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15346486786592,55.62845804823749,0</coordinates>
+				<coordinates>12.15347067460811,55.62845903945686,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1066,11 +1136,12 @@
 					<SimpleData name="total_cover">5</SimpleData>
 					<SimpleData name="depth">0.43</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15911670069179,55.62831965487148,0</coordinates>
+				<coordinates>12.15910402870807,55.62832888392088,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1082,11 +1153,12 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">1.4</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15297401914182,55.62810278639701,0</coordinates>
+				<coordinates>12.15298136183043,55.62811008123325,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1097,6 +1169,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">0.99</SimpleData>
 					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1112,6 +1185,7 @@
 					<SimpleData name="total_cover">1</SimpleData>
 					<SimpleData name="depth">2.3</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1127,6 +1201,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">0.19</SimpleData>
 					<SimpleData name="species_cover">30</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1142,6 +1217,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.47</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1157,6 +1233,7 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">1.63</SimpleData>
 					<SimpleData name="species_cover">50</SimpleData>
+					<SimpleData name="height_m">0.2</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1172,6 +1249,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.61</SimpleData>
 					<SimpleData name="species_cover">100</SimpleData>
+					<SimpleData name="height_m">0.02</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1187,6 +1265,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">1.66</SimpleData>
 					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="height_m">0.02</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1202,6 +1281,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.64</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.01</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1217,6 +1297,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">1.67</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.01</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1232,6 +1313,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">1.55</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.02</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1247,6 +1329,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.65</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.02</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1262,6 +1345,7 @@
 					<SimpleData name="total_cover">75</SimpleData>
 					<SimpleData name="depth">0.16</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1277,6 +1361,7 @@
 					<SimpleData name="total_cover">60</SimpleData>
 					<SimpleData name="depth">0.53</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.25</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1293,11 +1378,12 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.76</SimpleData>
 					<SimpleData name="species_cover">90</SimpleData>
+					<SimpleData name="height_m">0.7</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.153387822739,55.62920109402826,0</coordinates>
+				<coordinates>12.15335194995164,55.62919522561605,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1309,11 +1395,12 @@
 					<SimpleData name="total_cover">10</SimpleData>
 					<SimpleData name="depth">0.7</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15304110903915,55.62881357397952,0</coordinates>
+				<coordinates>12.15305654003274,55.62879426365706,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1325,11 +1412,12 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">1.4</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.7</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15297019031736,55.6280940166401,0</coordinates>
+				<coordinates>12.15298270971804,55.6280984126598,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1341,11 +1429,12 @@
 					<SimpleData name="total_cover">10</SimpleData>
 					<SimpleData name="depth">0.7</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15304267021782,55.62882946983049,0</coordinates>
+				<coordinates>12.15305383111423,55.62882427744617,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1356,6 +1445,7 @@
 					<SimpleData name="total_cover">1</SimpleData>
 					<SimpleData name="depth">2.3</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1371,6 +1461,7 @@
 					<SimpleData name="total_cover">75</SimpleData>
 					<SimpleData name="depth">0.16</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1386,6 +1477,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.74</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.5</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1401,6 +1493,7 @@
 					<SimpleData name="total_cover">40</SimpleData>
 					<SimpleData name="depth">0.2</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.2</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1416,6 +1509,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.81</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.3</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1431,6 +1525,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.69</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.45</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1446,6 +1541,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.66</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1461,6 +1557,7 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">1.14</SimpleData>
 					<SimpleData name="species_cover">20</SimpleData>
+					<SimpleData name="height_m">0.35</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1476,6 +1573,7 @@
 					<SimpleData name="total_cover">75</SimpleData>
 					<SimpleData name="depth">0.16</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1491,6 +1589,7 @@
 					<SimpleData name="total_cover">60</SimpleData>
 					<SimpleData name="depth">0.53</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.35</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1506,6 +1605,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.66</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.25</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1521,6 +1621,7 @@
 					<SimpleData name="total_cover">80</SimpleData>
 					<SimpleData name="depth">0.19</SimpleData>
 					<SimpleData name="species_cover">1</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1536,6 +1637,7 @@
 					<SimpleData name="total_cover">60</SimpleData>
 					<SimpleData name="depth">0.53</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.25</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1551,6 +1653,7 @@
 					<SimpleData name="total_cover">40</SimpleData>
 					<SimpleData name="depth">0.2</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.05</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1566,6 +1669,7 @@
 					<SimpleData name="total_cover">100</SimpleData>
 					<SimpleData name="depth">0.69</SimpleData>
 					<SimpleData name="species_cover">5</SimpleData>
+					<SimpleData name="height_m">0.15</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1581,6 +1685,7 @@
 					<SimpleData name="total_cover">50</SimpleData>
 					<SimpleData name="depth">1.14</SimpleData>
 					<SimpleData name="species_cover">10</SimpleData>
+					<SimpleData name="height_m">0.1</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1595,6 +1700,7 @@
 					<SimpleData name="total_cover">0</SimpleData>
 					<SimpleData name="depth">2.32</SimpleData>
 					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="height_m">0</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1610,11 +1716,12 @@
 					<SimpleData name="total_cover">0</SimpleData>
 					<SimpleData name="depth">1.97</SimpleData>
 					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="height_m">0</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
 			<Point>
-				<coordinates>12.15296442722154,55.62775438997173,0</coordinates>
+				<coordinates>12.15295420531226,55.62773406115091,0</coordinates>
 			</Point>
 		</Placemark>
 		<Placemark>
@@ -1624,6 +1731,7 @@
 					<SimpleData name="total_cover">0</SimpleData>
 					<SimpleData name="depth">2.1</SimpleData>
 					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="height_m">0</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1638,6 +1746,7 @@
 					<SimpleData name="total_cover">0</SimpleData>
 					<SimpleData name="depth">1.73</SimpleData>
 					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="height_m">0</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>
@@ -1652,6 +1761,7 @@
 					<SimpleData name="total_cover">0</SimpleData>
 					<SimpleData name="depth">3.29</SimpleData>
 					<SimpleData name="species_cover">0</SimpleData>
+					<SimpleData name="height_m">0</SimpleData>
 					<SimpleData name="chara_cover">0</SimpleData>
 				</SchemaData>
 			</ExtendedData>

@@ -13,6 +13,9 @@ total_cover_raster_mask <- mask(total_cover_raster, vect(lake_poly))
 chara_cover_raster <- rasterize(plants_voronoi, raster_template, field="chara_cover")
 chara_cover_raster_mask <- mask(chara_cover_raster, vect(lake_poly))
 
+height_raster <- rasterize(plants_voronoi, raster_template, field="height")
+height_raster_mask <- mask(height_raster, vect(lake_poly))
+
 #Bathymetric map
 depth_zero <- lake_poly |> 
   st_cast("MULTILINESTRING") %>% 
@@ -49,8 +52,14 @@ chemistry |>
   select(secchi_depth, alk_mmol_l, chla_ug_l, tp_mg_p_l, tn_mg_n_l) |> 
   summarise_all(list("mean" = mean,"sd" = sd))
 
-#Proportion of lake below 1 meter and chara cover > 80
-sum((chara_cover_raster_mask > 75 & depth_interp_mask < 1)[], na.rm=TRUE)/lake_area*100
+#Proportion of lake below 1 meter and chara cover > 75
+sum((total_cover_raster_mask > 75 & depth_interp_mask < 1)[], na.rm=TRUE)/lake_area*100
+
+#Mean depth of lake where depth >1 meter
+depth_minus_veg <- depth_interp_mask - height_raster_mask
+depth_minus_veg[(total_cover_raster_mask > 75 & depth_interp_mask < 1)] <- NA
+mean(depth_minus_veg[], na.rm = TRUE)
+sum(!is.na(depth_minus_veg[]))
 
 #Data frames for plotting
 depth_df <- as.data.frame(depth_interp_mask, xy = TRUE)

@@ -207,7 +207,7 @@ lake_area <- as.numeric(st_area(lake_poly))
 # plants <- read_excel("data/nymolle_plants_raw_2019.xlsx") |>
 #   select(pkt = Punkt, long, lat, species = `Art latin`,
 #          total_cover = `Total dækningsgrad %`, depth = `Dybde [m]`,
-#          species_cover = `Dækningsgrad art%`) |>
+#          species_cover = `Dækningsgrad art%`, height_m = `Skudhøjde [m]`) |>
 #   filter(!is.na(long)) |>
 #   st_as_sf(crs = 4326, coords = c("long", "lat")) |>
 #   mutate(chara_cover = ifelse(grepl("Chara*", species), species_cover, 0))
@@ -217,7 +217,7 @@ lake_area <- as.numeric(st_area(lake_poly))
 # st_write(lake_poly, "data/lake_poly_plants.kml")
 
 plants_edit <- st_read("data/plants_edit.kml") |> 
-  select(pkt, species, total_cover, depth, species_cover, chara_cover) |> 
+  select(pkt, species, total_cover, depth, species_cover, chara_cover, height_m) |> 
   st_transform(25832) |> 
   st_zm()
 
@@ -226,8 +226,10 @@ plant_points <- bind_cols(st_coordinates(plants_edit), st_drop_geometry(plants_e
   group_by(pkt) |> 
   summarise(X = mean(X), Y=mean(Y),
             depth = mean(depth),
+            height = weighted.mean(height_m, w = total_cover),
             total_cover = mean(total_cover),
             chara_cover = sum(chara_cover)) |> 
   mutate(chara_cover = ifelse(chara_cover > 100, 100, chara_cover),
-         chara_pres_abs = ifelse(chara_cover > 0, "Presence", "Absence")) |> 
+         chara_pres_abs = ifelse(chara_cover > 0, "Presence", "Absence"),
+         height = ifelse(is.na(height), 0, height)) |> 
   st_as_sf(coords=c("X", "Y"), crs=25832)
