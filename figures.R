@@ -229,6 +229,8 @@ oxygen_plot_data <- left_join(datetime_seq, oxygen_all) |>
   filter(between(datetime_hour, min(wtr_2019$datetime), max(wtr_2019$datetime)) | 
            between(datetime_hour, min(wtr_2020$datetime), max(wtr_2020$datetime))) 
 
+#oxygen_plot_data |> filter(period == 2020) |> spread(Position, value) |> mutate(diff = ifelse(is.na(`3`), `1` - `2`, `1` - `3`)) |> summary()
+
 oxygen_all_plot <- oxygen_plot_data |> 
   ggplot(aes(datetime_hour, value, col = Position))+
   geom_rect(data = rect_df, inherit.aes = FALSE, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill = "white", linetype=2, col="black")+
@@ -298,6 +300,7 @@ diel_data <- dic_2019 %>%
          co2 = map_dbl(aquaenv, ~.$CO2),
          co2_sat = map_dbl(aquaenv, ~.$CO2_sat),
          calcification = -1*(c(0, diff(anc_predicted))/2)*6,
+         date = as_date(datetime),
          hours = as.numeric(datetime - floor_date(datetime, "day"))/60/60) #calc in units mol/l/hour
 
 mean_sun <- sensor_data_2019 %>% 
@@ -321,18 +324,19 @@ diel_dic_stats <- diel_data |>
 
 summary(diel_dic_stats)
 
-ph_diel <-  diel_data %>% 
-  ggplot(aes(hours))+
+ph_diel <- diel_data %>% 
+  ggplot(aes(hours, y = ph))+
   annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
   annotate("rect", xmax=Inf, xmin = mean_sun$set_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
-  geom_smooth(aes(y = ph), method="gam", formula = y~s(x, bs="cc"), col=brewer.pal(n = 4, name = "Dark2")[3], fill = brewer.pal(n = 4, name = "Dark2")[3])+
+  geom_line(aes(group=date), alpha=0.2, col="black")+
+  geom_smooth(method="gam", formula = y~s(x, bs="cc"), col=brewer.pal(n = 4, name = "Dark2")[3], fill = brewer.pal(n = 4, name = "Dark2")[3])+
   scale_x_continuous(breaks = seq(0, 24, 6))+
   ylab("pH")+
   xlab("Time of day")
 
-dic_diel_col <- c("DIC" = brewer.pal(n = 4, name = "Dark2")[4],
-                  "HCO3" = brewer.pal(n = 4, name = "Dark2")[1],
-                  "CO3" = brewer.pal(n = 4, name = "Dark2")[2])
+dic_diel_col <- c("dic_mmol" = brewer.pal(n = 4, name = "Dark2")[4],
+                  "hco3_mmol" = brewer.pal(n = 4, name = "Dark2")[1],
+                  "co3_mmol" = brewer.pal(n = 4, name = "Dark2")[2])
 
 dic_diel_labels <- c("DIC",
                      expression(HCO[3]^{"-"}),
@@ -342,12 +346,12 @@ dic_diel <- diel_data %>%
   mutate(dic_mmol = dic*1000,
          hco3_mmol = hco3*1000,
          co3_mmol = co3*1000) %>% 
-  ggplot(aes(hours))+
+  gather(variable, value, dic_mmol, hco3_mmol, co3_mmol) |> 
+  ggplot(aes(hours, value, col=variable))+
   annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
   annotate("rect", xmax=Inf, xmin = mean_sun$set_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
-  geom_smooth(aes(y = dic_mmol, col="DIC"), se=FALSE, method="gam", formula = y~s(x, bs="cc"))+
-  geom_smooth(aes(y = hco3_mmol, col="HCO3"), se=FALSE, method="gam", formula = y~s(x, bs="cc"))+
-  geom_smooth(aes(y = co3_mmol, col="CO3"), se=FALSE, method="gam", formula = y~s(x, bs="cc"))+
+  geom_line(aes(group = paste0(date, variable)), alpha=0.2)+
+  geom_smooth(se=FALSE, method="gam", formula = y~s(x, bs="cc"))+
   scale_x_continuous(breaks = seq(0, 24, 6))+
   scale_color_manual(values=dic_diel_col, labels = dic_diel_labels)+
   xlab("Time of day")+
@@ -361,23 +365,29 @@ diel_co2_sat <- diel_data %>%
 
 co2_diel <- diel_data %>% 
   mutate(co2_umol = co2*10^6) %>% 
-  ggplot(aes(hours))+
+  ggplot(aes(hours, y = co2_umol))+
   annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
   annotate("rect", xmax=Inf, xmin = mean_sun$set_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  geom_line(aes(group=date), alpha=0.2, col="black")+
   geom_line(data = diel_co2_sat, aes(y=co2_sat_mean), show.legend = FALSE, linetype=2)+
-  geom_smooth(aes(y = co2_umol, col="CO2"), method="gam", formula = y~s(x, bs="cc"), col=brewer.pal(n = 4, name = "Dark2")[3], fill = brewer.pal(n = 4, name = "Dark2")[3])+
+  geom_smooth(method="gam", formula = y~s(x, bs="cc"), col=brewer.pal(n = 4, name = "Dark2")[3], fill = brewer.pal(n = 4, name = "Dark2")[3])+
   scale_x_continuous(breaks = seq(0, 24, 6))+
   ylab(expression(CO[2]~concentration~"("*mu*mol~L^{-1}*")"))+
-  xlab("Time of day")
+  xlab("Time of day")+
+  coord_cartesian(ylim=c(0, 40))
 
 calc_diel <- diel_data %>% 
-  ggplot(aes(hours))+
+  mutate(calcification_umol = calcification*10^6) |> 
+  ggplot(aes(hours, y = calcification_umol))+
   annotate("rect", xmin=-Inf, xmax = mean_sun$rise_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
   annotate("rect", xmax=Inf, xmin = mean_sun$set_mean_hour, ymin=-Inf, ymax=Inf, fill= grey(0.8))+
+  geom_line(aes(group=date), alpha=0.05, col="black")+
   geom_hline(yintercept = 0, linetype = 3)+
-  geom_smooth(aes(y = calcification*10^6, col="Calcification"), method="gam", formula = y~s(x, bs="cc"), col=brewer.pal(n = 4, name = "Dark2")[3], fill = brewer.pal(n = 4, name = "Dark2")[3])+
+  geom_smooth(method="gam", formula = y~s(x, bs="cc"), col=brewer.pal(n = 4, name = "Dark2")[3], fill = brewer.pal(n = 4, name = "Dark2")[3])+
   ylab(expression("Calcification ("*mu*mol~L^{-1}~h^{-1}*")"))+
-  xlab("Time of day")
+  xlab("Time of day")+
+  scale_x_continuous(breaks = seq(0, 24, 6))+
+  coord_cartesian(ylim=c(-15, 15))
 
 figure_6 <- ph_diel + dic_diel + co2_diel + calc_diel + plot_layout(ncol=2)+plot_annotation(tag_levels = "A")
 
