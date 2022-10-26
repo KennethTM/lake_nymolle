@@ -176,7 +176,13 @@ wtr_plot_data <- left_join(datetime_seq, wtr_all) |>
 #             max_wtr = max(diel_wtr)) |> 
 
 wtr_all_plot <- wtr_plot_data |> 
-  ggplot(aes(datetime_hour, value, col = Position))+
+  mutate(`Mean depth (cm)` = case_when(Position == "1" ~ "7",
+                                    Position == "2" ~ "21",
+                                    Position == "3" ~ "32",
+                                    Position == "4" ~ "42",
+                                    Position == "5" ~ "51"),
+         `Mean depth (cm)` = factor(`Mean depth (cm)`, levels = c("7", "21", "32", "42", "51"))) |> 
+  ggplot(aes(datetime_hour, value, col = `Mean depth (cm)`))+
   geom_rect(data = rect_df, inherit.aes = FALSE, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill = "white", linetype=2, col="black")+
   geom_text(data = rect_df, inherit.aes = FALSE, aes(x=x, y=27, label=letter))+
   geom_line()+
@@ -189,31 +195,45 @@ wtr_all_plot <- wtr_plot_data |>
 
 wtr_sub_2019 <- wtr_plot_data |> 
   filter(between(datetime_hour, xmin_2019, xmax_2019)) |> 
-  ggplot(aes(datetime_hour, value, col = Position))+
-  geom_line(show.legend = FALSE)+
+  mutate(`Depth (cm)` = case_when(Position == "1" ~ "8",
+                                       Position == "2" ~ "21",
+                                       Position == "3" ~ "29",
+                                       Position == "4" ~ "37",
+                                       Position == "5" ~ "49"),
+         `Depth (cm)` = factor(`Depth (cm)`, levels = c("8", "21", "29", "37", "49"))) |> 
+  ggplot(aes(datetime_hour, value, col = `Depth (cm)`))+
+  geom_line()+
   scale_color_viridis_d(direction=-1)+
   scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
   ylab(expression(Water~temperature~'('*degree*C*')'))
 
 wtr_sub_2020 <- wtr_plot_data |> 
-  filter(between(datetime_hour, xmin_2020, xmax_2020)) |> 
-  ggplot(aes(datetime_hour, value, col = Position))+
-  geom_line(show.legend = FALSE)+
-  scale_color_viridis_d(direction=-1)+
+  filter(between(datetime_hour, xmin_2020, xmax_2020)) |>
+  mutate(`Depth (cm)` = case_when(Position == "1" ~ "5",
+                                  Position == "3" ~ "25",
+                                  Position == "4" ~ "38",
+                                  Position == "5" ~ "51"),
+         `Depth (cm)` = factor(`Depth (cm)`, levels = c("5", "25", "38", "51"))) |> 
+  na.omit() |> 
+  ggplot(aes(datetime_hour, value, col = `Depth (cm)`))+
+  geom_line()+
+  scale_color_manual(values = viridis(5, direction = -1)[c(1, 3, 4, 5)])+ 
+  #scale_color_viridis_d(direction=-1)+
   scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
   ylab(expression(Water~temperature~'('*degree*C*')'))
 
 figure_3 <- wtr_all_plot/(wtr_sub_2019+wtr_sub_2020)+
   plot_annotation(tag_levels = "A")+
-  plot_layout(guides = "collect", heights = c(1,1)) &
-  theme(legend.position='bottom')
+  plot_layout(heights = c(1,1)) &
+  theme(legend.position='bottom') & 
+  guides(col=guide_legend(title.position = "top", title.hjust = 0.5))
 
 figure_3
 
-ggsave("figures/figure_3.png", figure_3, width = 174, height = 150, units = "mm")
-ggsave("figures/figure_3.pdf", figure_3, width = 174, height = 150, units = "mm")
+ggsave("figures/figure_3.png", figure_3, width = 174, height = 165, units = "mm")
+ggsave("figures/figure_3.pdf", figure_3, width = 174, height = 165, units = "mm")
 
 #Figure 4 - oxygen dynamics
 oxygen_pal <- brewer.pal(n = 3, name = "Dark2")[c(2, 1, 3)]
@@ -232,7 +252,11 @@ oxygen_plot_data <- left_join(datetime_seq, oxygen_all) |>
 #oxygen_plot_data |> filter(period == 2020) |> spread(Position, value) |> mutate(diff = ifelse(is.na(`3`), `1` - `2`, `1` - `3`)) |> summary()
 
 oxygen_all_plot <- oxygen_plot_data |> 
-  ggplot(aes(datetime_hour, value, col = Position))+
+  mutate(`Mean depth (cm)` = case_when(Position == "1" ~ "9",
+                                       Position == "2" ~ "30",
+                                       Position == "3" ~ "51"),
+         `Mean depth (cm)` = factor(`Mean depth (cm)`, levels = c("9", "30", "51"))) |> 
+  ggplot(aes(datetime_hour, value, col = `Mean depth (cm)`))+
   geom_rect(data = rect_df, inherit.aes = FALSE, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill = "white", linetype=2, col="black")+
   geom_text(data = rect_df, inherit.aes = FALSE, aes(x=x, y=y, label=letter))+
   geom_line()+
@@ -245,17 +269,25 @@ oxygen_all_plot <- oxygen_plot_data |>
 
 oxygen_sub_2019 <- oxygen_plot_data |> 
   filter(between(datetime_hour, xmin_2019, xmax_2019)) |> 
-  ggplot(aes(datetime_hour, value, col = Position))+
-  geom_line(show.legend = FALSE)+
-  scale_color_manual(values=oxygen_pal)+
+  mutate(`Depth (cm)` = case_when(Position == "2" ~ "39",
+                                  Position == "3" ~ "65"),
+         `Depth (cm)` = factor(`Depth (cm)`, levels = c("39", "65"))) |> 
+  na.omit() |> 
+  ggplot(aes(datetime_hour, value, col = `Depth (cm)`))+
+  geom_line()+
+  scale_color_manual(values=oxygen_pal[c(2, 3)])+
   scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
   ylab(expression(Oxygen~saturation~'(%)'))
 
 oxygen_sub_2020 <- oxygen_plot_data |> 
   filter(between(datetime_hour, xmin_2020, xmax_2020)) |> 
-  ggplot(aes(datetime_hour, value, col = Position))+
-  geom_line(show.legend = FALSE)+
+  mutate(`Depth (cm)` = case_when(Position == "1" ~ "6",
+                                  Position == "2" ~ "23",
+                                  Position == "3" ~ "40"),
+         `Depth (cm)` = factor(`Depth (cm)`, levels = c("6", "23", "40"))) |> 
+  ggplot(aes(datetime_hour, value, col = `Depth (cm)`))+
+  geom_line()+
   scale_color_manual(values=oxygen_pal)+
   scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
@@ -263,13 +295,14 @@ oxygen_sub_2020 <- oxygen_plot_data |>
 
 figure_4 <- oxygen_all_plot/(oxygen_sub_2019+oxygen_sub_2020)+
   plot_annotation(tag_levels = "A")+
-  plot_layout(guides = "collect", heights = c(1,1)) &
-  theme(legend.position='bottom')
+  plot_layout(heights = c(1,1)) &
+  theme(legend.position='bottom') & 
+  guides(col=guide_legend(title.position = "top", title.hjust = 0.5))
 
 figure_4
 
-ggsave("figures/figure_4.png", figure_4, width = 174, height = 150, units = "mm")
-ggsave("figures/figure_4.pdf", figure_4, width = 174, height = 150, units = "mm")
+ggsave("figures/figure_4.png", figure_4, width = 174, height = 165, units = "mm")
+ggsave("figures/figure_4.pdf", figure_4, width = 174, height = 165, units = "mm")
 
 #Figure 5 - ph and dic
 ph_dic_col <- c("pH" = brewer.pal(n = 4, name = "Dark2")[3],
