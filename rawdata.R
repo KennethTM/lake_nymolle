@@ -46,7 +46,7 @@ wnd_predict <- dmi_wnd_interp |>
          wnd_pred_10 = wind.scale.base(wnd_pred, 0.5)) |> 
   select(-wnd_dmi, -wnd_pred)
 
-#Calibration curves for alkalinity versus specific conductivity for both 2019 and 2020
+#Calibration curves for alkalinity (meq/L) versus specific conductivity (us/cm) for both 2019 and 2020
 calcurve_2019 <- tribble(~spec_cond, ~alk,
                          453.6,	1.527,
                          314.4,	1.036,

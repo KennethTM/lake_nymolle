@@ -480,7 +480,7 @@ figure_7
 ggsave("figures/figure_7.png", figure_7, width = 174, height = 75, units = "mm")
 ggsave("figures/figure_7.pdf", figure_7, width = 174, height = 75, units = "mm")
 
-#Table S3
+#Table S4
 #Metabolism summary table
 figure_7_data |> 
   select(period, method, variable, value_m2) |> 
@@ -491,7 +491,7 @@ figure_7_data |>
                         round(min, digits = 0), "–", round(max, digits = 0), ")")) |> 
   select(period, method, variable, label) |> 
   spread(variable, label) |> 
-  write_csv("figures/table_s3.csv")
+  write_csv("figures/table_s4.csv")
 
 #Figure 8. 
 #A) O2 vs DIC rates with 1:1 line, maybe model II regression fit. 
@@ -563,7 +563,7 @@ figure_8
 ggsave("figures/figure_8.png", figure_8, width = 129, height = 180, units = "mm")
 ggsave("figures/figure_8.pdf", figure_8, width = 129, height = 180, units = "mm")
 
-#Table S2
+#Table S3
 #Species list
 plants_edit |> 
   st_drop_geometry() |> 
@@ -572,4 +572,4 @@ plants_edit |>
             max_depth = max(depth),
             avg_cover = mean(species_cover)) |> 
   na.omit() |> #filter(!str_detect(species, "Chara")) |> summary()
-  write_csv("figures/table_s2.csv")
+  write_csv("figures/table_s3.csv")
