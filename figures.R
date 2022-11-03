@@ -166,15 +166,6 @@ wtr_plot_data <- left_join(datetime_seq, wtr_all) |>
   filter(between(datetime_hour, min(wtr_2019$datetime), max(wtr_2019$datetime)) | 
            between(datetime_hour, min(wtr_2020$datetime), max(wtr_2020$datetime))) 
 
-# wtr_all |> 
-#   mutate(date = as_date(datetime),
-#          year = year(datetime)) |> 
-#   group_by(year, date) |> 
-#   summarise(diel_wtr = mean(wtr_1)) |> View()
-#   summarise(mean_wtr = mean(diel_wtr),
-#             min_wtr = min(diel_wtr),
-#             max_wtr = max(diel_wtr)) |> 
-
 wtr_all_plot <- wtr_plot_data |> 
   mutate(`Mean depth (cm)` = case_when(Position == "1" ~ "7",
                                     Position == "2" ~ "21",
@@ -219,7 +210,6 @@ wtr_sub_2020 <- wtr_plot_data |>
   ggplot(aes(datetime_hour, value, col = `Depth (cm)`))+
   geom_line()+
   scale_color_manual(values = viridis(5, direction = -1)[c(1, 3, 4, 5)])+ 
-  #scale_color_viridis_d(direction=-1)+
   scale_x_datetime(date_labels = "%d %b")+
   xlab("Date")+
   ylab(expression(Water~temperature~'('*degree*C*')'))
@@ -248,8 +238,6 @@ oxygen_plot_data <- left_join(datetime_seq, oxygen_all) |>
   ungroup() |> 
   filter(between(datetime_hour, min(wtr_2019$datetime), max(wtr_2019$datetime)) | 
            between(datetime_hour, min(wtr_2020$datetime), max(wtr_2020$datetime))) 
-
-#oxygen_plot_data |> filter(period == 2020) |> spread(Position, value) |> mutate(diff = ifelse(is.na(`3`), `1` - `2`, `1` - `3`)) |> summary()
 
 oxygen_all_plot <- oxygen_plot_data |> 
   mutate(`Mean depth (cm)` = case_when(Position == "1" ~ "9",
@@ -459,8 +447,6 @@ figure_7_data <- all_daily |>
 figure_7 <- figure_7_data |> 
   ggplot(aes(date, value_m2, col = variable, linetype=method, shape = method))+
   geom_hline(yintercept = 0, linetype=3)+
-  #geom_line()+
-  #geom_smooth(se=FALSE, size=0.5, show.legend = FALSE)+
   geom_point()+
   facet_grid(.~period, scales="free_x", space = "free_x")+
   scale_color_manual(values = metab_colors, name="Component")+
@@ -469,11 +455,6 @@ figure_7 <- figure_7_data |>
   scale_x_date(date_labels = "%d %b", date_breaks = "10 days")+
   ylab(expression("Metabolism (mmol m"^{-2}~d^{-1}*")"))+
   xlab("Date")
-  # guides(color = guide_legend(title.position = "top", title.hjust = 0.5),
-  #        shape = guide_legend(title.position = "top", title.hjust = 0.5))+
-  # theme(legend.position = c(0.6, 0.8),
-  #       legend.direction = "horizontal", legend.box = "horizontal",
-  #       strip.background = element_blank())
 
 figure_7
 
@@ -504,6 +485,20 @@ figure_8_a_data <- figure_7_data |>
 
 lm2_o2_dic <- lmodel2(Oxygen~DIC, data = figure_8_a_data)
 lm2_o2_dic
+
+#photosynthetic quotient
+pq <- figure_8_a_data[figure_8_a_data$variable == "GPP", ]$Oxygen/figure_8_a_data[figure_8_a_data$variable == "GPP", ]$DIC
+pq_mean <- mean(pq)
+pq_se <- sd(pq)/sqrt(length(pq))
+pq_low <- pq_mean - pq_se*1.96
+pq_high <- pq_mean + pq_se*1.96
+
+#respiratory quotient
+rq <- figure_8_a_data[figure_8_a_data$variable == "R", ]$DIC/figure_8_a_data[figure_8_a_data$variable == "R", ]$Oxygen
+rq_mean <- mean(rq)
+rq_se <- sd(rq)/sqrt(length(rq))
+rq_low <- rq_mean - rq_se*1.96
+rq_high <- rq_mean + rq_se*1.96
 
 #t-tests for difference between dic and oxygen
 t.test(figure_8_a_data[figure_8_a_data$variable == "GPP", ]$DIC, figure_8_a_data[figure_8_a_data$variable == "GPP", ]$Oxygen, paired = TRUE)
