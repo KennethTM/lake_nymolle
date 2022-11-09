@@ -1,12 +1,12 @@
 ## Ecosystem metabolism and gradients of temperature, oxygen and inorganic carbon in the littoral zone of a macrophyte-dominated lake
 
-### Code and data repository
-
 ### Project acronym: lake_nymolle
+
+#### Code and data repository
 
 Repository containing code and data used in the manuscript:
 
-**Title:** Ecosystem metabolism and gradients of temperature, oxygen and dissolved inorganic carbon in the littoral zone of a macrophyte-dominated lake" 
+**Title:** Ecosystem metabolism and gradients of temperature, oxygen and dissolved inorganic carbon in the littoral zone of a macrophyte-dominated lake
 
 **Journal:** Journal of Geophysical Research - Biogeosciences.
 
